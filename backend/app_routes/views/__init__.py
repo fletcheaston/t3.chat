@@ -43,6 +43,9 @@ class API(NinjaAPI):
 
 api = API(
     title="Fletcher Easton's T3 Chat Clone",
+    version="0.0.0",
+    openapi_url="/api/openapi.json",
+    docs_url="/api/docs",
     auth=django_auth,
     csrf=True,
     parser=ORJSONParser(),
