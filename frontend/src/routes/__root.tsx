@@ -12,10 +12,10 @@ export const Route = createRootRoute({
                     Home
                 </Link>{" "}
                 <Link
-                    to="/about"
+                    to="/login"
                     className="[&.active]:font-bold"
                 >
-                    About
+                    Login
                 </Link>
             </div>
 
