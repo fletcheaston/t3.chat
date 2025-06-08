@@ -65,3 +65,12 @@ To create a user, run:
 cd backend
 npm run create:user
 ```
+
+## Run tests
+
+Before running tests, you'll need to create a new local database with the name `test`.
+Once you have that database, run:
+
+```shell
+npm run test
+```

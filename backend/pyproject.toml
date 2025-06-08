@@ -37,3 +37,6 @@ python_files = ["*_test.py", "test_*.py"]
 markers = [
     "integration: tests that touch the database, filesystem, or some other external system",
 ]
+filterwarnings = [
+    "ignore::UserWarning",
+]
