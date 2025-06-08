@@ -1,0 +1,15 @@
+{
+    "name": "@fletcheaston/api",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "setup": "uv venv && uv sync",
+        "openapi": "uv run manage.py export_openapi_schema --api app_api.views.api | python -m json.tool > openapi.json",
+        "dev": "uv run manage.py runserver",
+        "type:check": "uv run ty check",
+        "lint": "uv run ruff check --fix",
+        "lint:check": "uv run ruff check",
+        "format": "uv run ruff format",
+        "format:check": "uv run format --check"
+    }
+}
