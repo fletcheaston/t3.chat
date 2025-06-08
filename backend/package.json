@@ -6,6 +6,8 @@
         "setup": "uv venv && uv sync",
         "openapi": "uv run manage.py export_openapi_schema --api app_api.views.api | python -m json.tool > openapi.json",
         "create:user": "uv run manage.py createsuperuser",
+        "migrate": "uv run manage.py migrate",
+        "makemigrations": "uv run manage.py makemigrations",
         "dev": "uv run manage.py runserver",
         "type:check": "uv run ty check",
         "lint": "uv run ruff check --fix",

@@ -44,6 +44,15 @@ PG_PASSWORD=postgres
 PG_HOST=localhost
 ```
 
+## Run database migrations
+
+To update your local database schema, run:
+
+```shell
+cd backend
+npm run migrate
+```
+
 ## Running the app
 
 Once you've followed the above steps, try running the app.
