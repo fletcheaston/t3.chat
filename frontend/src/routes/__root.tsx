@@ -1,4 +1,4 @@
-import { Link, Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
+import { Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { AuthUserSchema } from "@/api";
@@ -26,28 +26,17 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             throw redirect({ to: "/" });
         }
     },
-    component: () => (
+    component: RouteComponent,
+});
+
+function RouteComponent() {
+    /**************************************************************************/
+    /* Render */
+    return (
         <>
-            <div className="flex gap-2 p-2">
-                <Link
-                    to="/"
-                    className="[&.active]:font-bold"
-                >
-                    Home
-                </Link>{" "}
-                <Link
-                    to="/login"
-                    className="[&.active]:font-bold"
-                >
-                    Login
-                </Link>
-            </div>
-
-            <hr />
-
             <Outlet />
 
             <TanStackRouterDevtools />
         </>
-    ),
-});
+    );
+}
