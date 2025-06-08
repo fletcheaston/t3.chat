@@ -1,0 +1,36 @@
+{
+  "name": "@fletcheaston/t3chat",
+  "version": "0.0.0",
+  "description": "T3 Chat clone",
+  "homepage": "https://github.com/fletcheaston/t3.chat#readme",
+  "bugs": {
+    "url": "https://github.com/fletcheaston/t3.chat/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fletcheaston/t3.chat.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Fletcher Easton",
+    "email": "work@fletcheaston.com"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "type:check": "turbo type:check",
+    "lint": "turbo lint",
+    "lint:check": "turbo lint:check",
+    "format": "turbo format",
+    "format:check": "turbo format:check",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  },
+  "packageManager": "npm@11.0.0",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
+}
