@@ -1,0 +1,42 @@
+[project]
+name = "backend"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "aenum>=3.1.16",
+    "channels-redis>=4.2.1",
+    "channels[daphne]>=4.2.2",
+    "django>=5.2.2",
+    "django-cors-headers>=4.7.0",
+    "django-ninja>=1.4.3",
+    "django-redis>=5.4.0",
+    "django-silk>=5.4.0",
+    "django-simple-history>=3.8.0",
+    "httpx>=0.28.1",
+    "orjson>=3.10.18",
+    "psycopg>=3.2.9",
+    "psycopg-binary>=3.2.9",
+    "pydantic>=2.11.5",
+    "pydantic-extra-types>=2.10.5",
+    "pydantic-settings>=2.9.1",
+    "pyhumps>=3.8.0",
+    "redis>=6.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-django>=4.11.1",
+    "ruff>=0.11.13",
+    "ty>=0.0.1a8",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "server.settings"
+python_files = ["*_test.py", "test_*.py"]
+markers = [
+    "integration: tests that touch the database, filesystem, or some other external system",
+]
+filterwarnings = [
+    "ignore::UserWarning",
+]

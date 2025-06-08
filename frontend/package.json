@@ -1,0 +1,37 @@
+{
+    "name": "@fletcheaston/frontend",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && npm run build:seo",
+        "type:check": "tsc --noEmit",
+        "lint": "eslint . --fix",
+        "lint:check": "eslint .",
+        "format": "prettier --write \"**/*.{ts,tsx,md,mdx,mjs,js,json,yaml,html}\"",
+        "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx,mjs,js,json,yaml,html}\""
+    },
+    "dependencies": {
+        "@tailwindcss/vite": "^4.1.8",
+        "@tanstack/react-router": "^1.120.18",
+        "classnames": "^2.5.1",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "tailwindcss": "^4.1.8"
+    },
+    "devDependencies": {
+        "@tanstack/react-router-devtools": "^1.120.18",
+        "@tanstack/router-plugin": "^1.120.18",
+        "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+        "@types/node": "^22.15.30",
+        "@types/react": "^19.1.6",
+        "@types/react-dom": "^19.1.6",
+        "@typescript-eslint/parser": "^8.33.1",
+        "@vitejs/plugin-react": "^4.5.1",
+        "eslint": "^9.28.0",
+        "prettier": "^3.5.3",
+        "prettier-plugin-tailwindcss": "^0.6.12",
+        "vite": "^6.3.5",
+        "vite-tsconfig-paths": "^5.1.4"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "target": "ESNext",
+        "module": "esnext",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "allowJs": true,
+
+        /* Bundler mode */
+        "moduleResolution": "Bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+
+        /* Paths */
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["**/*.ts", "**/*.tsx", "vite.config.mts"],
+    "exclude": ["node_modules"]
+}
