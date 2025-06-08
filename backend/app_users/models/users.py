@@ -17,7 +17,7 @@ class UserManager(BaseUserManager["User"]):
         self,
         name: str,
         email: str,
-        password: str | None,
+        password: str | None = None,
         **extra_fields: Any,
     ) -> "User":
         if not name:
@@ -44,7 +44,7 @@ class UserManager(BaseUserManager["User"]):
         self,
         name: str,
         email: str,
-        password: str,
+        password: str | None = None,
         **extra_fields: Any,
     ) -> "User":
         extra_fields["is_staff"] = True

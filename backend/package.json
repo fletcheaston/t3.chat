@@ -11,6 +11,7 @@
         "lint": "uv run ruff check --fix",
         "lint:check": "uv run ruff check",
         "format": "uv run ruff format",
-        "format:check": "uv run format --check"
+        "format:check": "uv run format --check",
+        "test": "uv run pytest ."
     }
 }
