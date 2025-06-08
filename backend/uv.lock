@@ -2,6 +2,14 @@ version = 1
 requires-python = ">=3.13"
 
 [[package]]
+name = "aenum"
+version = "3.1.16"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e3/52/6ad8f63ec8da1bf40f96996d25d5b650fdd38f5975f8c813732c47388f18/aenum-3.1.16-py3-none-any.whl", hash = "sha256:9035092855a98e41b66e3d0998bd7b96280e85ceb3a04cc035636138a1943eaf", size = 165627 },
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -70,6 +78,7 @@ name = "backend"
 version = "0.0.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "aenum" },
     { name = "channels", extra = ["daphne"] },
     { name = "channels-redis" },
     { name = "django" },
@@ -98,6 +107,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "aenum", specifier = ">=3.1.16" },
     { name = "channels", extras = ["daphne"], specifier = ">=4.2.2" },
     { name = "channels-redis", specifier = ">=4.2.1" },
     { name = "django", specifier = ">=5.2.2" },
