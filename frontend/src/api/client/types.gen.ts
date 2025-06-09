@@ -79,6 +79,34 @@ export type LogoutResponses = {
     200: unknown;
 };
 
+export type GithubCallbackData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Code
+         */
+        code: string;
+    };
+    url: "/api/auth/github-callback";
+};
+
+export type GithubCallbackErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorSchema;
+};
+
+export type GithubCallbackError = GithubCallbackErrors[keyof GithubCallbackErrors];
+
+export type GithubCallbackResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
 export type ClientOptions = {
     baseUrl: string;
 };

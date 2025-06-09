@@ -6,6 +6,9 @@ import type {
     CheckLoginData,
     CheckLoginErrors,
     CheckLoginResponses,
+    GithubCallbackData,
+    GithubCallbackErrors,
+    GithubCallbackResponses,
     LogoutData,
     LogoutResponses,
 } from "./types.gen";
@@ -51,6 +54,22 @@ export const logout = <ThrowOnError extends boolean = false>(
 ) => {
     return (options?.client ?? _heyApiClient).post<LogoutResponses, unknown, ThrowOnError>({
         url: "/api/auth/logout",
+        ...options,
+    });
+};
+
+/**
+ * Github Callback
+ */
+export const githubCallback = <ThrowOnError extends boolean = false>(
+    options: Options<GithubCallbackData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).get<
+        GithubCallbackResponses,
+        GithubCallbackErrors,
+        ThrowOnError
+    >({
+        url: "/api/auth/github-callback",
         ...options,
     });
 };

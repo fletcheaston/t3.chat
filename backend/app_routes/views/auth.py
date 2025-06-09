@@ -75,7 +75,7 @@ class GitHubUserSchema(Schema):
 def github_callback(request: HttpRequest, code: str) -> Any:
     # If the user is already authenticated, just redirect
     if request.user.is_authenticated:
-        return
+        return redirect("/")
 
     # Authenticate with GitHub
     gh_callback_response = httpx.post(
