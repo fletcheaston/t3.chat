@@ -72,6 +72,7 @@ class User(DjangoModel, AbstractBaseUser):
     name = models.TextField(default="")
     email = LowercaseEmailField(unique=True)
     username = models.TextField(unique=True)
+    image_url = models.TextField(default="")
 
     # Django user fields
     is_staff = models.BooleanField(default=False)
