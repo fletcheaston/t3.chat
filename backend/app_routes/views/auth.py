@@ -62,6 +62,7 @@ class GitHubCallbackSchema(Schema):
 
 
 class GitHubUserSchema(Schema):
+    username: str
     email: str
     name: str
 
@@ -110,8 +111,9 @@ def github_callback(request: HttpRequest, code: str) -> Any:
 
     # Create the user in our database if they don't exist yet
     user, _ = User.objects.get_or_create(
-        email=gh_user.email,
         name=gh_user.name,
+        email=gh_user.email,
+        username=gh_user.username,
     )
 
     # Log the user in
