@@ -65,7 +65,7 @@ function RouteComponent() {
                 <HeadContent />
             </head>
 
-            <body className="h-full overflow-y-auto bg-slate-50">
+            <body className="h-full overflow-y-auto">
                 <main>
                     <Outlet />
 
