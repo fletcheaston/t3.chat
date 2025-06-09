@@ -1,7 +1,9 @@
-import { Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
+import { HeadContent, Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { AuthUserSchema } from "@/api";
+import sonnerCss from "@/sonner.css?url";
+import appCss from "@/styles.css?url";
 
 interface RouterContext {
     user: AuthUserSchema | null;
@@ -26,6 +28,31 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             throw redirect({ to: "/" });
         }
     },
+    head: () => {
+        return {
+            meta: [
+                { title: "Fletcher Easton's T3 Chat Clone" },
+                {
+                    name: "viewport",
+                    content: "width=device-width, initial-scale=1.0",
+                },
+            ],
+            links: [
+                {
+                    rel: "icon",
+                    href: "/favicon.ico",
+                },
+                {
+                    rel: "stylesheet",
+                    href: appCss,
+                },
+                {
+                    rel: "stylesheet",
+                    href: sonnerCss,
+                },
+            ],
+        };
+    },
     component: RouteComponent,
 });
 
@@ -34,9 +61,17 @@ function RouteComponent() {
     /* Render */
     return (
         <>
-            <Outlet />
+            <head>
+                <HeadContent />
+            </head>
 
-            <TanStackRouterDevtools />
+            <body className="h-full overflow-y-auto bg-slate-50">
+                <main>
+                    <Outlet />
+
+                    <TanStackRouterDevtools />
+                </main>
+            </body>
         </>
     );
 }

@@ -17,7 +17,10 @@ export function AuthProvider(props: { children: React.ReactNode }) {
             .then((result) => {
                 if (result.data?.authUser) {
                     setUser(result.data.authUser);
+                    return;
                 }
+
+                setUser(null);
             })
             .catch(() => {
                 setUser(null);
