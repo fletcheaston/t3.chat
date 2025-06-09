@@ -4,6 +4,7 @@ from .conversation import (
     ConversationTag,
     ConversationToTag,
 )
+from .message import Message
 from .users import User
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     "ConversationMember",
     "ConversationTag",
     "ConversationToTag",
+    "Message",
     "User",
 ]
