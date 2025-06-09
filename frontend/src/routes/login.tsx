@@ -13,8 +13,10 @@ function RouteComponent() {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="flex h-full flex-col items-center justify-center">
-            <div className="h-[calc(45%-40px)]" />
+        <div className="flex h-full flex-col items-center justify-start">
+            <div className="h-[40%]" />
+
+            <h1 className="mb-4 text-3xl">Fletcher's T3 Chat Clone</h1>
 
             <Button
                 asChild
@@ -33,8 +35,6 @@ function RouteComponent() {
                     />
                 </a>
             </Button>
-
-            <div className="h-[calc(55%-40px)]" />
         </div>
     );
 }
