@@ -20,7 +20,7 @@ class Conversation(DjangoModel):
         on_delete=models.PROTECT,
     )
 
-    tags = models.ManyToManyField(
+    db_tags = models.ManyToManyField(
         "ConversationTag",
         related_name="conversations",
         through="ConversationToTag",
@@ -39,6 +39,9 @@ class Conversation(DjangoModel):
 
     ############################################################################
     # Properties
+    @property
+    def tags(self) -> list["ConversationTag"]:
+        return self.db_tags.all()
 
     ############################################################################
     # Methods

@@ -146,7 +146,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="conversation",
-            name="tags",
+            name="db_tags",
             field=models.ManyToManyField(
                 related_name="conversations",
                 through="app_users.ConversationToTag",

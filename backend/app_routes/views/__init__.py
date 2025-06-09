@@ -11,7 +11,7 @@ from ninja.renderers import BaseRenderer
 from ninja.security import django_auth
 from pydantic_extra_types.color import Color
 
-from . import auth, static
+from . import auth, conversation_tags, conversations, static
 
 
 class ORJSONParser(Parser):
@@ -53,6 +53,8 @@ api = API(
 )
 
 api.add_router("/api/auth", auth.router)
+api.add_router("/api/conversations", conversations.router)
+api.add_router("/api/conversation-tags", conversation_tags.router)
 api.add_router("", static.router)
 
 

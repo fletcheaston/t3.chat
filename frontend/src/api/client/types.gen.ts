@@ -40,6 +40,106 @@ export type ErrorSchema = {
     detail: ErrorMessage;
 };
 
+/**
+ * ConversationSchema
+ */
+export type ConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tags
+     */
+    tags: Array<ConversationTagSchema>;
+};
+
+/**
+ * ConversationTagSchema
+ */
+export type ConversationTagSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
+/**
+ * NewConversationSchema
+ */
+export type NewConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tagids
+     */
+    tagIds: Array<string>;
+};
+
+/**
+ * UpdateConversationSchema
+ */
+export type UpdateConversationSchema = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tagids
+     */
+    tagIds: Array<string>;
+};
+
+/**
+ * NewConversationTagSchema
+ */
+export type NewConversationTagSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
+/**
+ * UpdateConversationTagSchema
+ */
+export type UpdateConversationTagSchema = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
 export type CheckLoginData = {
     body?: never;
     path?: never;
@@ -106,6 +206,120 @@ export type GithubCallbackResponses = {
      */
     200: unknown;
 };
+
+export type ListMyConversationsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/conversations";
+};
+
+export type ListMyConversationsResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<ConversationSchema>;
+};
+
+export type ListMyConversationsResponse =
+    ListMyConversationsResponses[keyof ListMyConversationsResponses];
+
+export type CreateConversationData = {
+    body: NewConversationSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversations";
+};
+
+export type CreateConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type CreateConversationResponse =
+    CreateConversationResponses[keyof CreateConversationResponses];
+
+export type UpdateConversationData = {
+    body: UpdateConversationSchema;
+    path: {
+        /**
+         * Conversation Id
+         */
+        conversation_id: string;
+    };
+    query?: never;
+    url: "/api/conversations/{conversation_id}";
+};
+
+export type UpdateConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type UpdateConversationResponse =
+    UpdateConversationResponses[keyof UpdateConversationResponses];
+
+export type ListMyConversationTagsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/conversation-tags";
+};
+
+export type ListMyConversationTagsResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<ConversationTagSchema>;
+};
+
+export type ListMyConversationTagsResponse =
+    ListMyConversationTagsResponses[keyof ListMyConversationTagsResponses];
+
+export type CreateConversationTagData = {
+    body: NewConversationTagSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversation-tags";
+};
+
+export type CreateConversationTagResponses = {
+    /**
+     * OK
+     */
+    200: ConversationTagSchema;
+};
+
+export type CreateConversationTagResponse =
+    CreateConversationTagResponses[keyof CreateConversationTagResponses];
+
+export type UpdateConversationTagData = {
+    body: UpdateConversationTagSchema;
+    path: {
+        /**
+         * Tag Id
+         */
+        tag_id: string;
+    };
+    query?: never;
+    url: "/api/conversation-tags/{tag_id}";
+};
+
+export type UpdateConversationTagResponses = {
+    /**
+     * OK
+     */
+    200: ConversationTagSchema;
+};
+
+export type UpdateConversationTagResponse =
+    UpdateConversationTagResponses[keyof UpdateConversationTagResponses];
 
 export type ClientOptions = {
     baseUrl: string;

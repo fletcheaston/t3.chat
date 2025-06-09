@@ -6,11 +6,23 @@ import type {
     CheckLoginData,
     CheckLoginErrors,
     CheckLoginResponses,
+    CreateConversationData,
+    CreateConversationResponses,
+    CreateConversationTagData,
+    CreateConversationTagResponses,
     GithubCallbackData,
     GithubCallbackErrors,
     GithubCallbackResponses,
+    ListMyConversationTagsData,
+    ListMyConversationTagsResponses,
+    ListMyConversationsData,
+    ListMyConversationsResponses,
     LogoutData,
     LogoutResponses,
+    UpdateConversationData,
+    UpdateConversationResponses,
+    UpdateConversationTagData,
+    UpdateConversationTagResponses,
 } from "./types.gen";
 
 export type Options<
@@ -71,5 +83,159 @@ export const githubCallback = <ThrowOnError extends boolean = false>(
     >({
         url: "/api/auth/github-callback",
         ...options,
+    });
+};
+
+/**
+ * List My Conversations
+ */
+export const listMyConversations = <ThrowOnError extends boolean = false>(
+    options?: Options<ListMyConversationsData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<
+        ListMyConversationsResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations",
+        ...options,
+    });
+};
+
+/**
+ * Create Conversation
+ */
+export const createConversation = <ThrowOnError extends boolean = false>(
+    options: Options<CreateConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        CreateConversationResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Update Conversation
+ */
+export const updateConversation = <ThrowOnError extends boolean = false>(
+    options: Options<UpdateConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).put<
+        UpdateConversationResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/{conversation_id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * List My Conversation Tags
+ */
+export const listMyConversationTags = <ThrowOnError extends boolean = false>(
+    options?: Options<ListMyConversationTagsData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<
+        ListMyConversationTagsResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversation-tags",
+        ...options,
+    });
+};
+
+/**
+ * Create Conversation Tag
+ */
+export const createConversationTag = <ThrowOnError extends boolean = false>(
+    options: Options<CreateConversationTagData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        CreateConversationTagResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversation-tags",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Update Conversation Tag
+ */
+export const updateConversationTag = <ThrowOnError extends boolean = false>(
+    options: Options<UpdateConversationTagData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).put<
+        UpdateConversationTagResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversation-tags/{tag_id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
     });
 };
