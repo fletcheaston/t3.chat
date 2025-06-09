@@ -62,6 +62,8 @@ class GitHubCallbackSchema(Schema):
 
 
 class GitHubUserSchema(Schema):
+    login: str
+    avatar_url: str
     email: str
     name: str
 
@@ -111,8 +113,19 @@ def github_callback(request: HttpRequest, code: str) -> Any:
     # Create the user in our database if they don't exist yet
     user, _ = User.objects.get_or_create(
         email=gh_user.email,
-        name=gh_user.name,
+        username=gh_user.login,
     )
+
+    if not user.name:
+        user.name = gh_user.name
+
+    if not user.image_url:
+        user.image_url = gh_user.avatar_url
+
+    user.save()
+
+    # Log the user out (just in case they have existing cookies)
+    django_logout(request)
 
     # Log the user in
     django_login(request, user)
