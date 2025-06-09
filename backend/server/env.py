@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     PG_PASSWORD: str
     PG_HOST: str
 
+    ####################################################################################
+    # GitHub OAuth settings
+    GITHUB_OAUTH_CLIENT_ID: str
+    GITHUB_OAUTH_CLIENT_SECRET: str
+
 
 # Settings derived from .env or env vars
 SETTINGS: Settings = Settings()  # ty: ignore[missing-argument]

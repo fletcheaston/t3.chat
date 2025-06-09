@@ -18,6 +18,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "codegen": "turbo codegen",
     "type:check": "turbo type:check",
     "lint": "turbo lint",
     "lint:check": "turbo lint:check",

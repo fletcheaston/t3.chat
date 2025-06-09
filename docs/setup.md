@@ -42,6 +42,9 @@ PG_DB=t3chat
 PG_USER=postgres
 PG_PASSWORD=postgres
 PG_HOST=localhost
+
+GITHUB_OAUTH_CLIENT_ID=fake
+GITHUB_OAUTH_CLIENT_SECRET=fake
 ```
 
 ## Run database migrations

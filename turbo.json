@@ -1,31 +1,26 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "ui": "stream",
-    "globalEnv": ["ARTIFACT_URL", "GCP_PROJECT_ID", "IMAGE_REPOSITORY", "LINEAR_API_KEY"],
+    "globalEnv": ["ARTIFACT_URL", "GCP_PROJECT_ID", "IMAGE_REPOSITORY"],
     "globalPassThroughEnv": [
         "ARTIFACT_URL",
         "GCP_PROJECT_ID",
-        "IMAGE_REPOSITORY",
-        "LINEAR_API_KEY"
+        "IMAGE_REPOSITORY"
     ],
     "tasks": {
         "@fletcheaston/backend#setup": {
             "outputs": [".venv"]
         },
-        "@fletcheaston/backend#openapi": {
-            "dependsOn": ["@fletcheaston/api#setup"],
+        "@fletcheaston/backend#codegen": {
+            "dependsOn": ["@fletcheaston/backend#setup"],
             "outputs": ["openapi.yaml"]
         },
         "@fletcheaston/frontend#codegen": {
-            "dependsOn": ["@fletcheaston/backend#openapi"]
+            "dependsOn": ["@fletcheaston/backend#codegen"]
         },
         "dev": {
             "dependsOn": ["^dev"],
             "persistent": true,
-            "cache": false
-        },
-        "codegen": {
-            "dependsOn": ["^build"],
             "cache": false
         },
         "build": {

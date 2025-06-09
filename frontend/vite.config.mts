@@ -1,13 +1,14 @@
+import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import viteTsconfigPaths from "vite-tsconfig-paths";
-import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
+        tailwindcss(),
         TanStackRouterVite({
             target: "react",
             autoCodeSplitting: true,
@@ -15,7 +16,6 @@ export default defineConfig({
         }),
         react(),
         viteTsconfigPaths(),
-        tailwindcss(),
     ],
     resolve: {
         alias: {
@@ -34,5 +34,5 @@ export default defineConfig({
                 rewrite: (path) => path.replace("http://localhost:3000", "http://localhost:8000"),
             },
         },
-    }
+    },
 });
