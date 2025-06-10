@@ -383,6 +383,7 @@ class Migration(migrations.Migration):
                 (
                     "reply_to",
                     models.ForeignKey(
+                        blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.PROTECT,
                         to="app_chats.message",
