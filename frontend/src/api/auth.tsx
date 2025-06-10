@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 
 import { useMountEffect } from "@react-hookz/web";
 
-import { AuthUserSchema, checkLogin } from "@/api/client";
+import { AuthUserSchema, whoAmI } from "@/api/client";
 import { Loading } from "@/ui/loading";
 
 const UserContext = createContext<AuthUserSchema | null>(null);
@@ -13,7 +13,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     const [user, setUser] = useState<AuthUserSchema | undefined | null>(undefined);
 
     useMountEffect(() => {
-        checkLogin()
+        whoAmI()
             .then((result) => {
                 if (result.data?.authUser) {
                     setUser(result.data.authUser);

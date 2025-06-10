@@ -16,7 +16,7 @@ router = Router()
 
 
 @router.get(
-    "/github-callback/",
+    "/github-callback",
     response={200: None, 400: schemas.ErrorSchema},
     by_alias=True,
     auth=None,

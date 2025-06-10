@@ -9,10 +9,10 @@ router = Router()
 
 @router.get(
     "",
-    response={200: list[schemas.ConversationTagSchema]},
+    response={200: list[schemas.TagSchema]},
     by_alias=True,
 )
-def list_my_conversation_tags(
+def list_my_tags(
     request: AuthenticatedHttpRequest,
 ) -> list[ConversationTag]:
     return ConversationTag.objects.filter(owner=request.user)

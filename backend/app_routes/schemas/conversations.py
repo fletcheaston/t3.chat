@@ -1,13 +1,13 @@
 import uuid
 
 from .base import Schema
-from .conversation_tags import ConversationTagSchema
+from .tags import TagSchema
 
 
 class ConversationSchema(Schema):
     id: uuid.UUID
     title: str
-    tags: list[ConversationTagSchema]
+    tags: list[TagSchema]
 
 
 class NewConversationSchema(Schema):

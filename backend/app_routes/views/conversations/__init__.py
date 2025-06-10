@@ -5,6 +5,6 @@ from . import create, list, update
 router = Router()
 
 
-router.add_router("", list.router, tags=["conversations"])
-router.add_router("", create.router, tags=["conversations"])
-router.add_router("", update.router, tags=["conversations"])
+router.add_router("/list", list.router, tags=["conversations"])
+router.add_router("/create", create.router, tags=["conversations"])
+router.add_router("/update", update.router, tags=["conversations"])

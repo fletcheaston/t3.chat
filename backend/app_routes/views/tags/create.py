@@ -9,12 +9,12 @@ router = Router()
 
 @router.post(
     "",
-    response={200: schemas.ConversationTagSchema},
+    response={200: schemas.TagSchema},
     by_alias=True,
 )
-def create_conversation_tag(
+def create_tag(
     request: AuthenticatedHttpRequest,
-    data: schemas.NewConversationTagSchema,
+    data: schemas.NewTagSchema,
 ) -> ConversationTag:
     return ConversationTag.objects.create(
         id=data.id,
