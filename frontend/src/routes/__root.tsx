@@ -4,6 +4,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthUserSchema } from "@/api";
 import sonnerCss from "@/sonner.css?url";
 import appCss from "@/styles.css?url";
+import { SyncProvider } from "@/sync/sync-provider";
 
 interface RouterContext {
     user: AuthUserSchema | null;
@@ -67,7 +68,9 @@ function RouteComponent() {
 
             <body className="h-full overflow-y-auto">
                 <main>
-                    <Outlet />
+                    <SyncProvider>
+                        <Outlet />
+                    </SyncProvider>
 
                     <TanStackRouterDevtools />
                 </main>
