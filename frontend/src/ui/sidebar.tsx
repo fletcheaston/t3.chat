@@ -2,9 +2,7 @@ import * as React from "react";
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
 
-import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Separator } from "@/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/ui/sheet";
@@ -176,7 +174,7 @@ function Sidebar({
                     data-sidebar="sidebar"
                     data-slot="sidebar"
                     data-mobile="true"
-                    className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+                    className="w-(--sidebar-width) p-0 [&>button]:hidden"
                     style={
                         {
                             "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -196,7 +194,7 @@ function Sidebar({
 
     return (
         <div
-            className="group peer text-sidebar-foreground hidden md:block"
+            className="group peer hidden md:block"
             data-state={state}
             data-collapsible={state === "collapsed" ? collapsible : ""}
             data-variant={variant}
@@ -207,7 +205,7 @@ function Sidebar({
             <div
                 data-slot="sidebar-gap"
                 className={cn(
-                    "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
+                    "relative w-(--sidebar-width) bg-transparent transition-[width] duration-150 ease-in-out",
                     "group-data-[collapsible=offcanvas]:w-0",
                     "group-data-[side=right]:rotate-180",
                     variant === "floating" || variant === "inset"
@@ -218,7 +216,7 @@ function Sidebar({
             <div
                 data-slot="sidebar-container"
                 className={cn(
-                    "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
+                    "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-150 ease-in-out md:flex",
                     side === "left"
                         ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
                         : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -233,34 +231,12 @@ function Sidebar({
                 <div
                     data-sidebar="sidebar"
                     data-slot="sidebar-inner"
-                    className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+                    className="flex h-full w-full flex-col py-4"
                 >
                     {children}
                 </div>
             </div>
         </div>
-    );
-}
-
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-    const { toggleSidebar } = useSidebar();
-
-    return (
-        <Button
-            data-sidebar="trigger"
-            data-slot="sidebar-trigger"
-            variant="default"
-            size="icon"
-            className={cn("size-7", className)}
-            onClick={(event) => {
-                onClick?.(event);
-                toggleSidebar();
-            }}
-            {...props}
-        >
-            <PanelLeftIcon />
-            <span className="sr-only">Toggle Sidebar</span>
-        </Button>
     );
 }
 
@@ -309,17 +285,6 @@ function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input
             data-slot="sidebar-input"
             data-sidebar="input"
             className={cn("bg-background h-8 w-full shadow-none", className)}
-            {...props}
-        />
-    );
-}
-
-function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
-    return (
-        <div
-            data-slot="sidebar-header"
-            data-sidebar="header"
-            className={cn("flex flex-col gap-2 p-2", className)}
             {...props}
         />
     );
@@ -676,7 +641,6 @@ export {
     SidebarGroupAction,
     SidebarGroupContent,
     SidebarGroupLabel,
-    SidebarHeader,
     SidebarInput,
     SidebarInset,
     SidebarMenu,
@@ -691,6 +655,5 @@ export {
     SidebarProvider,
     SidebarRail,
     SidebarSeparator,
-    SidebarTrigger,
     useSidebar,
 };
