@@ -32,7 +32,7 @@ function ChatSidebar() {
                 data-sidebar="header"
                 className="flex flex-col items-center gap-2 p-0.5 text-xl"
             >
-                <h1 className="h-4 select-none">
+                <h1 className="my-0.5 h-3.5 select-none">
                     <F3 />
                 </h1>
             </div>

@@ -49,7 +49,7 @@ export function F3() {
 
                 <path
                     fill="currentcolor"
-                    d="M43,3.4H0v0.5l0,0v3.2v3.7h3.5l0,0h11.9v40.8H24V10.7h11.8L43,3.4z"
+                    d="M44 3 H 0 v 49 H 9 V 31 L 16 31 L 24 23 L 9 23 L 9 10.5 h 27 z"
                 />
             </g>
 
