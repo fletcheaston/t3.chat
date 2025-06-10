@@ -1,6 +1,9 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 from simple_history.models import HistoricalRecords
 
+from app_chats import schemas
 from app_utils.models import DjangoModel
 
 from .users import User
@@ -45,6 +48,24 @@ class Conversation(DjangoModel):
 
     ############################################################################
     # Methods
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+
+        # Broadcast via channels
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"user-{self.owner_id}",
+            {
+                "type": "send_data",
+                "event": schemas.SyncConversation.model_validate(
+                    {
+                        "type": "conversation",
+                        "data": self,
+                    }
+                ).model_dump_safe(),
+            },
+        )
 
 
 class TagQuerySet(models.QuerySet["Tag"]):
@@ -79,6 +100,24 @@ class Tag(DjangoModel):
 
     ############################################################################
     # Methods
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+
+        # Broadcast via channels
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"user-{self.owner.id}",
+            {
+                "type": "send_data",
+                "event": schemas.SyncTag.model_validate(
+                    {
+                        "type": "tag",
+                        "data": self,
+                    }
+                ).model_dump_safe(),
+            },
+        )
 
 
 class ConversationToTagQuerySet(models.QuerySet["ConversationToTag"]):
@@ -114,6 +153,52 @@ class ConversationToTag(DjangoModel):
 
     ############################################################################
     # Methods
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+
+        value = self.conversation
+
+        # Broadcast via channels
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"user-{value.owner_id}",
+            {
+                "type": "send_data",
+                "event": schemas.SyncConversation.model_validate(
+                    {
+                        "type": "conversation",
+                        "data": value,
+                    }
+                ).model_dump_safe(),
+            },
+        )
+
+    def delete(self, *args, **kwargs) -> None:
+        # Grab the conversation before it's wiped
+        value = self.conversation
+
+        # Run the actual delete
+        super().delete(*args, **kwargs)
+
+        # Refresh the conversation so we pull down relevant tags
+        value.refresh_from_db()
+
+        # Broadcast via channels
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"user-{value.owner_id}",
+            {
+                "type": "send_data",
+                "event": schemas.SyncConversation.model_validate(
+                    {
+                        "type": "conversation",
+                        "data": value,
+                    }
+                ).model_dump_safe(),
+            },
+        )
 
 
 class ConversationMemberQuerySet(models.QuerySet["ConversationMember"]):
