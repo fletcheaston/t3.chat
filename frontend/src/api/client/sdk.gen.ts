@@ -3,14 +3,33 @@ import type { Client, Options as ClientOptions, TDataShape } from "@hey-api/clie
 
 import { client as _heyApiClient } from "./client.gen";
 import type {
-    CheckLoginData,
-    CheckLoginErrors,
-    CheckLoginResponses,
+    CreateConversationData,
+    CreateConversationResponses,
+    CreateMessageData,
+    CreateMessageErrors,
+    CreateMessageResponses,
+    CreateTagData,
+    CreateTagResponses,
     GithubCallbackData,
     GithubCallbackErrors,
     GithubCallbackResponses,
+    GlobalSyncTypesData,
+    GlobalSyncTypesResponses,
+    ListMyConversationsData,
+    ListMyConversationsResponses,
+    ListMyMessagesData,
+    ListMyMessagesResponses,
+    ListMyTagsData,
+    ListMyTagsResponses,
     LogoutData,
     LogoutResponses,
+    UpdateConversationData,
+    UpdateConversationResponses,
+    UpdateTagData,
+    UpdateTagResponses,
+    WhoAmIData,
+    WhoAmIErrors,
+    WhoAmIResponses,
 } from "./types.gen";
 
 export type Options<
@@ -31,17 +50,13 @@ export type Options<
 };
 
 /**
- * Check Login
+ * Who Am I
  */
-export const checkLogin = <ThrowOnError extends boolean = false>(
-    options?: Options<CheckLoginData, ThrowOnError>
+export const whoAmI = <ThrowOnError extends boolean = false>(
+    options?: Options<WhoAmIData, ThrowOnError>
 ) => {
-    return (options?.client ?? _heyApiClient).get<
-        CheckLoginResponses,
-        CheckLoginErrors,
-        ThrowOnError
-    >({
-        url: "/api/auth/login",
+    return (options?.client ?? _heyApiClient).get<WhoAmIResponses, WhoAmIErrors, ThrowOnError>({
+        url: "/api/auth/whoami",
         ...options,
     });
 };
@@ -70,6 +85,213 @@ export const githubCallback = <ThrowOnError extends boolean = false>(
         ThrowOnError
     >({
         url: "/api/auth/github-callback",
+        ...options,
+    });
+};
+
+/**
+ * List My Messages
+ */
+export const listMyMessages = <ThrowOnError extends boolean = false>(
+    options?: Options<ListMyMessagesData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<ListMyMessagesResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/messages/list",
+        ...options,
+    });
+};
+
+/**
+ * Create Message
+ */
+export const createMessage = <ThrowOnError extends boolean = false>(
+    options: Options<CreateMessageData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        CreateMessageResponses,
+        CreateMessageErrors,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/messages/create",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * List My Conversations
+ */
+export const listMyConversations = <ThrowOnError extends boolean = false>(
+    options?: Options<ListMyConversationsData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<
+        ListMyConversationsResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/list",
+        ...options,
+    });
+};
+
+/**
+ * Create Conversation
+ */
+export const createConversation = <ThrowOnError extends boolean = false>(
+    options: Options<CreateConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        CreateConversationResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/create",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Update Conversation
+ */
+export const updateConversation = <ThrowOnError extends boolean = false>(
+    options: Options<UpdateConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).put<
+        UpdateConversationResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/update/{conversation_id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * List My Tags
+ */
+export const listMyTags = <ThrowOnError extends boolean = false>(
+    options?: Options<ListMyTagsData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<ListMyTagsResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/tags/list",
+        ...options,
+    });
+};
+
+/**
+ * Create Tag
+ */
+export const createTag = <ThrowOnError extends boolean = false>(
+    options: Options<CreateTagData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<CreateTagResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/tags/create",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Update Tag
+ */
+export const updateTag = <ThrowOnError extends boolean = false>(
+    options: Options<UpdateTagData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).put<UpdateTagResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/tags/update/{tag_id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Global Sync Types
+ */
+export const globalSyncTypes = <ThrowOnError extends boolean = false>(
+    options?: Options<GlobalSyncTypesData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<GlobalSyncTypesResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/sync",
         ...options,
     });
 };

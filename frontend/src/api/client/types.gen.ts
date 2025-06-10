@@ -40,30 +40,215 @@ export type ErrorSchema = {
     detail: ErrorMessage;
 };
 
-export type CheckLoginData = {
+/**
+ * MessageSchema
+ */
+export type MessageSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Content
+     */
+    content: string;
+    /**
+     * Conversationid
+     */
+    conversationId: string;
+    /**
+     * Replytoid
+     */
+    replyToId: string | null;
+};
+
+/**
+ * NewMessageSchema
+ */
+export type NewMessageSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Content
+     */
+    content: string;
+    /**
+     * Conversationid
+     */
+    conversationId: string;
+    /**
+     * Replytoid
+     */
+    replyToId: string | null;
+};
+
+/**
+ * ConversationSchema
+ */
+export type ConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tags
+     */
+    tags: Array<TagSchema>;
+};
+
+/**
+ * TagSchema
+ */
+export type TagSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
+/**
+ * NewConversationSchema
+ */
+export type NewConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tagids
+     */
+    tagIds: Array<string>;
+};
+
+/**
+ * UpdateConversationSchema
+ */
+export type UpdateConversationSchema = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Tagids
+     */
+    tagIds: Array<string>;
+};
+
+/**
+ * NewTagSchema
+ */
+export type NewTagSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
+/**
+ * UpdateTagSchema
+ */
+export type UpdateTagSchema = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Color
+     */
+    color: string;
+};
+
+/**
+ * SyncConversation
+ */
+export type SyncConversation = {
+    /**
+     * Type
+     */
+    type: "conversation";
+    data: ConversationSchema;
+};
+
+/**
+ * SyncMessage
+ */
+export type SyncMessage = {
+    /**
+     * Type
+     */
+    type: "message";
+    data: MessageSchema;
+};
+
+/**
+ * SyncTag
+ */
+export type SyncTag = {
+    /**
+     * Type
+     */
+    type: "tag";
+    data: TagSchema;
+};
+
+export type WhoAmIData = {
     body?: never;
     path?: never;
     query?: never;
-    url: "/api/auth/login";
+    url: "/api/auth/whoami";
 };
 
-export type CheckLoginErrors = {
+export type WhoAmIErrors = {
     /**
      * Unauthorized
      */
     401: ErrorSchema;
 };
 
-export type CheckLoginError = CheckLoginErrors[keyof CheckLoginErrors];
+export type WhoAmIError = WhoAmIErrors[keyof WhoAmIErrors];
 
-export type CheckLoginResponses = {
+export type WhoAmIResponses = {
     /**
      * OK
      */
     200: CsrfAuthUserSchema;
 };
 
-export type CheckLoginResponse = CheckLoginResponses[keyof CheckLoginResponses];
+export type WhoAmIResponse = WhoAmIResponses[keyof WhoAmIResponses];
 
 export type LogoutData = {
     body?: never;
@@ -106,6 +291,176 @@ export type GithubCallbackResponses = {
      */
     200: unknown;
 };
+
+export type ListMyMessagesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/messages/list";
+};
+
+export type ListMyMessagesResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<MessageSchema>;
+};
+
+export type ListMyMessagesResponse = ListMyMessagesResponses[keyof ListMyMessagesResponses];
+
+export type CreateMessageData = {
+    body: NewMessageSchema;
+    path?: never;
+    query?: never;
+    url: "/api/messages/create";
+};
+
+export type CreateMessageErrors = {
+    /**
+     * Not Found
+     */
+    404: ErrorSchema;
+};
+
+export type CreateMessageError = CreateMessageErrors[keyof CreateMessageErrors];
+
+export type CreateMessageResponses = {
+    /**
+     * OK
+     */
+    200: MessageSchema;
+};
+
+export type CreateMessageResponse = CreateMessageResponses[keyof CreateMessageResponses];
+
+export type ListMyConversationsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/conversations/list";
+};
+
+export type ListMyConversationsResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<ConversationSchema>;
+};
+
+export type ListMyConversationsResponse =
+    ListMyConversationsResponses[keyof ListMyConversationsResponses];
+
+export type CreateConversationData = {
+    body: NewConversationSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversations/create";
+};
+
+export type CreateConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type CreateConversationResponse =
+    CreateConversationResponses[keyof CreateConversationResponses];
+
+export type UpdateConversationData = {
+    body: UpdateConversationSchema;
+    path: {
+        /**
+         * Conversation Id
+         */
+        conversation_id: string;
+    };
+    query?: never;
+    url: "/api/conversations/update/{conversation_id}";
+};
+
+export type UpdateConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type UpdateConversationResponse =
+    UpdateConversationResponses[keyof UpdateConversationResponses];
+
+export type ListMyTagsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/tags/list";
+};
+
+export type ListMyTagsResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<TagSchema>;
+};
+
+export type ListMyTagsResponse = ListMyTagsResponses[keyof ListMyTagsResponses];
+
+export type CreateTagData = {
+    body: NewTagSchema;
+    path?: never;
+    query?: never;
+    url: "/api/tags/create";
+};
+
+export type CreateTagResponses = {
+    /**
+     * OK
+     */
+    200: TagSchema;
+};
+
+export type CreateTagResponse = CreateTagResponses[keyof CreateTagResponses];
+
+export type UpdateTagData = {
+    body: UpdateTagSchema;
+    path: {
+        /**
+         * Tag Id
+         */
+        tag_id: string;
+    };
+    query?: never;
+    url: "/api/tags/update/{tag_id}";
+};
+
+export type UpdateTagResponses = {
+    /**
+     * OK
+     */
+    200: TagSchema;
+};
+
+export type UpdateTagResponse = UpdateTagResponses[keyof UpdateTagResponses];
+
+export type GlobalSyncTypesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: "/api/sync";
+};
+
+export type GlobalSyncTypesResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: SyncMessage | SyncConversation | SyncTag;
+};
+
+export type GlobalSyncTypesResponse = GlobalSyncTypesResponses[keyof GlobalSyncTypesResponses];
 
 export type ClientOptions = {
     baseUrl: string;

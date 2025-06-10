@@ -2,8 +2,11 @@ import { HeadContent, Outlet, createRootRouteWithContext, redirect } from "@tans
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { AuthUserSchema } from "@/api";
+import { useAnonUser } from "@/api/auth";
 import sonnerCss from "@/sonner.css?url";
 import appCss from "@/styles.css?url";
+import { ConversationsProvider } from "@/sync/conversations";
+import { SyncProvider } from "@/sync/sync-provider";
 
 interface RouterContext {
     user: AuthUserSchema | null;
@@ -56,7 +59,29 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     component: RouteComponent,
 });
 
+function Authenticated() {
+    /**************************************************************************/
+    /* Render */
+    return (
+        <SyncProvider>
+            <ConversationsProvider>
+                <Outlet />
+            </ConversationsProvider>
+        </SyncProvider>
+    );
+}
+
+function Anonymous() {
+    /**************************************************************************/
+    /* Render */
+    return <Outlet />;
+}
+
 function RouteComponent() {
+    /**************************************************************************/
+    /* State */
+    const user = useAnonUser();
+
     /**************************************************************************/
     /* Render */
     return (
@@ -65,9 +90,9 @@ function RouteComponent() {
                 <HeadContent />
             </head>
 
-            <body className="h-full overflow-y-auto">
+            <body className="h-full overflow-y-auto overscroll-y-none">
                 <main>
-                    <Outlet />
+                    {user === null ? <Anonymous /> : <Authenticated />}
 
                     <TanStackRouterDevtools />
                 </main>

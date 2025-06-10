@@ -33,6 +33,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace("http://localhost:3000", "http://localhost:8000"),
             },
+            "/ws/sync": {
+                target: "ws://localhost:8000",
+                ws: true,
+                rewrite: (path) => path.replace("ws://localhost:3000", "ws://localhost:8000"),
+            },
         },
     },
 });

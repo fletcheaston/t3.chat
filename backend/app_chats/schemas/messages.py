@@ -1,0 +1,21 @@
+import uuid
+
+from .base import Schema
+
+
+class MessageSchema(Schema):
+    id: uuid.UUID
+    title: str
+    content: str
+
+    conversation_id: uuid.UUID
+    reply_to_id: uuid.UUID | None
+
+
+class NewMessageSchema(Schema):
+    id: uuid.UUID
+    title: str
+    content: str
+
+    conversation_id: uuid.UUID
+    reply_to_id: uuid.UUID | None
