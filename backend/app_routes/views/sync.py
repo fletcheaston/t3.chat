@@ -1,10 +1,10 @@
-from typing import Literal
+from typing import Any, Literal
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from ninja import Router
 
 from app_routes import schemas
-from app_users.models import Conversation, ConversationTag, Message
+from app_users.models import Conversation, ConversationTag, Message, User
 
 router = Router()
 
@@ -37,32 +37,38 @@ def global_sync_types() -> None:
 
 
 class GlobalSyncConsumer(AsyncWebsocketConsumer):
+    user: User
+    group_name: str
+
     ####################################################################################
     async def connect(self) -> None:
         # Check user
-        if not self.scope["user"].is_authenticated:
+        self.user = self.scope["user"]
+
+        if not self.user.is_authenticated:
             await self.close()
+            return
 
         # Start connection
+        self.group_name = f"user-{self.user.id}"
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
         # Full bootstrap
         # Tags
-        async for value in ConversationTag.objects.filter(owner=self.scope["user"]):
+        async for value in ConversationTag.objects.filter(owner=self.user):
             data = SyncTag(type="tag", data=value)
             await self.send(data.model_dump_json())
 
         # Conversations
         async for value in Conversation.objects.filter(
-            owner=self.scope["user"]
+            owner=self.user
         ).prefetch_related("db_tags__conversations"):
             data = SyncConversation(type="conversation", data=value)
             await self.send(data.model_dump_json())
 
         # Messages
-        async for value in Message.objects.filter(
-            conversation__owner=self.scope["user"]
-        ):
+        async for value in Message.objects.filter(conversation__owner=self.user):
             data = SyncMessage(type="message", data=value)
             await self.send(data.model_dump_json())
 
@@ -70,3 +76,7 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code) -> None:
         # Close connection
         await self.close(close_code)
+
+    ####################################################################################
+    async def send_data(self, event: Any) -> None:
+        pass
