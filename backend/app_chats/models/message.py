@@ -61,7 +61,7 @@ class Message(DjangoModel):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(
-            f"user-{self.author_id}",
+            f"user-{self.conversation.owner_id}",
             {
                 "type": "send_data",
                 "event": schemas.SyncMessage.model_validate(
