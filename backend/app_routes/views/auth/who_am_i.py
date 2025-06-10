@@ -1,0 +1,25 @@
+from typing import Any
+
+from django.middleware.csrf import get_token
+from ninja import Router
+
+from app_routes import schemas
+from app_utils.requests import HttpRequest
+
+router = Router()
+
+
+@router.get(
+    "/whoami",
+    response={200: schemas.CsrfAuthUserSchema, 401: schemas.ErrorSchema},
+    by_alias=True,
+    auth=None,
+)
+def who_am_i(request: HttpRequest) -> Any:
+    if request.user.is_authenticated:
+        return {
+            "csrf_token": get_token(request),
+            "auth_user": request.user,
+        }
+
+    return 401, schemas.ErrorSchema(detail=schemas.ErrorMessage.UNAUTHENTICATED_USER)
