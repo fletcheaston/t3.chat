@@ -16,12 +16,14 @@ def create_conversation(
     request: AuthenticatedHttpRequest,
     data: schemas.NewConversationSchema,
 ) -> Conversation:
-    conversation = Conversation.objects.create(
+    conversation = Conversation(
         id=data.id,
         title=data.title,
         owner=request.user,
     )
 
     conversation.db_tags.set(data.tag_ids)
+
+    conversation.save()
 
     return conversation

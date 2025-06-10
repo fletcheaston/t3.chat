@@ -107,7 +107,7 @@ class Tag(DjangoModel):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(
-            f"user-{self.owner.id}",
+            f"user-{self.owner_id}",
             {
                 "type": "send_data",
                 "event": schemas.SyncTag.model_validate(

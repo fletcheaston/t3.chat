@@ -1,6 +1,9 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 from simple_history.models import HistoricalRecords
 
+from app_chats import schemas
 from app_utils.models import DjangoModel
 
 from .conversation import Conversation
@@ -31,6 +34,7 @@ class Message(DjangoModel):
     reply_to = models.ForeignKey(
         "self",
         null=True,
+        blank=True,
         on_delete=models.PROTECT,
     )
 
@@ -50,3 +54,21 @@ class Message(DjangoModel):
 
     ############################################################################
     # Methods
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+
+        # Broadcast via channels
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            f"user-{self.author_id}",
+            {
+                "type": "send_data",
+                "event": schemas.SyncMessage.model_validate(
+                    {
+                        "type": "message",
+                        "data": self,
+                    }
+                ).model_dump_safe(),
+            },
+        )
