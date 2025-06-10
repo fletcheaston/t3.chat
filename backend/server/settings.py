@@ -64,7 +64,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "unsafe-none"
 
 ########################################################################################
 # Application definition
-AUTH_USER_MODEL = "app_users.User"
+AUTH_USER_MODEL = "app_chats.User"
 
 LOGIN_URL = "/login/"
 
@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     # First apps
     "daphne",
     "app_utils",
-    "app_users",
+    "app_chats",
     ####################################################################################
     # Django's builtin apps
     "django.contrib.admin",
@@ -89,9 +89,6 @@ INSTALLED_APPS = [
     "silk",
     "simple_history",
     "ninja",
-    ####################################################################################
-    # Custom apps
-    "app_routes",
 ]
 
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
