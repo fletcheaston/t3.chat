@@ -12,9 +12,9 @@
 
 import { Route as rootRoute } from "./routes/__root"
 import { Route as LoginImport } from "./routes/login"
-import { Route as ChatsImport } from "./routes/chats"
+import { Route as ChatImport } from "./routes/chat"
 import { Route as IndexImport } from "./routes/index"
-import { Route as ChatsChatIdImport } from "./routes/chats.$chatId"
+import { Route as ChatChatIdImport } from "./routes/chat.$chatId"
 
 // Create/Update Routes
 
@@ -24,9 +24,9 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ChatsRoute = ChatsImport.update({
-  id: "/chats",
-  path: "/chats",
+const ChatRoute = ChatImport.update({
+  id: "/chat",
+  path: "/chat",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,10 +36,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ChatsChatIdRoute = ChatsChatIdImport.update({
+const ChatChatIdRoute = ChatChatIdImport.update({
   id: "/$chatId",
   path: "/$chatId",
-  getParentRoute: () => ChatsRoute,
+  getParentRoute: () => ChatRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -53,11 +53,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    "/chats": {
-      id: "/chats"
-      path: "/chats"
-      fullPath: "/chats"
-      preLoaderRoute: typeof ChatsImport
+    "/chat": {
+      id: "/chat"
+      path: "/chat"
+      fullPath: "/chat"
+      preLoaderRoute: typeof ChatImport
       parentRoute: typeof rootRoute
     }
     "/login": {
@@ -67,68 +67,68 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    "/chats/$chatId": {
-      id: "/chats/$chatId"
+    "/chat/$chatId": {
+      id: "/chat/$chatId"
       path: "/$chatId"
-      fullPath: "/chats/$chatId"
-      preLoaderRoute: typeof ChatsChatIdImport
-      parentRoute: typeof ChatsImport
+      fullPath: "/chat/$chatId"
+      preLoaderRoute: typeof ChatChatIdImport
+      parentRoute: typeof ChatImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface ChatsRouteChildren {
-  ChatsChatIdRoute: typeof ChatsChatIdRoute
+interface ChatRouteChildren {
+  ChatChatIdRoute: typeof ChatChatIdRoute
 }
 
-const ChatsRouteChildren: ChatsRouteChildren = {
-  ChatsChatIdRoute: ChatsChatIdRoute,
+const ChatRouteChildren: ChatRouteChildren = {
+  ChatChatIdRoute: ChatChatIdRoute,
 }
 
-const ChatsRouteWithChildren = ChatsRoute._addFileChildren(ChatsRouteChildren)
+const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
-  "/chats": typeof ChatsRouteWithChildren
+  "/chat": typeof ChatRouteWithChildren
   "/login": typeof LoginRoute
-  "/chats/$chatId": typeof ChatsChatIdRoute
+  "/chat/$chatId": typeof ChatChatIdRoute
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
-  "/chats": typeof ChatsRouteWithChildren
+  "/chat": typeof ChatRouteWithChildren
   "/login": typeof LoginRoute
-  "/chats/$chatId": typeof ChatsChatIdRoute
+  "/chat/$chatId": typeof ChatChatIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   "/": typeof IndexRoute
-  "/chats": typeof ChatsRouteWithChildren
+  "/chat": typeof ChatRouteWithChildren
   "/login": typeof LoginRoute
-  "/chats/$chatId": typeof ChatsChatIdRoute
+  "/chat/$chatId": typeof ChatChatIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/chats" | "/login" | "/chats/$chatId"
+  fullPaths: "/" | "/chat" | "/login" | "/chat/$chatId"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/chats" | "/login" | "/chats/$chatId"
-  id: "__root__" | "/" | "/chats" | "/login" | "/chats/$chatId"
+  to: "/" | "/chat" | "/login" | "/chat/$chatId"
+  id: "__root__" | "/" | "/chat" | "/login" | "/chat/$chatId"
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ChatsRoute: typeof ChatsRouteWithChildren
+  ChatRoute: typeof ChatRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ChatsRoute: ChatsRouteWithChildren,
+  ChatRoute: ChatRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 
@@ -143,25 +143,25 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/chats",
+        "/chat",
         "/login"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/chats": {
-      "filePath": "chats.tsx",
+    "/chat": {
+      "filePath": "chat.tsx",
       "children": [
-        "/chats/$chatId"
+        "/chat/$chatId"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/chats/$chatId": {
-      "filePath": "chats.$chatId.tsx",
-      "parent": "/chats"
+    "/chat/$chatId": {
+      "filePath": "chat.$chatId.tsx",
+      "parent": "/chat"
     }
   }
 }

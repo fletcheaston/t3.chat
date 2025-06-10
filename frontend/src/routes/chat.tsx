@@ -16,7 +16,7 @@ import {
 } from "@/ui/sidebar";
 import { cn } from "@/utils";
 
-export const Route = createFileRoute("/chats")({
+export const Route = createFileRoute("/chat")({
     component: RouteComponent,
 });
 
