@@ -4,7 +4,7 @@ import { GlobalSyncTypesResponses, SyncConversation, SyncMessage, SyncTag } from
 
 export type SyncData = GlobalSyncTypesResponses["200"];
 
-const db = new Dexie("Drawing") as Dexie & {
+const db = new Dexie("F3Chat") as Dexie & {
     messages: EntityTable<SyncMessage["data"], "id">;
     conversations: EntityTable<SyncConversation["data"], "id">;
     tags: EntityTable<SyncTag["data"], "id">;

@@ -3,6 +3,7 @@ import * as React from "react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { PanelLeftIcon, PlusIcon, SearchIcon } from "lucide-react";
 
+import { useConversations } from "@/sync/conversations";
 import { Button } from "@/ui/button";
 import { F3 } from "@/ui/logo";
 import {
@@ -19,31 +20,21 @@ export const Route = createFileRoute("/chats")({
     component: RouteComponent,
 });
 
-function ChatSidebar() {
+function SidebarChats() {
+    /**************************************************************************/
+    /* State */
+    const conversations = useConversations();
+
+    console.log({ conversations });
+
     /**************************************************************************/
     /* Render */
     return (
-        <Sidebar
-            collapsible="offcanvas"
-            className="bg-gunmetal-50"
-        >
-            <div
-                data-slot="sidebar-header"
-                data-sidebar="header"
-                className="flex flex-col items-center gap-2 p-0.5 text-xl"
-            >
-                <h1 className="my-0.5 h-3.5 select-none">
-                    <F3 />
-                </h1>
-            </div>
-
-            <SidebarContent>
-                <SidebarGroup />
-                <SidebarGroup />
-            </SidebarContent>
-
-            <SidebarFooter />
-        </Sidebar>
+        <>
+            {conversations.map((conversation) => {
+                return <SidebarGroup key={conversation.id}>{conversation.title}</SidebarGroup>;
+            })}
+        </>
     );
 }
 
@@ -115,7 +106,26 @@ function RouteComponent() {
             <SidebarProvider>
                 <SidebarButtons />
 
-                <ChatSidebar />
+                <Sidebar
+                    collapsible="offcanvas"
+                    className="bg-gunmetal-50"
+                >
+                    <div
+                        data-slot="sidebar-header"
+                        data-sidebar="header"
+                        className="flex flex-col items-center gap-2 p-0.5 text-xl"
+                    >
+                        <h1 className="my-0.5 h-3.5 select-none">
+                            <F3 />
+                        </h1>
+                    </div>
+
+                    <SidebarContent>
+                        <SidebarChats />
+                    </SidebarContent>
+
+                    <SidebarFooter />
+                </Sidebar>
 
                 <div>
                     <div>Hello chats</div>
