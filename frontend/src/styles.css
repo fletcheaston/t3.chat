@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-pantone: rgb(255, 91, 4);
+    --color-pantone: rgb(255, 91, 4);
+    --color-pantone-light: rgb(255, 133, 62);
 
-  --color-gunmetal-50: rgb(70, 96, 112);
-  --color-gunmetal: rgb(35, 48, 56);
-  --color-gunmetal-200: rgb(18, 24, 28);
+    --color-gunmetal-light: rgb(70, 96, 112);
+    --color-gunmetal: rgb(35, 48, 56);
+    --color-gunmetal-dark: rgb(18, 24, 28);
 
-  --color-ivory: rgb(253, 246, 227);
+    --color-ivory: rgb(253, 246, 227);
 
-  --color-silver: rgb(243, 254, 255);
+    --color-silver: rgb(243, 254, 255);
+    --color-silver-dull: rgb(156, 159, 159);
 }
 
 html, main {
-  @apply h-full bg-gunmetal text-silver;
+    @apply h-full bg-gunmetal text-silver;
 }

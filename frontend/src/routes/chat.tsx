@@ -1,11 +1,12 @@
 import * as React from "react";
 
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import { PanelLeftIcon, PlusIcon, SearchIcon } from "lucide-react";
 
 import { useConversations } from "@/sync/conversations";
 import { Button } from "@/ui/button";
 import { F3 } from "@/ui/logo";
+import { Separator } from "@/ui/separator";
 import {
     Sidebar,
     SidebarContent,
@@ -47,7 +48,7 @@ function SidebarButtons() {
     /* Render */
     return (
         <div className="absolute top-2 left-2 z-50">
-            <div className="bg-gunmetal-50/50 relative flex h-fit gap-x-0.5 rounded p-1 backdrop-blur-sm transition-all duration-150">
+            <div className="bg-gunmetal-light/50 relative flex h-fit gap-x-0.5 rounded p-1 backdrop-blur-sm transition-all duration-150">
                 <Button
                     data-sidebar="trigger"
                     data-slot="sidebar-trigger"
@@ -108,16 +109,27 @@ function RouteComponent() {
 
                 <Sidebar
                     collapsible="offcanvas"
-                    className="bg-gunmetal-50"
+                    className="bg-gunmetal-light"
                 >
                     <div
                         data-slot="sidebar-header"
                         data-sidebar="header"
-                        className="flex flex-col items-center gap-2 p-0.5 text-xl"
+                        className="flex flex-col items-center gap-2 px-4 py-0.5"
                     >
-                        <h1 className="my-0.5 h-3.5 select-none">
+                        <h1 className="mt-0.5 h-3.5 select-none">
                             <F3 />
                         </h1>
+
+                        <Button
+                            asChild
+                            variant="plain"
+                            size="sm"
+                            className="text-gunmetal hover:bg-pantone-light bg-pantone/90 mt-4 w-full text-sm"
+                        >
+                            <Link to="/chat">New Chat</Link>
+                        </Button>
+
+                        <Separator />
                     </div>
 
                     <SidebarContent>

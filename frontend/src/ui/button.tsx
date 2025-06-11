@@ -11,7 +11,7 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 plain: "",
-                default: "hover:opacity-80 focus:opacity-80 border border-silver",
+                default: "hover:opacity-80 focus:opacity-80 border border-silver-dull",
             },
             size: {
                 default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -21,7 +21,7 @@ const buttonVariants = cva(
             },
         },
         defaultVariants: {
-            variant: "default",
+            variant: "plain",
             size: "default",
         },
     }
