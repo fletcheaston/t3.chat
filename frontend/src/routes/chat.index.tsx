@@ -13,7 +13,7 @@ function RouteComponent() {
     return (
         <div className="flex h-full justify-center overflow-y-auto px-2">
             <div className="flex max-w-3xl grow flex-col">
-                <div className="grow">
+                <div className="grow pb-12">
                     <MessageContent />
                 </div>
 

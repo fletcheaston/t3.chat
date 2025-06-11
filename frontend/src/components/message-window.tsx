@@ -9,7 +9,7 @@ import { Textarea } from "@/ui/textarea";
 export function MessageWindow() {
     /**************************************************************************/
     /* State */
-    const [message, setMessage] = useState("a\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n");
+    const [message, setMessage] = useState("");
 
     /**************************************************************************/
     /* Render */
