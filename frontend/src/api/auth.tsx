@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 import { useMountEffect } from "@react-hookz/web";
 
 import { AuthUserSchema, whoAmI } from "@/api/client";
+import { client } from "@/api/client/client.gen";
 
 const UserContext = createContext<AuthUserSchema | null>(null);
 
@@ -16,6 +17,13 @@ export function AuthProvider(props: { children: React.ReactNode }) {
             .then((result) => {
                 if (result.data?.authUser) {
                     setUser(result.data.authUser);
+
+                    client.setConfig({
+                        headers: {
+                            "X-CSRFToken": result.data.csrfToken,
+                        },
+                    });
+
                     return;
                 }
 

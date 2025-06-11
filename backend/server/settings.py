@@ -40,6 +40,7 @@ CSRF_USE_SESSIONS = False
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS = [
     ####################################################################################
     # Local dev
+    "http://localhost:3000",
     "http://localhost:8000",
     ####################################################################################
     # Real domains
