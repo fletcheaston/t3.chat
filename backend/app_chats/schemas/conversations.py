@@ -7,6 +7,9 @@ from .tags import TagSchema
 
 class ConversationSchema(Schema):
     id: uuid.UUID
+    created: datetime
+    modified: datetime
+
     title: str
     tags: list[TagSchema]
     created: datetime

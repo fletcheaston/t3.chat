@@ -13,6 +13,8 @@ import type {
     GithubCallbackData,
     GithubCallbackErrors,
     GithubCallbackResponses,
+    GlobalSyncBootstrapData,
+    GlobalSyncBootstrapResponses,
     GlobalSyncTypesData,
     GlobalSyncTypesResponses,
     ListMyConversationsData,
@@ -292,6 +294,29 @@ export const globalSyncTypes = <ThrowOnError extends boolean = false>(
             },
         ],
         url: "/api/sync",
+        ...options,
+    });
+};
+
+/**
+ * Global Sync Bootstrap
+ */
+export const globalSyncBootstrap = <ThrowOnError extends boolean = false>(
+    options?: Options<GlobalSyncBootstrapData, ThrowOnError>
+) => {
+    return (options?.client ?? _heyApiClient).get<
+        GlobalSyncBootstrapResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/sync/bootstrap",
         ...options,
     });
 };

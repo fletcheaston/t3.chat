@@ -6,9 +6,11 @@ from .base import Schema
 
 class MessageSchema(Schema):
     id: uuid.UUID
+    created: datetime
+    modified: datetime
+
     title: str
     content: str
-    created: datetime
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None

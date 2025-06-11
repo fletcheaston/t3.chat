@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from pydantic_extra_types.color import Color
 
@@ -7,6 +8,9 @@ from .base import Schema
 
 class TagSchema(Schema):
     id: uuid.UUID
+    created: datetime
+    modified: datetime
+
     title: str
     color: Color
 

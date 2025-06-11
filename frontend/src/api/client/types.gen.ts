@@ -49,6 +49,14 @@ export type MessageSchema = {
      */
     id: string;
     /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
      * Title
      */
     title: string;
@@ -56,10 +64,6 @@ export type MessageSchema = {
      * Content
      */
     content: string;
-    /**
-     * Created
-     */
-    created: string;
     /**
      * Conversationid
      */
@@ -105,6 +109,14 @@ export type ConversationSchema = {
      */
     id: string;
     /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
      * Title
      */
     title: string;
@@ -112,10 +124,6 @@ export type ConversationSchema = {
      * Tags
      */
     tags: Array<TagSchema>;
-    /**
-     * Created
-     */
-    created: string;
 };
 
 /**
@@ -126,6 +134,14 @@ export type TagSchema = {
      * Id
      */
     id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
     /**
      * Title
      */
@@ -469,6 +485,29 @@ export type GlobalSyncTypesResponses = {
 };
 
 export type GlobalSyncTypesResponse = GlobalSyncTypesResponses[keyof GlobalSyncTypesResponses];
+
+export type GlobalSyncBootstrapData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Timestamp
+         */
+        timestamp?: string | null;
+    };
+    url: "/api/sync/bootstrap";
+};
+
+export type GlobalSyncBootstrapResponses = {
+    /**
+     * Response
+     * OK
+     */
+    200: Array<SyncMessage | SyncConversation | SyncTag>;
+};
+
+export type GlobalSyncBootstrapResponse =
+    GlobalSyncBootstrapResponses[keyof GlobalSyncBootstrapResponses];
 
 export type ClientOptions = {
     baseUrl: string;
