@@ -90,7 +90,7 @@ function RouteComponent() {
                 <HeadContent />
             </head>
 
-            <body className="h-full overflow-y-auto overscroll-y-none">
+            <body className="h-full overflow-y-auto overscroll-none">
                 <main>
                     {user === null ? <Anonymous /> : <Authenticated />}
 
