@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-import { ChatSidebar } from "@/components/chat-sidebar";
+import { ConversationSidebar } from "@/components/conversation-sidebar";
 import { SidebarProvider } from "@/ui/sidebar";
 
 export const Route = createFileRoute("/chat")({
@@ -13,16 +13,14 @@ function RouteComponent() {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="relative">
-            <SidebarProvider>
-                <ChatSidebar />
+        <SidebarProvider>
+            <div className="relative">
+                <ConversationSidebar />
+            </div>
 
-                <div>
-                    <div>Hello chats</div>
-
-                    <Outlet />
-                </div>
-            </SidebarProvider>
-        </div>
+            <div className="h-[100vh] grow overflow-hidden">
+                <Outlet />
+            </div>
+        </SidebarProvider>
     );
 }

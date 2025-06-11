@@ -80,4 +80,4 @@ def github_callback(request: HttpRequest, code: str) -> Any:
     django_login(request, user)
 
     # Redirect them back to the app
-    return redirect("/")
+    return redirect("/chat")

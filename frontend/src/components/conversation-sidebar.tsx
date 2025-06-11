@@ -70,7 +70,7 @@ function SidebarButtons() {
     );
 }
 
-export function ChatSidebar() {
+export function ConversationSidebar() {
     /**************************************************************************/
     /* State */
     const conversations = useConversations();
@@ -98,7 +98,7 @@ export function ChatSidebar() {
                         asChild
                         variant="plain"
                         size="sm"
-                        className="text-gunmetal hover:bg-pantone-light bg-pantone/90 mt-4 w-full text-sm"
+                        className="text-gunmetal hover:bg-pantone bg-pantone-light hover:border-pantone border-gunmetal-light mt-4 w-full border text-sm"
                     >
                         <Link to="/chat">New Chat</Link>
                     </Button>

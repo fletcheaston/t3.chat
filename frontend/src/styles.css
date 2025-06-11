@@ -3,17 +3,41 @@
 @theme {
     --color-pantone: rgb(255, 91, 4);
     --color-pantone-light: rgb(255, 133, 62);
+    --color-pantone-lighter: rgb(255, 188, 143);
 
     --color-gunmetal-light: rgb(70, 96, 112);
     --color-gunmetal: rgb(35, 48, 56);
-    --color-gunmetal-dark: rgb(18, 24, 28);
+    --color-gunmetal-dark: rgb(22, 33, 37);
 
     --color-ivory: rgb(253, 246, 227);
 
     --color-silver: rgb(243, 254, 255);
     --color-silver-dull: rgb(156, 159, 159);
+
+    --blur-xxs: 2px;
 }
 
 html, main {
     @apply h-full bg-gunmetal text-silver;
+}
+
+::-webkit-scrollbar {
+    @apply w-2;
+    height: 20px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent rounded-4xl;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-pantone-lighter border border-gunmetal rounded-4xl;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-pantone border-none cursor-pointer;
+}
+
+::selection {
+    @apply bg-pantone text-gunmetal-dark;
 }

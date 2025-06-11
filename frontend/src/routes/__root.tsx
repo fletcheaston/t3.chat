@@ -28,7 +28,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         // Authenticated user
         // If they're on the login page, take them to home page
         if (isLoginPage) {
-            throw redirect({ to: "/" });
+            throw redirect({ to: "/chat" });
         }
     },
     head: () => {
