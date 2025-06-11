@@ -11,7 +11,7 @@ const db = new Dexie("F3Chat") as Dexie & {
 };
 
 db.version(1).stores({
-    messages: "id,created",
+    messages: "id,conversationId,created",
     conversations: "id,created",
     tags: "id,created",
 });

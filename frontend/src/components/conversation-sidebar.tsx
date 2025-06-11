@@ -1,13 +1,23 @@
 import * as React from "react";
 
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { PanelLeftIcon, PlusIcon, SearchIcon } from "lucide-react";
 
 import { useConversations } from "@/sync/conversations";
 import { Button } from "@/ui/button";
 import { F3 } from "@/ui/logo";
 import { Separator } from "@/ui/separator";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, useSidebar } from "@/ui/sidebar";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+} from "@/ui/sidebar";
 import { cn } from "@/utils";
 
 function SidebarButtons() {
@@ -73,6 +83,8 @@ function SidebarButtons() {
 export function ConversationSidebar() {
     /**************************************************************************/
     /* State */
+    const location = useLocation();
+
     const conversations = useConversations();
 
     /**************************************************************************/
@@ -83,12 +95,12 @@ export function ConversationSidebar() {
 
             <Sidebar
                 collapsible="offcanvas"
-                className="bg-gunmetal-light"
+                className="bg-gunmetal-light px-4"
             >
                 <div
                     data-slot="sidebar-header"
                     data-sidebar="header"
-                    className="flex flex-col items-center gap-2 px-4 py-0.5"
+                    className="flex flex-col items-center gap-2 py-0.5"
                 >
                     <h1 className="mt-0.5 h-3.5 select-none">
                         <F3 />
@@ -107,11 +119,36 @@ export function ConversationSidebar() {
                 </div>
 
                 <SidebarContent>
-                    {conversations.map((conversation) => {
-                        return (
-                            <SidebarGroup key={conversation.id}>{conversation.title}</SidebarGroup>
-                        );
-                    })}
+                    <SidebarGroup>
+                        <SidebarGroupContent>
+                            <SidebarMenu className="gap-2">
+                                {conversations.map((conversation) => {
+                                    const selected = location.pathname.includes(conversation.id);
+
+                                    return (
+                                        <SidebarMenuItem key={conversation.id}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                className={cn(
+                                                    "transition-all",
+                                                    selected
+                                                        ? "bg-pantone-lighter text-gunmetal-dark"
+                                                        : "hover:bg-pantone-lighter hover:text-gunmetal-dark"
+                                                )}
+                                            >
+                                                <Link
+                                                    to="/chat/$chatId"
+                                                    params={{ chatId: conversation.id }}
+                                                >
+                                                    {conversation.title}
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    );
+                                })}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
                 </SidebarContent>
 
                 <SidebarFooter />

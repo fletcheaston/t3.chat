@@ -22,7 +22,7 @@ def create_conversation(
         owner=request.user,
     )
 
-    conversation.db_tags.set(data.tag_ids)
+    conversation.db_tags.set(data.tag_ids)  # ty:ignore[possibly-unbound-attribute]
 
     conversation.save()
 

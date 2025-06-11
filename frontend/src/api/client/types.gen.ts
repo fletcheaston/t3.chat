@@ -57,6 +57,10 @@ export type MessageSchema = {
      */
     content: string;
     /**
+     * Created
+     */
+    created: string;
+    /**
      * Conversationid
      */
     conversationId: string;
@@ -108,6 +112,10 @@ export type ConversationSchema = {
      * Tags
      */
     tags: Array<TagSchema>;
+    /**
+     * Created
+     */
+    created: string;
 };
 
 /**

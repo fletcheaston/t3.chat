@@ -1,13 +1,17 @@
+import { useMessages } from "@/sync/messages";
+
 export function MessageContent() {
     /**************************************************************************/
     /* State */
+    const messages = useMessages();
 
     /**************************************************************************/
     /* Render */
     return (
-        <div className="flex h-[2000px] flex-col justify-between px-4">
-            <p>1</p>
-            <p>2</p>
+        <div className="flex flex-col gap-4 px-4">
+            {messages.map((message) => {
+                return <p key={message.id}>{message.content}</p>;
+            })}
         </div>
     );
 }

@@ -40,19 +40,19 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
         # Tags
         async for value in Tag.objects.filter(owner=self.user):
             data = schemas.SyncTag(type="tag", data=value)
-            await self.send(data.model_dump_json())
+            await self.send(data.model_dump_json(by_alias=True))
 
         # Conversations
         async for value in Conversation.objects.filter(
             owner=self.user
         ).prefetch_related("db_tags__conversations"):
             data = schemas.SyncConversation(type="conversation", data=value)
-            await self.send(data.model_dump_json())
+            await self.send(data.model_dump_json(by_alias=True))
 
         # Messages
         async for value in Message.objects.filter(conversation__owner=self.user):
             data = schemas.SyncMessage(type="message", data=value)
-            await self.send(data.model_dump_json())
+            await self.send(data.model_dump_json(by_alias=True))
 
     ####################################################################################
     async def disconnect(self, close_code) -> None:
@@ -62,4 +62,4 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
     ####################################################################################
     async def send_data(self, event: Any) -> None:
         data = schemas.SendDataEvent.model_validate(event)
-        await self.send(data.event.model_dump_json())
+        await self.send(data.event.model_dump_json(by_alias=True))
