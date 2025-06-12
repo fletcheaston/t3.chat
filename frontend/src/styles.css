@@ -18,7 +18,7 @@
 }
 
 html, main {
-    @apply h-full bg-gunmetal text-silver;
+    @apply h-full bg-gunmetal-dark text-silver;
 }
 
 ::-webkit-scrollbar {

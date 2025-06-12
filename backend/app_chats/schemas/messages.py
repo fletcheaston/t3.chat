@@ -14,6 +14,7 @@ class MessageSchema(Schema):
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None
+    author_id: uuid.UUID
 
 
 class NewMessageSchema(Schema):

@@ -95,7 +95,7 @@ export function ConversationSidebar() {
 
             <Sidebar
                 collapsible="offcanvas"
-                className="bg-gunmetal-light px-4"
+                className="bg-gunmetal px-4"
             >
                 <div
                     data-slot="sidebar-header"

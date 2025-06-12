@@ -6,8 +6,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createMessage } from "@/api";
 import { MessageContent } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
+import { ConversationProvider } from "@/sync/conversation";
 import { db } from "@/sync/database";
-import { MessagesProvider } from "@/sync/messages";
 
 export const Route = createFileRoute("/chat/$chatId")({
     component: RouteComponent,
@@ -43,7 +43,7 @@ function RouteComponent() {
     /**************************************************************************/
     /* Render */
     return (
-        <MessagesProvider conversationId={chatId}>
+        <ConversationProvider conversationId={chatId}>
             <div className="flex max-w-3xl grow flex-col">
                 <div className="grow pb-12">
                     <MessageContent />
@@ -53,6 +53,6 @@ function RouteComponent() {
                     <MessageWindow sendMessage={sendMessage} />
                 </div>
             </div>
-        </MessagesProvider>
+        </ConversationProvider>
     );
 }

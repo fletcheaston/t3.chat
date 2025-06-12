@@ -18,7 +18,12 @@ class SyncTag(schemas.Schema):
     data: schemas.TagSchema
 
 
-GlobalSyncTypes = SyncMessage | SyncConversation | SyncTag
+class SyncUser(schemas.Schema):
+    type: Literal["user"]
+    data: schemas.UserSchema
+
+
+GlobalSyncTypes = SyncMessage | SyncConversation | SyncTag | SyncUser
 
 
 class SendDataEvent(schemas.Schema):

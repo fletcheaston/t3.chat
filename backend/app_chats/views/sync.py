@@ -32,6 +32,16 @@ def global_sync_bootstrap(
     data: list[schemas.GlobalSyncTypes] = []
 
     ############################################################################
+    # Users
+    users = User.objects.all()
+
+    if timestamp is not None:
+        users = users.filter(modified__gte=timestamp)
+
+    for value in users:
+        data.append(schemas.SyncUser(type="user", data=value))
+
+    ############################################################################
     # Tags
     tags = Tag.objects.filter(owner=request.user)
 

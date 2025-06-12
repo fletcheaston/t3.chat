@@ -1,7 +1,7 @@
 import { HeadContent, Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import { AuthUserSchema } from "@/api";
+import { UserSchema } from "@/api";
 import { useAnonUser } from "@/api/auth";
 import sonnerCss from "@/sonner.css?url";
 import appCss from "@/styles.css?url";
@@ -9,7 +9,7 @@ import { ConversationsProvider } from "@/sync/conversations";
 import { SyncProvider } from "@/sync/sync-provider";
 
 interface RouterContext {
-    user: AuthUserSchema | null;
+    user: UserSchema | null;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

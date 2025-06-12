@@ -14,8 +14,8 @@ export function MessageWindow(props: { sendMessage: (content: string) => Promise
     /**************************************************************************/
     /* Render */
     return (
-        <div className="bg-gunmetal-light/30 backdrop-blur-xxs rounded-t-2xl p-2 pb-0">
-            <div className="bg-gunmetal-light/30 backdrop-blur-xxs mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3">
+        <div className="bg-gunmetal/50 rounded-t-2xl p-2 pb-0 backdrop-blur-xs">
+            <div className="bg-gunmetal-light/30 mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3 backdrop-blur-xs">
                 <Textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}

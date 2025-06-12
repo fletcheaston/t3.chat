@@ -2,21 +2,21 @@ import React, { createContext, useContext, useState } from "react";
 
 import { useMountEffect } from "@react-hookz/web";
 
-import { AuthUserSchema, whoAmI } from "@/api/client";
+import { UserSchema, whoAmI } from "@/api/client";
 import { client } from "@/api/client/client.gen";
 
-const UserContext = createContext<AuthUserSchema | null>(null);
+const UserContext = createContext<UserSchema | null>(null);
 
 export function AuthProvider(props: { children: React.ReactNode }) {
     /**************************************************************************/
     /* State */
-    const [user, setUser] = useState<AuthUserSchema | undefined | null>(undefined);
+    const [user, setUser] = useState<UserSchema | undefined | null>(undefined);
 
     useMountEffect(() => {
         whoAmI()
             .then((result) => {
-                if (result.data?.authUser) {
-                    setUser(result.data.authUser);
+                if (result.data?.user) {
+                    setUser(result.data.user);
 
                     client.setConfig({
                         headers: {
