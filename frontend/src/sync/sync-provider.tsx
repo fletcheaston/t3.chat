@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-import { useIntervalEffect } from "@react-hookz/web";
+import { useIntervalEffect, useMountEffect } from "@react-hookz/web";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
 import { globalSyncBootstrap } from "@/api";
@@ -8,6 +8,25 @@ import { useAnonUser } from "@/api/auth";
 import { apiUrl } from "@/env";
 
 import { SyncData, addSyncedData } from "./database";
+
+function bootstrap() {
+    // Pull the latest timestamp from local storage
+    const bootstrapTimestamp = localStorage.getItem("bootstrap-timestamp");
+
+    // Update timestamp for next bootstrap
+    localStorage.setItem("bootstrap-timestamp", new Date().toISOString());
+
+    globalSyncBootstrap({ query: { timestamp: bootstrapTimestamp } }).then(({ data }) => {
+        if (!data) {
+            throw new Error("Unable to bootstrap");
+        }
+
+        // Save data locally
+        data.forEach((value) => {
+            addSyncedData(value);
+        });
+    });
+}
 
 export function SyncProvider(props: { children: React.ReactNode }) {
     /**************************************************************************/
@@ -32,25 +51,11 @@ export function SyncProvider(props: { children: React.ReactNode }) {
         return () => wsRef.current?.close();
     }, [user]);
 
+    // On startup, full bootstrap
+    useMountEffect(bootstrap);
+
     // In case the WebSocket connection fails, sync data periodically
-    useIntervalEffect(() => {
-        // Pull the latest timestamp from local storage
-        const bootstrapTimestamp = localStorage.getItem("bootstrap-timestamp");
-
-        // Update timestamp for next bootstrap
-        localStorage.setItem("bootstrap-timestamp", new Date().toISOString());
-
-        globalSyncBootstrap({ query: { timestamp: bootstrapTimestamp } }).then(({ data }) => {
-            if (!data) {
-                throw new Error("Unable to bootstrap");
-            }
-
-            // Save data locally
-            data.forEach((value) => {
-                addSyncedData(value);
-            });
-        });
-    }, 10000);
+    useIntervalEffect(bootstrap, 10000);
 
     /**************************************************************************/
     /* Render */
