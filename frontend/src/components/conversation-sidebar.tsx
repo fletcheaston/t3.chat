@@ -37,6 +37,7 @@ function SidebarButtons() {
                     size="icon"
                     className="hover:bg-gunmetal z-10"
                     onClick={toggleSidebar}
+                    tooltip="Toggle sidebar"
                 >
                     <PanelLeftIcon />
                     <span className="sr-only">Toggle Sidebar</span>
@@ -49,6 +50,7 @@ function SidebarButtons() {
                         "hover:bg-gunmetal relative",
                         open ? "absolute left-0 z-0 opacity-0" : ""
                     )}
+                    tooltip="Search chats"
                 >
                     <SearchIcon
                         className={cn(
@@ -66,6 +68,7 @@ function SidebarButtons() {
                         "hover:bg-gunmetal relative",
                         open ? "absolute left-0 z-0 opacity-0" : ""
                     )}
+                    tooltip="New chat"
                 >
                     <PlusIcon
                         className={cn(
@@ -73,7 +76,7 @@ function SidebarButtons() {
                             open ? "-left-15" : "left-2"
                         )}
                     />
-                    <span className="sr-only">Create Chat</span>
+                    <span className="sr-only">New Chat</span>
                 </Button>
             </div>
         </div>
@@ -111,6 +114,7 @@ export function ConversationSidebar() {
                         variant="plain"
                         size="sm"
                         className="text-gunmetal hover:bg-pantone bg-pantone-light hover:border-pantone border-gunmetal-light mt-4 w-full border text-sm"
+                        tooltip="New chat"
                     >
                         <Link to="/chat">New Chat</Link>
                     </Button>

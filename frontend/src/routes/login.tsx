@@ -21,6 +21,7 @@ function RouteComponent() {
             <Button
                 asChild
                 size="lg"
+                tooltip="Login"
             >
                 <a
                     href={`https://github.com/login/oauth/authorize?scope=user:email&client_id=${githubOauthClientId}`}

@@ -1,14 +1,29 @@
+import { CopyIcon } from "lucide-react";
+
 import { MessageSchema, UserSchema } from "@/api";
 import { useUser } from "@/api/auth";
 import { useMessages, useUserMap } from "@/sync/conversation";
+import { Button } from "@/ui/button";
 
 function MyMessage(props: { message: MessageSchema }) {
     /**************************************************************************/
     /* Render */
     return (
         <div className="flex justify-end">
-            <div className="bg-gunmetal text-silver max-w-[85%] rounded-xl rounded-br-none p-3">
-                <p className="whitespace-pre-wrap">{props.message.content}</p>
+            <div className="group relative max-w-[85%] pb-10">
+                <div className="bg-gunmetal text-silver rounded-xl rounded-br-none p-4">
+                    <p className="whitespace-pre-wrap">{props.message.content}</p>
+                </div>
+
+                <div className="absolute right-0 bottom-0 opacity-0 transition-all group-hover:opacity-100">
+                    <Button
+                        size="icon"
+                        className="hover:bg-pantone-light hover:text-gunmetal-dark rounded"
+                        tooltip="Copy message"
+                    >
+                        <CopyIcon />
+                    </Button>
+                </div>
             </div>
         </div>
     );
@@ -44,7 +59,7 @@ export function MessageContent() {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="flex flex-col gap-12 px-4">
+        <div className="flex flex-col gap-10 px-4">
             {messages.map((message) => {
                 if (message.authorId === self.id) {
                     return (

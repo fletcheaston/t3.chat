@@ -5,11 +5,14 @@ import { ArrowUpIcon } from "lucide-react";
 
 import { Button } from "@/ui/button";
 import { Textarea } from "@/ui/textarea";
+import { cn } from "@/utils";
 
 export function MessageWindow(props: { sendMessage: (content: string) => Promise<void> }) {
     /**************************************************************************/
     /* State */
     const [message, setMessage] = useState("");
+
+    const empty = message === "";
 
     /**************************************************************************/
     /* Render */
@@ -28,12 +31,16 @@ export function MessageWindow(props: { sendMessage: (content: string) => Promise
 
                     <Button
                         size="icon"
-                        className="hover:bg-pantone bg-pantone-light"
+                        className={cn(
+                            "bg-pantone-light",
+                            empty ? "cursor-default opacity-50" : "hover:bg-pantone"
+                        )}
                         onClick={() => {
                             if (!message) return;
 
                             props.sendMessage(message).then(() => setMessage(""));
                         }}
+                        tooltip={empty ? "Message requires text" : "Send message"}
                     >
                         <ArrowUpIcon className="text-gunmetal-dark size-5" />
                         <span className="sr-only">Send Message</span>
