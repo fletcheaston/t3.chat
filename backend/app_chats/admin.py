@@ -14,9 +14,27 @@ from .models import (
 admin.site.disable_action("delete_selected")
 
 
-admin.site.register(Conversation, SimpleHistoryAdmin)
+class ConversationAdmin(SimpleHistoryAdmin):
+    ordering = ["created"]
+    list_display = ["id", "created", "title", "owner"]
+
+
+admin.site.register(Conversation, ConversationAdmin)
 admin.site.register(ConversationMember, SimpleHistoryAdmin)
 admin.site.register(Tag, SimpleHistoryAdmin)
 admin.site.register(ConversationToTag, SimpleHistoryAdmin)
-admin.site.register(Message, SimpleHistoryAdmin)
-admin.site.register(User, SimpleHistoryAdmin)
+
+
+class MessageAdmin(SimpleHistoryAdmin):
+    ordering = ["created"]
+    list_display = ["id", "created", "title", "author"]
+
+
+admin.site.register(Message, MessageAdmin)
+
+
+class UserAdmin(SimpleHistoryAdmin):
+    list_display = ["id", "name", "email", "username", "last_login"]
+
+
+admin.site.register(User, UserAdmin)

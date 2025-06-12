@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
 
-import { GlobalSyncTypesResponses, SyncConversation, SyncMessage, SyncTag } from "@/api";
+import { GlobalSyncTypesResponses, SyncConversation, SyncMessage, SyncTag, SyncUser } from "@/api";
 
 export type SyncData = GlobalSyncTypesResponses["200"];
 
@@ -8,12 +8,14 @@ const db = new Dexie("F3Chat") as Dexie & {
     messages: EntityTable<SyncMessage["data"], "id">;
     conversations: EntityTable<SyncConversation["data"], "id">;
     tags: EntityTable<SyncTag["data"], "id">;
+    users: EntityTable<SyncUser["data"], "id">;
 };
 
 db.version(1).stores({
-    messages: "id,created",
+    messages: "id,conversationId,created",
     conversations: "id,created",
     tags: "id,created",
+    users: "id,created",
 });
 
 export function addSyncedData(value: SyncData) {
@@ -30,6 +32,11 @@ export function addSyncedData(value: SyncData) {
 
         case "tag": {
             db.tags.put(value.data, value.data.id);
+            return;
+        }
+
+        case "user": {
+            db.users.put(value.data, value.data.id);
             return;
         }
 

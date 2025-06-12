@@ -1,11 +1,14 @@
+import uuid
+
 from .base import Schema
 
 
-class AuthUserSchema(Schema):
+class UserSchema(Schema):
+    id: uuid.UUID
     name: str
-    email: str
+    image_url: str
 
 
 class CsrfAuthUserSchema(Schema):
     csrf_token: str
-    auth_user: AuthUserSchema
+    user: UserSchema

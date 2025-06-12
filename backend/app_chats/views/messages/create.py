@@ -44,6 +44,7 @@ def create_message(
     message = Message.objects.create(
         id=data.id,
         title=data.title,
+        content=data.content,
         author=request.user,
         conversation=conversation,
         reply_to=reply_to,
