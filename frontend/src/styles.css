@@ -22,8 +22,7 @@ html, main {
 }
 
 ::-webkit-scrollbar {
-    @apply w-2;
-    height: 20px;
+    @apply w-2 h-1.5;
 }
 
 ::-webkit-scrollbar-track {
