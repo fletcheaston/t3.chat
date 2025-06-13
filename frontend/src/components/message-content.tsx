@@ -6,14 +6,16 @@ import { useMessages, useUserMap } from "@/sync/conversation";
 import { Button } from "@/ui/button";
 import { formatDatetime } from "@/utils";
 
+import { Markdown } from "./markdown";
+
 function MyMessage(props: { message: MessageSchema }) {
     /**************************************************************************/
     /* Render */
     return (
         <div className="flex justify-end">
             <div className="group relative flex w-[85%] justify-end pb-10">
-                <div className="bg-gunmetal text-silver w-fit rounded-xl rounded-br-none p-4">
-                    <p className="whitespace-pre-wrap">{props.message.content}</p>
+                <div className="bg-gunmetal text-silver overflow-x-hidden rounded-xl rounded-br-none p-4 leading-7 text-wrap">
+                    <Markdown content={props.message.content} />
                 </div>
 
                 <div className="absolute right-0 bottom-0 opacity-0 transition-all group-hover:opacity-100">
@@ -50,7 +52,9 @@ function OtherMessage(props: { message: MessageSchema; user: UserSchema }) {
     return (
         <div>
             <div className="group relative pb-10">
-                <p className="whitespace-pre-wrap">{props.message.content}</p>
+                <div className="overflow-x-hidden p-4 leading-7 text-wrap">
+                    <Markdown content={props.message.content} />
+                </div>
 
                 <div className="absolute bottom-0 left-0 opacity-0 transition-all group-hover:opacity-100">
                     <div className="flex items-center gap-4">
