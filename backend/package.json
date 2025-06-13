@@ -8,8 +8,7 @@
         "create:user": "uv run manage.py createsuperuser",
         "migrate": "uv run manage.py migrate",
         "makemigrations": "uv run manage.py makemigrations",
-        "dev": "concurrently \"npm run api\" \"npm run worker\"",
-        "api": "uv run manage.py runserver",
+        "dev": "uv run manage.py runserver",
         "worker": "uv run celery -A app_chats.jobs worker -l INFO",
         "type:check": "uv run ty check",
         "lint": "uv run ruff check --fix",
@@ -17,8 +16,5 @@
         "format": "uv run ruff format",
         "format:check": "uv run format --check",
         "test": "uv run pytest ."
-    },
-    "devDependencies": {
-        "concurrently": "^9.1.2"
     }
 }
