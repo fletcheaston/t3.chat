@@ -8,7 +8,7 @@ from simple_history.models import HistoricalRecords
 from app_chats import schemas
 from app_utils.models import DjangoModel
 
-from .conversation import Conversation
+from .conversations import Conversation
 from .users import User
 
 
