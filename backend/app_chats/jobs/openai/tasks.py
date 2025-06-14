@@ -61,12 +61,14 @@ FROM
                     f"user-{message.conversation.owner_id}",
                     {
                         "type": "send_data",
-                        "event": schemas.SyncMessage.model_validate(
-                            {
-                                "type": "message",
-                                "data": new_message,
-                            }
-                        ).model_dump_safe(),
+                        "event": [
+                            schemas.SyncMessage.model_validate(
+                                {
+                                    "type": "message",
+                                    "data": new_message,
+                                }
+                            ).model_dump_safe()
+                        ],
                     },
                 )
 
@@ -122,12 +124,14 @@ FROM
                     f"user-{message.conversation.owner_id}",
                     {
                         "type": "send_data",
-                        "event": schemas.SyncMessage.model_validate(
-                            {
-                                "type": "message",
-                                "data": new_message,
-                            }
-                        ).model_dump_safe(),
+                        "event": [
+                            schemas.SyncMessage.model_validate(
+                                {
+                                    "type": "message",
+                                    "data": new_message,
+                                }
+                            ).model_dump_safe()
+                        ],
                     },
                 )
 
@@ -183,12 +187,14 @@ FROM
                     f"user-{message.conversation.owner_id}",
                     {
                         "type": "send_data",
-                        "event": schemas.SyncMessage.model_validate(
-                            {
-                                "type": "message",
-                                "data": new_message,
-                            }
-                        ).model_dump_safe(),
+                        "event": [
+                            schemas.SyncMessage.model_validate(
+                                {
+                                    "type": "message",
+                                    "data": new_message,
+                                }
+                            ).model_dump_safe()
+                        ],
                     },
                 )
 

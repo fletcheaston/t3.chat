@@ -5,9 +5,9 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { LargeLanguageModel, MessageSchema, createMessage } from "@/api";
 import { useUser } from "@/api/auth";
-import { MessageContent } from "@/components/message-content";
+import { MessageTree } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
-import { ConversationProvider, useMessages } from "@/sync/conversation";
+import { ConversationProvider, useMessageTree } from "@/sync/conversation";
 import { db } from "@/sync/database";
 
 export const Route = createFileRoute("/chat/$chatId")({
@@ -18,7 +18,7 @@ function ConversationContext(props: { conversationId: string }) {
     /**************************************************************************/
     /* State */
     const user = useUser();
-    const messages = useMessages();
+    const messageTree = useMessageTree();
 
     const sendMessage = useCallback(
         async (content: string, llms: Array<LargeLanguageModel>) => {
@@ -33,7 +33,7 @@ function ConversationContext(props: { conversationId: string }) {
                 created: date,
                 modified: date,
                 conversationId: props.conversationId,
-                replyToId: messages[messages.length - 1]?.id ?? null,
+                replyToId: messageTree[messageTree.length - 1]?.id ?? null,
                 authorId: user.id,
                 llm: null,
             } satisfies MessageSchema);
@@ -45,7 +45,7 @@ function ConversationContext(props: { conversationId: string }) {
                     title: content,
                     content,
                     conversationId: props.conversationId,
-                    replyToId: messages[messages.length - 1]?.id ?? null,
+                    replyToId: messageTree[messageTree.length - 1]?.id ?? null,
                     llms,
                 },
             });
@@ -58,7 +58,7 @@ function ConversationContext(props: { conversationId: string }) {
             // Add data to local database
             await db.messages.put(message, message.id);
         },
-        [props.conversationId, user.id, messages]
+        [props.conversationId, user.id, messageTree]
     );
 
     /**************************************************************************/
@@ -66,7 +66,7 @@ function ConversationContext(props: { conversationId: string }) {
     return (
         <div className="flex max-w-3xl grow flex-col">
             <div className="grow pb-12">
-                <MessageContent messages={messages} />
+                <MessageTree messageTree={messageTree} />
             </div>
 
             <div className="sticky bottom-0 rounded-xl">

@@ -239,6 +239,28 @@ export type UpdateTagSchema = {
 };
 
 /**
+ * MessageMetadataSchema
+ */
+export type MessageMetadataSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Conversationid
+     */
+    conversationId: string;
+    /**
+     * Replytoid
+     */
+    replyToId: string | null;
+    /**
+     * Created
+     */
+    created: string;
+};
+
+/**
  * SyncConversation
  */
 export type SyncConversation = {
@@ -258,6 +280,17 @@ export type SyncMessage = {
      */
     type: "message";
     data: MessageSchema;
+};
+
+/**
+ * SyncMessageMetadata
+ */
+export type SyncMessageMetadata = {
+    /**
+     * Type
+     */
+    type: "message-metadata";
+    data: MessageMetadataSchema;
 };
 
 /**
@@ -514,7 +547,7 @@ export type GlobalSyncTypesResponses = {
      * Response
      * OK
      */
-    200: SyncMessage | SyncConversation | SyncTag | SyncUser;
+    200: SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser;
 };
 
 export type GlobalSyncTypesResponse = GlobalSyncTypesResponses[keyof GlobalSyncTypesResponses];
@@ -536,7 +569,7 @@ export type GlobalSyncBootstrapResponses = {
      * Response
      * OK
      */
-    200: Array<SyncMessage | SyncConversation | SyncTag | SyncUser>;
+    200: Array<SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser>;
 };
 
 export type GlobalSyncBootstrapResponse =
