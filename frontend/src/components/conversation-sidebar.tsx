@@ -134,7 +134,7 @@ export function ConversationSidebar() {
                                             <SidebarMenuButton
                                                 asChild
                                                 className={cn(
-                                                    "transition-all",
+                                                    "h-fit transition-all",
                                                     selected
                                                         ? "bg-pantone-lighter text-gunmetal-dark"
                                                         : "hover:bg-pantone-lighter hover:text-gunmetal-dark"

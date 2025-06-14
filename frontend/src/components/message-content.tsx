@@ -2,7 +2,7 @@ import { CopyIcon } from "lucide-react";
 
 import { MessageSchema, UserSchema } from "@/api";
 import { useUser } from "@/api/auth";
-import { useMessages, useUserMap } from "@/sync/conversation";
+import { useUserMap } from "@/sync/conversation";
 import { Button } from "@/ui/button";
 import { formatDatetime } from "@/utils";
 
@@ -76,18 +76,17 @@ function OtherMessage(props: { message: MessageSchema; user: UserSchema }) {
     );
 }
 
-export function MessageContent() {
+export function MessageContent(props: { messages: Array<MessageSchema> }) {
     /**************************************************************************/
     /* State */
     const self = useUser();
-    const messages = useMessages();
     const userMap = useUserMap();
 
     /**************************************************************************/
     /* Render */
     return (
         <div className="flex flex-col gap-10 px-4">
-            {messages.map((message) => {
+            {props.messages.map((message) => {
                 if (message.authorId === self.id) {
                     return (
                         <MyMessage

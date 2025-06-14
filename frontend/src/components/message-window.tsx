@@ -22,7 +22,7 @@ export function MessageWindow(props: {
 }) {
     /**************************************************************************/
     /* State */
-    const [llms, setLlms] = useState<Array<LargeLanguageModel>>([]);
+    const [llms, setLlms] = useState<Array<LargeLanguageModel>>(["openai-gpt-4.1"]);
     const [message, setMessage] = useState("");
 
     const empty = message === "";

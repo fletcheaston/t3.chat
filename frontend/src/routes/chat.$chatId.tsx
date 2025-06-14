@@ -6,17 +6,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LargeLanguageModel, createMessage } from "@/api";
 import { MessageContent } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
-import { ConversationProvider } from "@/sync/conversation";
+import { ConversationProvider, useMessages } from "@/sync/conversation";
 import { db } from "@/sync/database";
 
 export const Route = createFileRoute("/chat/$chatId")({
     component: RouteComponent,
 });
 
-function RouteComponent() {
+function ConversationContext(props: { conversationId: string }) {
     /**************************************************************************/
     /* State */
-    const { chatId } = Route.useParams();
+    const messages = useMessages();
 
     const sendMessage = useCallback(
         async (content: string, llms: Array<LargeLanguageModel>) => {
@@ -25,8 +25,8 @@ function RouteComponent() {
                     id: crypto.randomUUID(),
                     title: content,
                     content,
-                    conversationId: chatId,
-                    replyToId: null,
+                    conversationId: props.conversationId,
+                    replyToId: messages[messages.length - 1]?.id ?? null,
                     llms,
                 },
             });
@@ -38,22 +38,34 @@ function RouteComponent() {
             // Add data to local database
             await db.messages.put(message, message.id);
         },
-        [chatId]
+        [props.conversationId, messages]
     );
 
     /**************************************************************************/
     /* Render */
     return (
-        <ConversationProvider conversationId={chatId}>
-            <div className="flex max-w-3xl grow flex-col">
-                <div className="grow pb-12">
-                    <MessageContent />
-                </div>
-
-                <div className="sticky bottom-0 rounded-xl">
-                    <MessageWindow sendMessage={sendMessage} />
-                </div>
+        <div className="flex max-w-3xl grow flex-col">
+            <div className="grow pb-12">
+                <MessageContent messages={messages} />
             </div>
+
+            <div className="sticky bottom-0 rounded-xl">
+                <MessageWindow sendMessage={sendMessage} />
+            </div>
+        </div>
+    );
+}
+
+function RouteComponent() {
+    /**************************************************************************/
+    /* State */
+    const { chatId } = Route.useParams();
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <ConversationProvider conversationId={chatId}>
+            <ConversationContext conversationId={chatId} />
         </ConversationProvider>
     );
 }
