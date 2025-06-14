@@ -14,9 +14,9 @@ client = OpenAI(api_key=SETTINGS.OPENAI_API_KEY)
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1}")
 def openai_gpt_4_1(message_id: uuid.UUID) -> None:
+    # https://platform.openai.com/docs/models/gpt-4.1
     message = models.Message.objects.get(id=message_id)
 
-    # https://platform.openai.com/docs/models/gpt-4.1
     messages = models.Message.objects.raw(
         """
 SELECT
@@ -77,9 +77,9 @@ FROM
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1_MINI}")
 def openai_gpt_4_1_mini(message_id: uuid.UUID) -> None:
+    # https://platform.openai.com/docs/models/gpt-4.1-mini
     message = models.Message.objects.get(id=message_id)
 
-    # https://platform.openai.com/docs/models/gpt-4.1
     messages = models.Message.objects.raw(
         """
 SELECT
@@ -140,9 +140,9 @@ FROM
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1_NANO}")
 def openai_gpt_4_1_nano(message_id: uuid.UUID) -> None:
+    # https://platform.openai.com/docs/models/gpt-4.1-nano
     message = models.Message.objects.get(id=message_id)
 
-    # https://platform.openai.com/docs/models/gpt-4.1
     messages = models.Message.objects.raw(
         """
 SELECT

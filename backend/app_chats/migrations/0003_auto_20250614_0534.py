@@ -44,7 +44,7 @@ WITH RECURSIVE context_chain AS (
 		m.author_id,
 		m.conversation_id,
 		m.reply_to_id,
-	    m.llm,
+        m.llm,
 		c.total_length + length(m.content)
 	FROM
 		message m
