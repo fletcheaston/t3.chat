@@ -15,7 +15,9 @@ class MessageSchema(Schema):
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None
-    author_id: uuid.UUID
+    author_id: uuid.UUID | None
+
+    llm: LargeLanguageModel | None
 
 
 class NewMessageSchema(Schema):

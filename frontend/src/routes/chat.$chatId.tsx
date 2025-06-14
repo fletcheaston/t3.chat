@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 
-import { createMessage } from "@/api";
+import { LargeLanguageModel, createMessage } from "@/api";
 import { MessageContent } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
 import { ConversationProvider } from "@/sync/conversation";
@@ -19,7 +19,7 @@ function RouteComponent() {
     const { chatId } = Route.useParams();
 
     const sendMessage = useCallback(
-        async (content: string) => {
+        async (content: string, llms: Array<LargeLanguageModel>) => {
             const { data: message } = await createMessage({
                 body: {
                     id: crypto.randomUUID(),
@@ -27,6 +27,7 @@ function RouteComponent() {
                     content,
                     conversationId: chatId,
                     replyToId: null,
+                    llms,
                 },
             });
 

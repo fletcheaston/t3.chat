@@ -27,7 +27,7 @@ admin.site.register(ConversationToTag, SimpleHistoryAdmin)
 
 class MessageAdmin(SimpleHistoryAdmin):
     ordering = ["created"]
-    list_display = ["id", "created", "title", "author"]
+    list_display = ["id", "created", "title", "author", "conversation"]
 
 
 admin.site.register(Message, MessageAdmin)

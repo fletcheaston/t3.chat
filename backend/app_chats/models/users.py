@@ -18,7 +18,6 @@ class UserManager(BaseUserManager["User"]):
         name: str,
         email: str,
         username: str,
-        password: str | None = None,
         **extra_fields: Any,
     ) -> "User":
         if not name:
@@ -38,9 +37,6 @@ class UserManager(BaseUserManager["User"]):
             **extra_fields,
         )
 
-        if password:
-            user.set_password(password)
-
         user.save()
 
         return user
@@ -50,7 +46,6 @@ class UserManager(BaseUserManager["User"]):
         name: str,
         email: str,
         username: str,
-        password: str | None = None,
         **extra_fields: Any,
     ) -> "User":
         extra_fields["is_staff"] = True
@@ -61,7 +56,6 @@ class UserManager(BaseUserManager["User"]):
             name,
             email,
             username,
-            password,
             **extra_fields,
         )
 

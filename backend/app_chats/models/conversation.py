@@ -48,6 +48,9 @@ class Conversation(DjangoModel):
 
     ############################################################################
     # Methods
+    def __str__(self) -> str:
+        return f"{self.title}"
+
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
 
