@@ -63,7 +63,9 @@ SELECT
 	reply_to_id,
 	llm
 FROM
-	context_chain;
+	context_chain
+ORDER BY
+	created ASC;
 $function$
 ;
             """,

@@ -112,7 +112,7 @@ export function ConversationSidebar() {
                     <Button
                         asChild
                         variant="plain"
-                        size="sm"
+                        size="default"
                         className="text-gunmetal hover:bg-pantone bg-pantone-light hover:border-pantone border-gunmetal-light mt-4 w-full border text-sm"
                         tooltip="New chat"
                     >

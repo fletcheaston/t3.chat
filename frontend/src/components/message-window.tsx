@@ -22,7 +22,7 @@ export function MessageWindow(props: {
 }) {
     /**************************************************************************/
     /* State */
-    const [llms, setLlms] = useState<Array<LargeLanguageModel>>(["openai-gpt-4.1"]);
+    const [llms, setLlms] = useState<Array<LargeLanguageModel>>(["utils-echo"]);
     const [message, setMessage] = useState("");
 
     const empty = message === "";
@@ -41,7 +41,7 @@ export function MessageWindow(props: {
 
                 <div className="flex items-center justify-between">
                     <Select
-                        defaultValue={"openai-gpt-4.1" satisfies LargeLanguageModel}
+                        defaultValue={"utils-echo" satisfies LargeLanguageModel}
                         onValueChange={(value) => {
                             setLlms([value as LargeLanguageModel]);
                         }}
@@ -52,6 +52,12 @@ export function MessageWindow(props: {
 
                         <SelectContent>
                             <SelectGroup>
+                                <SelectLabel>Testing</SelectLabel>
+
+                                <SelectItem value={"utils-echo" satisfies LargeLanguageModel}>
+                                    Echo
+                                </SelectItem>
+
                                 <SelectLabel>OpenAI</SelectLabel>
 
                                 <SelectItem value={"openai-gpt-4.1" satisfies LargeLanguageModel}>
@@ -82,7 +88,11 @@ export function MessageWindow(props: {
                         onClick={() => {
                             if (!message) return;
 
-                            props.sendMessage(message, llms).then(() => setMessage(""));
+                            const tempMessage = message;
+
+                            setMessage("");
+
+                            props.sendMessage(message, llms).catch(() => setMessage(tempMessage));
                         }}
                         tooltip={empty ? "Message requires text" : "Send message"}
                     >

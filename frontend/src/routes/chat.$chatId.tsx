@@ -3,7 +3,8 @@ import * as React from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 
-import { LargeLanguageModel, createMessage } from "@/api";
+import { LargeLanguageModel, MessageSchema, createMessage } from "@/api";
+import { useUser } from "@/api/auth";
 import { MessageContent } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
 import { ConversationProvider, useMessages } from "@/sync/conversation";
@@ -16,13 +17,31 @@ export const Route = createFileRoute("/chat/$chatId")({
 function ConversationContext(props: { conversationId: string }) {
     /**************************************************************************/
     /* State */
+    const user = useUser();
     const messages = useMessages();
 
     const sendMessage = useCallback(
         async (content: string, llms: Array<LargeLanguageModel>) => {
+            // Optimistic add data to local database
+            const newMessageId = crypto.randomUUID();
+            const date = new Date().toISOString();
+
+            await db.messages.add({
+                id: newMessageId,
+                title: content,
+                content: content,
+                created: date,
+                modified: date,
+                conversationId: props.conversationId,
+                replyToId: messages[messages.length - 1]?.id ?? null,
+                authorId: user.id,
+                llm: null,
+            } satisfies MessageSchema);
+
+            // Save data to the API
             const { data: message } = await createMessage({
                 body: {
-                    id: crypto.randomUUID(),
+                    id: newMessageId,
                     title: content,
                     content,
                     conversationId: props.conversationId,
@@ -32,13 +51,14 @@ function ConversationContext(props: { conversationId: string }) {
             });
 
             if (!message) {
+                await db.messages.delete(newMessageId);
                 throw new Error("Unable to create message");
             }
 
             // Add data to local database
             await db.messages.put(message, message.id);
         },
-        [props.conversationId, messages]
+        [props.conversationId, user.id, messages]
     );
 
     /**************************************************************************/

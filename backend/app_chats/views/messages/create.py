@@ -58,6 +58,9 @@ def create_message(
 
     ############################################################################
     # Check which LLMs were requested
+    if schemas.LargeLanguageModel.UTILS_ECHO in data.llms:
+        echo.delay_on_commit(message.id)
+
     if schemas.LargeLanguageModel.OPENAI_GPT_4_1 in data.llms:
         openai_gpt_4_1.delay_on_commit(message.id)
 
@@ -66,7 +69,5 @@ def create_message(
 
     if schemas.LargeLanguageModel.OPENAI_GPT_4_1_NANO in data.llms:
         openai_gpt_4_1_nano.delay_on_commit(message.id)
-
-    echo.delay_on_commit(message.id)
 
     return message

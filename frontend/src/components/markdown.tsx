@@ -26,7 +26,7 @@ const components: Components = {
 
         return (
             <h1
-                className={cn("my-4 text-4xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-4 text-4xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -36,7 +36,7 @@ const components: Components = {
 
         return (
             <h2
-                className={cn("my-2 text-3xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-3xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -46,7 +46,7 @@ const components: Components = {
 
         return (
             <h3
-                className={cn("my-2 text-2xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-2xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -56,7 +56,7 @@ const components: Components = {
 
         return (
             <h4
-                className={cn("my-2 text-xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -66,7 +66,7 @@ const components: Components = {
 
         return (
             <h5
-                className={cn("my-2 text-lg font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-lg font-semibold", className)}
                 {...rest}
             />
         );
@@ -76,7 +76,7 @@ const components: Components = {
 
         return (
             <h6
-                className={cn("my-2 text-base font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-base font-semibold", className)}
                 {...rest}
             />
         );
@@ -357,6 +357,16 @@ const components: Components = {
                     <i>{alt}</i>
                 </figcaption>
             </figure>
+        );
+    },
+    hr: (props) => {
+        const { className, node, ...rest } = props;
+
+        return (
+            <hr
+                className={cn("border-gunmetal-light my-4", className)}
+                {...rest}
+            />
         );
     },
 };

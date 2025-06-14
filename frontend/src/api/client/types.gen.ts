@@ -45,6 +45,15 @@ export type ErrorSchema = {
 };
 
 /**
+ * LargeLanguageModel
+ */
+export type LargeLanguageModel =
+    | "utils-echo"
+    | "openai-gpt-4.1"
+    | "openai-gpt-4.1-mini"
+    | "openai-gpt-4.1-nano";
+
+/**
  * MessageSchema
  */
 export type MessageSchema = {
@@ -79,13 +88,9 @@ export type MessageSchema = {
     /**
      * Authorid
      */
-    authorId: string;
+    authorId: string | null;
+    llm: LargeLanguageModel | null;
 };
-
-/**
- * LargeLanguageModel
- */
-export type LargeLanguageModel = "openai-gpt-4.1" | "openai-gpt-4.1-mini" | "openai-gpt-4.1-nano";
 
 /**
  * NewMessageSchema

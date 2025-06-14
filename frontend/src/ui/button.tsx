@@ -15,8 +15,8 @@ const buttonVariants = cva(
                 default: "hover:opacity-80 focus:opacity-80 border border-silver-dull",
             },
             size: {
+                custom: "",
                 default: "h-9 px-4 py-2 has-[>svg]:px-3",
-                sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
                 lg: "h-14 rounded-md px-6 has-[>svg]:px-4 text-xl",
                 icon: "size-8",
             },

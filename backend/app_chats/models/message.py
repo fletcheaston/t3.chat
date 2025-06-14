@@ -19,7 +19,7 @@ class MessageQuerySet(models.QuerySet["Message"]):
 class Message(DjangoModel):
     ############################################################################
     # Normal fields
-    title = models.TextField()
+    title = models.TextField(blank=True)
 
     content = models.TextField()
 
