@@ -1,5 +1,4 @@
 import { HeadContent, Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { UserSchema } from "@/api";
 import { useAnonUser } from "@/api/auth";
@@ -91,11 +90,7 @@ function RouteComponent() {
             </head>
 
             <body className="h-full overflow-y-auto overscroll-none">
-                <main>
-                    {user === null ? <Anonymous /> : <Authenticated />}
-
-                    <TanStackRouterDevtools />
-                </main>
+                <main>{user === null ? <Anonymous /> : <Authenticated />}</main>
             </body>
         </>
     );

@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from .base import Schema
+from .models import LargeLanguageModel
 
 
 class MessageSchema(Schema):
@@ -24,3 +25,5 @@ class NewMessageSchema(Schema):
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None
+
+    llms: list[LargeLanguageModel]

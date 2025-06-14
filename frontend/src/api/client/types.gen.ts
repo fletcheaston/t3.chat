@@ -83,6 +83,11 @@ export type MessageSchema = {
 };
 
 /**
+ * LargeLanguageModel
+ */
+export type LargeLanguageModel = "openai-gpt-4.1" | "openai-gpt-4.1-mini" | "openai-gpt-4.1-nano";
+
+/**
  * NewMessageSchema
  */
 export type NewMessageSchema = {
@@ -106,6 +111,10 @@ export type NewMessageSchema = {
      * Replytoid
      */
     replyToId: string | null;
+    /**
+     * Llms
+     */
+    llms: Array<LargeLanguageModel>;
 };
 
 /**

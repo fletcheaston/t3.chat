@@ -14,6 +14,7 @@ dependencies = [
     "django-silk>=5.4.0",
     "django-simple-history>=3.8.0",
     "httpx>=0.28.1",
+    "openai>=1.86.0",
     "orjson>=3.10.18",
     "psycopg>=3.2.9",
     "psycopg-binary>=3.2.9",
