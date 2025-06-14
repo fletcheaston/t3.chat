@@ -12,6 +12,7 @@ import ReactMarkdown, { Components } from "react-markdown";
 import rehypeMathJaxSvg from "rehype-mathjax";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import remarkEmoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkRemoveComments from "remark-remove-comments";
@@ -374,7 +375,7 @@ const components: Components = {
 export function Markdown(props: { content: string }) {
     return (
         <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath, remarkRemoveComments]}
+            remarkPlugins={[remarkGfm, remarkMath, remarkRemoveComments, remarkEmoji]}
             rehypePlugins={[rehypeMathJaxSvg, rehypeRaw, rehypeSanitize]}
             components={components}
         >
