@@ -1,14 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageMetadataSchema, MessageSchema } from "@/api";
+import { MessageSchema } from "@/api";
 import { useUser } from "@/api/auth";
 import { llmToImageUrl, llmToName } from "@/api/models";
-import { useUserMap } from "@/sync/conversation";
+import { MessageTreeSchema, useUserMap } from "@/sync/conversation";
 import { MessageProvider, useMessage } from "@/sync/message";
 import { Button } from "@/ui/button";
+import { Card, CardContent } from "@/ui/card";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/ui/carousel";
 import { formatDatetime } from "@/utils";
 
 import { Markdown } from "./markdown";
@@ -39,11 +47,11 @@ function MyMessage(props: { message: MessageSchema }) {
     /* State */
     const ref = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (!ref.current) return;
-
-        ref.current.scrollIntoView({ inline: "end", behavior: "smooth" });
-    }, [props.message.content]);
+    // useEffect(() => {
+    //     if (!ref.current) return;
+    //
+    //     ref.current.scrollIntoView({ inline: "end", behavior: "smooth" });
+    // }, [props.message.content]);
 
     /**************************************************************************/
     /* Render */
@@ -78,11 +86,11 @@ function OtherMessage(props: {
     /* State */
     const ref = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (!ref.current) return;
-
-        ref.current.scrollIntoView({ inline: "end", behavior: "smooth" });
-    }, [props.message.content]);
+    // useEffect(() => {
+    //     if (!ref.current) return;
+    //
+    //     ref.current.scrollIntoView({ inline: "end", behavior: "smooth" });
+    // }, [props.message.content]);
 
     /**************************************************************************/
     /* Render */
@@ -164,21 +172,35 @@ export function MessageContent() {
     );
 }
 
-export function MessageTree(props: { messageTree: Array<MessageMetadataSchema> }) {
+export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="flex flex-col gap-10 px-4">
-            {props.messageTree.map((metadata) => {
-                return (
-                    <MessageProvider
-                        key={metadata.id}
-                        messageId={metadata.id}
-                    >
-                        <MessageContent />
-                    </MessageProvider>
-                );
-            })}
+        <div className="flex flex-col gap-10">
+            <Carousel
+                className="w-full"
+                opts={{ startIndex: 0, watchDrag: false }}
+            >
+                <CarouselContent>
+                    {props.messageTree.map((tree) => (
+                        <CarouselItem
+                            key={tree.message.id}
+                            className="basis-3/5 pr-[1px]"
+                        >
+                            <Card>
+                                <CardContent>
+                                    <MessageProvider messageId={tree.message.id}>
+                                        <MessageContent />
+                                    </MessageProvider>
+                                </CardContent>
+                            </Card>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+
+                <CarouselPrevious tooltip="Previous" />
+                <CarouselNext tooltip="Next" />
+            </Carousel>
         </div>
     );
 }
