@@ -1,3 +1,5 @@
+from typing import Literal
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db import models
@@ -17,13 +19,21 @@ class MessageQuerySet(models.QuerySet["Message"]):
 class Message(DjangoModel):
     ############################################################################
     # Normal fields
-    title = models.TextField()
+    title = models.TextField(blank=True)
 
     content = models.TextField()
 
     author = models.ForeignKey(
         User,
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
+    )
+
+    llm = models.TextField(
+        null=True,
+        blank=True,
+        choices=[(llm.value, llm.name) for llm in schemas.LargeLanguageModel],
     )
 
     conversation = models.ForeignKey(
@@ -51,10 +61,22 @@ class Message(DjangoModel):
 
     ############################################################################
     # Properties
+    @property
+    def role(self) -> Literal["assistant", "user"]:
+        if self.llm:
+            return "assistant"
+
+        return "user"
 
     ############################################################################
     # Methods
     def save(self, *args, **kwargs) -> None:
+        if self.llm is None and self.author_id is None:
+            raise ValueError("Must set either LLM or Author")
+
+        if self.llm is not None and self.author_id is not None:
+            raise ValueError("Can set either LLM or Author but not both")
+
         super().save(*args, **kwargs)
 
         # Broadcast via channels
@@ -64,11 +86,19 @@ class Message(DjangoModel):
             f"user-{self.conversation.owner_id}",
             {
                 "type": "send_data",
-                "event": schemas.SyncMessage.model_validate(
-                    {
-                        "type": "message",
-                        "data": self,
-                    }
-                ).model_dump_safe(),
+                "event": [
+                    schemas.SyncMessageMetadata.model_validate(
+                        {
+                            "type": "message-metadata",
+                            "data": self,
+                        }
+                    ).model_dump_safe(),
+                    schemas.SyncMessage.model_validate(
+                        {
+                            "type": "message",
+                            "data": self,
+                        }
+                    ).model_dump_safe(),
+                ],
             },
         )

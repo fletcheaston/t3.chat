@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
-import { createConversation, createMessage } from "@/api";
+import { LargeLanguageModel, createConversation, createMessage } from "@/api";
 import { MessageWindow } from "@/components/message-window";
 import { db } from "@/sync/database";
 
@@ -17,7 +17,7 @@ function RouteComponent() {
     const navigate = useNavigate();
 
     const sendMessage = useCallback(
-        async (content: string) => {
+        async (content: string, llms: Array<LargeLanguageModel>) => {
             const { data: conversation } = await createConversation({
                 body: {
                     id: crypto.randomUUID(),
@@ -37,6 +37,7 @@ function RouteComponent() {
                     content,
                     conversationId: conversation.id,
                     replyToId: null,
+                    llms,
                 },
             });
 

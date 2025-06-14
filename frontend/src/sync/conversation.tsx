@@ -1,18 +1,21 @@
 import React, { createContext, useContext } from "react";
 
-import { MessageSchema, UserSchema } from "@/api";
+import { MessageMetadataSchema, UserSchema } from "@/api";
 
 import { db } from "./database";
 import { useCachedLiveQuery } from "./utils";
 
-const MessagesContext = createContext<Array<MessageSchema> | null>(null);
+const MessageTreeContext = createContext<Array<MessageMetadataSchema> | null>(null);
 const UserMapContext = createContext<Record<string, UserSchema> | null>(null);
 
 export function ConversationProvider(props: { conversationId: string; children: React.ReactNode }) {
     /**************************************************************************/
     /* State */
     const messages = useCachedLiveQuery(async () => {
-        return db.messages.where("conversationId").equals(props.conversationId).sortBy("created");
+        return db.messagesMetadata
+            .where("conversationId")
+            .equals(props.conversationId)
+            .sortBy("created");
     }, [props.conversationId]);
 
     const userMap = useCachedLiveQuery(async () => {
@@ -27,14 +30,14 @@ export function ConversationProvider(props: { conversationId: string; children: 
     /**************************************************************************/
     /* Render */
     return (
-        <MessagesContext.Provider value={messages}>
+        <MessageTreeContext.Provider value={messages}>
             <UserMapContext.Provider value={userMap}>{props.children}</UserMapContext.Provider>
-        </MessagesContext.Provider>
+        </MessageTreeContext.Provider>
     );
 }
 
-export function useMessages() {
-    const result = useContext(MessagesContext);
+export function useMessageTree() {
+    const result = useContext(MessageTreeContext);
 
     if (result === null) {
         throw new Error("Missing context provider.");

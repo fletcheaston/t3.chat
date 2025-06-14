@@ -112,7 +112,7 @@ export function ConversationSidebar() {
                     <Button
                         asChild
                         variant="plain"
-                        size="sm"
+                        size="default"
                         className="text-gunmetal hover:bg-pantone bg-pantone-light hover:border-pantone border-gunmetal-light mt-4 w-full border text-sm"
                         tooltip="New chat"
                     >
@@ -134,7 +134,7 @@ export function ConversationSidebar() {
                                             <SidebarMenuButton
                                                 asChild
                                                 className={cn(
-                                                    "transition-all",
+                                                    "h-fit transition-all",
                                                     selected
                                                         ? "bg-pantone-lighter text-gunmetal-dark"
                                                         : "hover:bg-pantone-lighter hover:text-gunmetal-dark"

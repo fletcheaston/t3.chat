@@ -12,6 +12,7 @@ import ReactMarkdown, { Components } from "react-markdown";
 import rehypeMathJaxSvg from "rehype-mathjax";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import remarkEmoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkRemoveComments from "remark-remove-comments";
@@ -26,7 +27,7 @@ const components: Components = {
 
         return (
             <h1
-                className={cn("my-4 text-4xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-4 text-4xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -36,7 +37,7 @@ const components: Components = {
 
         return (
             <h2
-                className={cn("my-2 text-3xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-3xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -46,7 +47,7 @@ const components: Components = {
 
         return (
             <h3
-                className={cn("my-2 text-2xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-2xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -56,7 +57,7 @@ const components: Components = {
 
         return (
             <h4
-                className={cn("my-2 text-xl font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-xl font-semibold", className)}
                 {...rest}
             />
         );
@@ -66,7 +67,7 @@ const components: Components = {
 
         return (
             <h5
-                className={cn("my-2 text-lg font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-lg font-semibold", className)}
                 {...rest}
             />
         );
@@ -76,7 +77,7 @@ const components: Components = {
 
         return (
             <h6
-                className={cn("my-2 text-base font-semibold", className)}
+                className={cn("text-pantone-lighter my-2 text-base font-semibold", className)}
                 {...rest}
             />
         );
@@ -359,12 +360,22 @@ const components: Components = {
             </figure>
         );
     },
+    hr: (props) => {
+        const { className, node, ...rest } = props;
+
+        return (
+            <hr
+                className={cn("border-gunmetal-light my-4", className)}
+                {...rest}
+            />
+        );
+    },
 };
 
 export function Markdown(props: { content: string }) {
     return (
         <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath, remarkRemoveComments]}
+            remarkPlugins={[remarkGfm, remarkMath, remarkRemoveComments, remarkEmoji]}
             rehypePlugins={[rehypeMathJaxSvg, rehypeRaw, rehypeSanitize]}
             components={components}
         >

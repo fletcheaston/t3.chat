@@ -2,6 +2,14 @@ import uuid
 from datetime import datetime
 
 from .base import Schema
+from .models import LargeLanguageModel
+
+
+class MessageMetadataSchema(Schema):
+    id: uuid.UUID
+    conversation_id: uuid.UUID
+    reply_to_id: uuid.UUID | None
+    created: datetime
 
 
 class MessageSchema(Schema):
@@ -14,7 +22,9 @@ class MessageSchema(Schema):
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None
-    author_id: uuid.UUID
+    author_id: uuid.UUID | None
+
+    llm: LargeLanguageModel | None
 
 
 class NewMessageSchema(Schema):
@@ -24,3 +34,5 @@ class NewMessageSchema(Schema):
 
     conversation_id: uuid.UUID
     reply_to_id: uuid.UUID | None
+
+    llms: list[LargeLanguageModel]

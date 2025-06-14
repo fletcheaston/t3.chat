@@ -3,13 +3,26 @@ import * as React from "react";
 
 import { ArrowUpIcon } from "lucide-react";
 
+import { LargeLanguageModel } from "@/api";
 import { Button } from "@/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/ui/select";
 import { Textarea } from "@/ui/textarea";
 import { cn } from "@/utils";
 
-export function MessageWindow(props: { sendMessage: (content: string) => Promise<void> }) {
+export function MessageWindow(props: {
+    sendMessage: (content: string, llms: Array<LargeLanguageModel>) => Promise<void>;
+}) {
     /**************************************************************************/
     /* State */
+    const [llms, setLlms] = useState<Array<LargeLanguageModel>>(["utils-echo"]);
     const [message, setMessage] = useState("");
 
     const empty = message === "";
@@ -27,7 +40,44 @@ export function MessageWindow(props: { sendMessage: (content: string) => Promise
                 />
 
                 <div className="flex items-center justify-between">
-                    <p className="text-pantone-light">Model name</p>
+                    <Select
+                        defaultValue={"utils-echo" satisfies LargeLanguageModel}
+                        onValueChange={(value) => {
+                            setLlms([value as LargeLanguageModel]);
+                        }}
+                    >
+                        <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a model" />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Testing</SelectLabel>
+
+                                <SelectItem value={"utils-echo" satisfies LargeLanguageModel}>
+                                    Echo
+                                </SelectItem>
+
+                                <SelectLabel>OpenAI</SelectLabel>
+
+                                <SelectItem value={"openai-gpt-4.1" satisfies LargeLanguageModel}>
+                                    OpenAI GPT-4.1
+                                </SelectItem>
+
+                                <SelectItem
+                                    value={"openai-gpt-4.1-mini" satisfies LargeLanguageModel}
+                                >
+                                    OpenAI GPT-4.1-mini
+                                </SelectItem>
+
+                                <SelectItem
+                                    value={"openai-gpt-4.1-nano" satisfies LargeLanguageModel}
+                                >
+                                    OpenAI GPT-4.1-nano
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
 
                     <Button
                         size="icon"
@@ -38,7 +88,11 @@ export function MessageWindow(props: { sendMessage: (content: string) => Promise
                         onClick={() => {
                             if (!message) return;
 
-                            props.sendMessage(message).then(() => setMessage(""));
+                            const tempMessage = message;
+
+                            setMessage("");
+
+                            props.sendMessage(message, llms).catch(() => setMessage(tempMessage));
                         }}
                         tooltip={empty ? "Message requires text" : "Send message"}
                     >

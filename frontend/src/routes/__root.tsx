@@ -1,5 +1,5 @@
 import { HeadContent, Outlet, createRootRouteWithContext, redirect } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Toaster } from "sonner";
 
 import { UserSchema } from "@/api";
 import { useAnonUser } from "@/api/auth";
@@ -94,7 +94,7 @@ function RouteComponent() {
                 <main>
                     {user === null ? <Anonymous /> : <Authenticated />}
 
-                    <TanStackRouterDevtools />
+                    <Toaster position="top-right" />
                 </main>
             </body>
         </>

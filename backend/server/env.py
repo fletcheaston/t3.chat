@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     GITHUB_OAUTH_CLIENT_ID: str
     GITHUB_OAUTH_CLIENT_SECRET: str
 
+    ####################################################################################
+    # API keys
+    OPENAI_API_KEY: str
+
 
 # Settings derived from .env or env vars
 SETTINGS: Settings = Settings()  # ty: ignore[missing-argument]

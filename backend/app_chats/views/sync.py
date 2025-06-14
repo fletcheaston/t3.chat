@@ -4,8 +4,7 @@ from typing import Any
 from channels.generic.websocket import AsyncWebsocketConsumer
 from ninja import Router
 
-from app_chats import schemas
-from app_chats.models import Conversation, Message, Tag, User
+from app_chats import models, schemas
 from app_utils.requests import AuthenticatedHttpRequest
 
 router = Router(tags=["sync"])
@@ -33,7 +32,7 @@ def global_sync_bootstrap(
 
     ############################################################################
     # Users
-    users = User.objects.all()
+    users = models.User.objects.all()
 
     if timestamp is not None:
         users = users.filter(modified__gte=timestamp)
@@ -43,7 +42,7 @@ def global_sync_bootstrap(
 
     ############################################################################
     # Tags
-    tags = Tag.objects.filter(owner=request.user)
+    tags = models.Tag.objects.filter(owner=request.user)
 
     if timestamp is not None:
         tags = tags.filter(modified__gte=timestamp)
@@ -53,9 +52,9 @@ def global_sync_bootstrap(
 
     ############################################################################
     # Conversations
-    conversations = Conversation.objects.filter(owner=request.user).prefetch_related(
-        "db_tags__conversations"
-    )
+    conversations = models.Conversation.objects.filter(
+        owner=request.user
+    ).prefetch_related("db_tags__conversations")
 
     if timestamp is not None:
         conversations = conversations.filter(modified__gte=timestamp)
@@ -65,19 +64,20 @@ def global_sync_bootstrap(
 
     ############################################################################
     # Messages
-    messages = Message.objects.filter(conversation__owner=request.user)
+    messages = models.Message.objects.filter(conversation__owner=request.user)
 
     if timestamp is not None:
         messages = messages.filter(modified__gte=timestamp)
 
     for value in messages:
+        data.append(schemas.SyncMessageMetadata(type="message-metadata", data=value))
         data.append(schemas.SyncMessage(type="message", data=value))
 
     return data
 
 
 class GlobalSyncConsumer(AsyncWebsocketConsumer):
-    user: User
+    user: models.User
     group_name: str
 
     ####################################################################################
@@ -102,4 +102,6 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
     ####################################################################################
     async def send_data(self, event: Any) -> None:
         data = schemas.SendDataEvent.model_validate(event)
-        await self.send(data.event.model_dump_json(by_alias=True))
+
+        for value in data.event:
+            await self.send(value.model_dump_json(by_alias=True))

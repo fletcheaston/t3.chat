@@ -155,6 +155,17 @@ DATABASES = {
 }
 
 ########################################################################################
+# Celery
+# https://docs.celeryq.dev/en/latest/userguide/configuration.html#broker-url
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+
+# https://docs.celeryq.dev/en/latest/userguide/configuration.html#worker-prefetch-multiplier
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+# https://docs.celeryq.dev/en/latest/userguide/configuration.html#task-track-started
+CELERY_TASK_TIME_LIMIT = 60
+
+########################################################################################
 # Cache
 CACHES = {
     "default": {

@@ -48,6 +48,9 @@ class Conversation(DjangoModel):
 
     ############################################################################
     # Methods
+    def __str__(self) -> str:
+        return f"{self.title}"
+
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
 
@@ -58,12 +61,14 @@ class Conversation(DjangoModel):
             f"user-{self.owner_id}",
             {
                 "type": "send_data",
-                "event": schemas.SyncConversation.model_validate(
-                    {
-                        "type": "conversation",
-                        "data": self,
-                    }
-                ).model_dump_safe(),
+                "event": [
+                    schemas.SyncConversation.model_validate(
+                        {
+                            "type": "conversation",
+                            "data": self,
+                        }
+                    ).model_dump_safe()
+                ],
             },
         )
 
@@ -110,12 +115,14 @@ class Tag(DjangoModel):
             f"user-{self.owner_id}",
             {
                 "type": "send_data",
-                "event": schemas.SyncTag.model_validate(
-                    {
-                        "type": "tag",
-                        "data": self,
-                    }
-                ).model_dump_safe(),
+                "event": [
+                    schemas.SyncTag.model_validate(
+                        {
+                            "type": "tag",
+                            "data": self,
+                        }
+                    ).model_dump_safe()
+                ],
             },
         )
 
@@ -165,12 +172,14 @@ class ConversationToTag(DjangoModel):
             f"user-{value.owner_id}",
             {
                 "type": "send_data",
-                "event": schemas.SyncConversation.model_validate(
-                    {
-                        "type": "conversation",
-                        "data": value,
-                    }
-                ).model_dump_safe(),
+                "event": [
+                    schemas.SyncConversation.model_validate(
+                        {
+                            "type": "conversation",
+                            "data": value,
+                        }
+                    ).model_dump_safe()
+                ],
             },
         )
 
@@ -191,12 +200,14 @@ class ConversationToTag(DjangoModel):
             f"user-{value.owner_id}",
             {
                 "type": "send_data",
-                "event": schemas.SyncConversation.model_validate(
-                    {
-                        "type": "conversation",
-                        "data": value,
-                    }
-                ).model_dump_safe(),
+                "event": [
+                    schemas.SyncConversation.model_validate(
+                        {
+                            "type": "conversation",
+                            "data": value,
+                        }
+                    ).model_dump_safe()
+                ],
             },
         )
 

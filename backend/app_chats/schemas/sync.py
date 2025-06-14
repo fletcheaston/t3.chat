@@ -3,6 +3,11 @@ from typing import Literal
 from app_chats import schemas
 
 
+class SyncMessageMetadata(schemas.Schema):
+    type: Literal["message-metadata"]
+    data: schemas.MessageMetadataSchema
+
+
 class SyncMessage(schemas.Schema):
     type: Literal["message"]
     data: schemas.MessageSchema
@@ -23,8 +28,10 @@ class SyncUser(schemas.Schema):
     data: schemas.UserSchema
 
 
-GlobalSyncTypes = SyncMessage | SyncConversation | SyncTag | SyncUser
+GlobalSyncTypes = (
+    SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser
+)
 
 
 class SendDataEvent(schemas.Schema):
-    event: GlobalSyncTypes
+    event: list[GlobalSyncTypes]
