@@ -146,6 +146,12 @@ export type ConversationSchema = {
      * Tags
      */
     tags: Array<TagSchema>;
+    /**
+     * Messagebranches
+     */
+    messageBranches: {
+        [key: string]: boolean;
+    };
 };
 
 /**
@@ -199,11 +205,17 @@ export type UpdateConversationSchema = {
     /**
      * Title
      */
-    title: string;
+    title?: string | null;
     /**
      * Tagids
      */
-    tagIds: Array<string>;
+    tagIds?: Array<string> | null;
+    /**
+     * Messagebranches
+     */
+    messageBranches?: {
+        [key: string]: boolean;
+    } | null;
 };
 
 /**
