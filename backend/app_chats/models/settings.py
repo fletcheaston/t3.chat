@@ -55,6 +55,27 @@ class Setting(DjangoModel):
 
     ############################################################################
     # Properties
+    @property
+    def developer_prompt(self) -> str:
+        prompts = ["You are a helpful assistant.You may respond with markdown content."]
+
+        if self.llm_nickname:
+            prompts.append(f"The user's preferred name is '{self.llm_nickname}'.")
+
+        if self.llm_job:
+            prompts.append(f"The user's job is '{self.llm_job}'.")
+
+        if self.llm_traits:
+            prompts.append(
+                f"The user has asked that you conform to these traits: '{', '.join(self.llm_traits)}'."
+            )
+
+        if self.llm_context:
+            prompts.append(
+                f"The user has provided additional context: '{self.llm_context}'."
+            )
+
+        return " ".join(prompts)
 
     ############################################################################
     # Methods

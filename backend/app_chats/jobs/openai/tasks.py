@@ -14,6 +14,11 @@ client = OpenAI(api_key=SETTINGS.OPENAI_API_KEY)
 def openai_gpt_4_1(message_id: uuid.UUID) -> None:
     # https://platform.openai.com/docs/models/gpt-4.1
     message = models.Message.objects.get(id=message_id)
+    settings = models.Setting.objects.get(user_id=message.author_id)
+
+    import logging
+
+    logging.warning(settings.developer_prompt)
 
     messages = models.Message.objects.raw(
         """
@@ -29,10 +34,16 @@ FROM
         model="gpt-4.1",
         messages=[
             {
-                "role": message.role,
-                "content": message.content,
-            }
-            for message in messages
+                "role": "developer",
+                "content": settings.developer_prompt,
+            },
+            *[
+                {
+                    "role": message.role,
+                    "content": message.content,
+                }
+                for message in messages
+            ],
         ],
         stream=True,
     )
@@ -60,6 +71,7 @@ FROM
 def openai_gpt_4_1_mini(message_id: uuid.UUID) -> None:
     # https://platform.openai.com/docs/models/gpt-4.1-mini
     message = models.Message.objects.get(id=message_id)
+    settings = models.Setting.objects.get(user_id=message.author_id)
 
     messages = models.Message.objects.raw(
         """
@@ -75,10 +87,16 @@ FROM
         model="gpt-4.1-mini",
         messages=[
             {
-                "role": message.role,
-                "content": message.content,
-            }
-            for message in messages
+                "role": "developer",
+                "content": settings.developer_prompt,
+            },
+            *[
+                {
+                    "role": message.role,
+                    "content": message.content,
+                }
+                for message in messages
+            ],
         ],
         stream=True,
     )
@@ -106,6 +124,7 @@ FROM
 def openai_gpt_4_1_nano(message_id: uuid.UUID) -> None:
     # https://platform.openai.com/docs/models/gpt-4.1-nano
     message = models.Message.objects.get(id=message_id)
+    settings = models.Setting.objects.get(user_id=message.author_id)
 
     messages = models.Message.objects.raw(
         """
@@ -121,10 +140,16 @@ FROM
         model="gpt-4.1",
         messages=[
             {
-                "role": message.role,
-                "content": message.content,
-            }
-            for message in messages
+                "role": "developer",
+                "content": settings.developer_prompt,
+            },
+            *[
+                {
+                    "role": message.role,
+                    "content": message.content,
+                }
+                for message in messages
+            ],
         ],
         stream=True,
     )
