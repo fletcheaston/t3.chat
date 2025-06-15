@@ -9,7 +9,7 @@ from app_utils.requests import AuthenticatedHttpRequest
 router = Router()
 
 
-@router.put(
+@router.patch(
     "/{conversation_id}",
     response={200: schemas.ConversationSchema},
     by_alias=True,
@@ -24,8 +24,14 @@ def update_conversation(
         owner=request.user,
     )
 
-    conversation.title = data.title
-    conversation.db_tags.set(data.tag_ids)
+    if data.title is not None:
+        conversation.title = data.title
+
+    if data.tag_ids is not None:
+        conversation.db_tags.set(data.tag_ids)
+
+    if data.message_branches is not None:
+        conversation.message_branches = data.message_branches
 
     conversation.save()
 

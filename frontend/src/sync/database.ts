@@ -54,7 +54,20 @@ export function addSyncedData(value: SyncData) {
         }
 
         case "conversation": {
-            db.conversations.put(value.data, value.data.id);
+            db.transaction("readwrite", db.conversations, async () => {
+                const stored = await db.conversations.get(value.data.id);
+
+                if (!stored) {
+                    // Add it if we don't have an object for this id yet
+                    db.conversations.add(value.data, value.data.id);
+                    return;
+                }
+
+                // If we've got a newer value, update it
+                if (new Date(value.data.modified) > new Date(stored.modified)) {
+                    db.conversations.put(value.data, value.data.id);
+                }
+            });
             return;
         }
 

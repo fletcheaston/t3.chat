@@ -193,7 +193,7 @@ export const createConversation = <ThrowOnError extends boolean = false>(
 export const updateConversation = <ThrowOnError extends boolean = false>(
     options: Options<UpdateConversationData, ThrowOnError>
 ) => {
-    return (options.client ?? _heyApiClient).put<
+    return (options.client ?? _heyApiClient).patch<
         UpdateConversationResponses,
         unknown,
         ThrowOnError

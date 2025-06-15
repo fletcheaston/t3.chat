@@ -34,6 +34,8 @@ class Conversation(DjangoModel):
         through="ConversationToTag",
     )
 
+    message_branches = models.JSONField(default=dict)
+
     ############################################################################
     # Queryset managers
     objects = ConversationQuerySet.as_manager()

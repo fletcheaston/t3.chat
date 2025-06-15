@@ -1,15 +1,15 @@
-import { useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 
-import { CopyIcon } from "lucide-react";
+import { CopyIcon, Undo2Icon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageSchema } from "@/api";
+import { MessageSchema, updateConversation } from "@/api";
 import { useUser } from "@/api/auth";
 import { llmToImageUrl, llmToName } from "@/api/models";
-import { MessageTreeSchema, useUserMap } from "@/sync/conversation";
+import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
+import { db } from "@/sync/database";
 import { MessageProvider, useMessage } from "@/sync/message";
 import { Button } from "@/ui/button";
-import { Card, CardContent } from "@/ui/card";
 import {
     Carousel,
     CarouselContent,
@@ -17,21 +17,26 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/ui/carousel";
-import { formatDatetime } from "@/utils";
+import { cn, formatDatetime } from "@/utils";
 
 import { Markdown } from "./markdown";
 
 function CopyButton(props: { value: string }) {
+    /**************************************************************************/
+    /* Render */
     return (
         <Button
             size="custom"
             className="hover:bg-pantone-light hover:text-gunmetal-dark size-7 rounded"
             tooltip="Copy message"
-            onClick={async () => {
-                await navigator.clipboard.writeText(props.value);
+            onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
 
-                toast.dismiss();
-                toast.success("Copied to clipboard!", { duration: 1500 });
+                navigator.clipboard.writeText(props.value).then(() => {
+                    toast.dismiss();
+                    toast.success("Copied to clipboard!", { duration: 1500 });
+                });
             }}
         >
             <CopyIcon
@@ -42,7 +47,33 @@ function CopyButton(props: { value: string }) {
     );
 }
 
-function MyMessage(props: { message: MessageSchema }) {
+function UnsetBranchButton(props: { unsetBranch: (() => void) | null }) {
+    /**************************************************************************/
+    /* Render */
+    return (
+        <Button
+            size="custom"
+            className="hover:bg-pantone-light hover:text-gunmetal-dark size-7 rounded"
+            tooltip="Un-branch"
+            disabled={props.unsetBranch === null}
+            onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (props.unsetBranch) {
+                    props.unsetBranch();
+                }
+            }}
+        >
+            <Undo2Icon
+                height={10}
+                width={10}
+            />
+        </Button>
+    );
+}
+
+function MyMessage(props: { message: MessageSchema; unsetBranch: (() => void) | null }) {
     /**************************************************************************/
     /* State */
     const ref = useRef<HTMLDivElement>(null);
@@ -56,8 +87,14 @@ function MyMessage(props: { message: MessageSchema }) {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="flex justify-end">
-            <div className="group relative flex w-[85%] justify-end pb-6">
+        <div
+            data-message-id={props.message.id}
+            className="flex justify-end"
+        >
+            <div
+                data-limit-width
+                className="group relative flex w-[85%] justify-end pb-6"
+            >
                 <div className="bg-gunmetal text-silver overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7 text-wrap">
                     <Markdown content={props.message.content} />
                 </div>
@@ -69,6 +106,8 @@ function MyMessage(props: { message: MessageSchema }) {
                     <div className="flex items-center gap-2">
                         <p className="text-base">{formatDatetime(props.message.modified)}</p>
 
+                        <UnsetBranchButton unsetBranch={props.unsetBranch} />
+
                         <CopyButton value={props.message.content} />
                     </div>
                 </div>
@@ -79,6 +118,7 @@ function MyMessage(props: { message: MessageSchema }) {
 
 function OtherMessage(props: {
     message: MessageSchema;
+    unsetBranch: (() => void) | null;
     authorName: string;
     authorImageUrl: string;
 }) {
@@ -95,7 +135,10 @@ function OtherMessage(props: {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="group relative pb-6">
+        <div
+            data-message-id={props.message.id}
+            className="group relative pb-6"
+        >
             <div className="flex flex-col gap-y-4 overflow-x-hidden px-1 leading-7 text-wrap">
                 <Markdown content={props.message.content} />
             </div>
@@ -106,6 +149,8 @@ function OtherMessage(props: {
             >
                 <div className="flex items-center gap-2">
                     <CopyButton value={props.message.content} />
+
+                    <UnsetBranchButton unsetBranch={props.unsetBranch} />
 
                     <p className="text-base">{formatDatetime(props.message.modified)}</p>
 
@@ -128,7 +173,7 @@ function OtherMessage(props: {
     );
 }
 
-export function MessageContent() {
+export function MessageContent(props: { unsetBranch: (() => void) | null }) {
     /**************************************************************************/
     /* State */
     const self = useUser();
@@ -142,6 +187,7 @@ export function MessageContent() {
             <MyMessage
                 key={message.id}
                 message={message}
+                unsetBranch={props.unsetBranch}
             />
         );
     }
@@ -153,6 +199,7 @@ export function MessageContent() {
             <OtherMessage
                 key={message.id}
                 message={message}
+                unsetBranch={props.unsetBranch}
                 authorName={user.name}
                 authorImageUrl={user.imageUrl}
             />
@@ -166,6 +213,7 @@ export function MessageContent() {
         <OtherMessage
             key={message.id}
             message={message}
+            unsetBranch={props.unsetBranch}
             authorName={llmToName[llm]}
             authorImageUrl={llmToImageUrl[llm] ?? ""}
         />
@@ -174,26 +222,109 @@ export function MessageContent() {
 
 export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
+    /* State */
+    const conversation = useConversation();
+
+    const selectedBranch = useMemo(() => {
+        return props.messageTree.find((tree) => {
+            return conversation.messageBranches[tree.message.id];
+        });
+    }, [props.messageTree, conversation.messageBranches]);
+
+    const setMessageBranch = useCallback(
+        async (messageId: string | null) => {
+            // Optimistic add data to local database
+            const messageBranches = {
+                ...conversation.messageBranches,
+            };
+
+            props.messageTree.forEach((tree) => {
+                messageBranches[tree.message.id] = false;
+            });
+
+            if (messageId !== null) {
+                messageBranches[messageId] = true;
+            }
+
+            await db.conversations.put(
+                {
+                    ...conversation,
+                    messageBranches,
+                },
+                conversation.id
+            );
+
+            // Sync with API
+            const { data: confirmedConversation } = await updateConversation({
+                path: {
+                    conversation_id: conversation.id,
+                },
+                body: {
+                    messageBranches,
+                },
+            });
+
+            if (!confirmedConversation) {
+                throw new Error("Unable to create conversation");
+            }
+
+            // Add confirmed data to local database
+            await db.conversations.put(confirmedConversation, conversation.id);
+        },
+        [props.messageTree, conversation.id]
+    );
+
+    /**************************************************************************/
     /* Render */
+    if (props.messageTree.length === 1) {
+        const { message, replies } = props.messageTree[0]!;
+
+        return (
+            <div className="flex flex-col gap-10">
+                <MessageProvider messageId={message.id}>
+                    <MessageContent unsetBranch={null} />
+                </MessageProvider>
+
+                {replies.length > 0 ? <MessageTree messageTree={replies} /> : null}
+            </div>
+        );
+    }
+
+    if (selectedBranch) {
+        return (
+            <div className="flex flex-col gap-10">
+                <MessageProvider messageId={selectedBranch.message.id}>
+                    <MessageContent unsetBranch={() => setMessageBranch(null)} />
+                </MessageProvider>
+
+                {selectedBranch.replies.length > 0 ? (
+                    <MessageTree messageTree={selectedBranch.replies} />
+                ) : null}
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col gap-10">
             <Carousel
                 className="w-full"
                 opts={{ startIndex: 0, watchDrag: false }}
             >
-                <CarouselContent>
+                <CarouselContent className="px-1 pl-4">
                     {props.messageTree.map((tree) => (
                         <CarouselItem
                             key={tree.message.id}
-                            className="basis-3/5 pr-[1px]"
+                            className={cn(
+                                "group bg-gunmetal hover:border-gunmetal-light mx-1 h-fit basis-3/5 cursor-pointer rounded-lg border border-transparent pr-1 pb-4 pl-1",
+                                "[&_[data-limit-width]]:w-full"
+                            )}
+                            onClick={() => {
+                                setMessageBranch(tree.message.id);
+                            }}
                         >
-                            <Card>
-                                <CardContent>
-                                    <MessageProvider messageId={tree.message.id}>
-                                        <MessageContent />
-                                    </MessageProvider>
-                                </CardContent>
-                            </Card>
+                            <MessageProvider messageId={tree.message.id}>
+                                <MessageContent unsetBranch={null} />
+                            </MessageProvider>
                         </CarouselItem>
                     ))}
                 </CarouselContent>

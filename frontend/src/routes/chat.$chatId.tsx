@@ -7,21 +7,28 @@ import { LargeLanguageModel, MessageSchema, createMessage } from "@/api";
 import { useUser } from "@/api/auth";
 import { MessageTree } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
-import { ConversationProvider, useMessageTree } from "@/sync/conversation";
+import { ConversationProvider, useConversation, useMessageTree } from "@/sync/conversation";
 import { db } from "@/sync/database";
 
 export const Route = createFileRoute("/chat/$chatId")({
     component: RouteComponent,
 });
 
-function ConversationContext(props: { conversationId: string }) {
+function Conversation() {
     /**************************************************************************/
     /* State */
     const user = useUser();
+    const conversation = useConversation();
     const messageTree = useMessageTree();
 
     const sendMessage = useCallback(
         async (content: string, llms: Array<LargeLanguageModel>) => {
+            // Pull the message we're replying to from the DOM
+            // MUCH easier to do this than pass state around in very hard ways
+            const elements = document.querySelectorAll<HTMLElement>("[data-message-id]");
+            const lastElement = elements[elements.length - 1];
+            const replyToId = lastElement?.getAttribute("data-message-id") ?? null;
+
             // Optimistic add data to local database
             const newMessageId = crypto.randomUUID();
             const date = new Date().toISOString();
@@ -32,8 +39,8 @@ function ConversationContext(props: { conversationId: string }) {
                 content: content,
                 created: date,
                 modified: date,
-                conversationId: props.conversationId,
-                replyToId: messageTree[messageTree.length - 1]?.id ?? null,
+                conversationId: conversation.id,
+                replyToId,
                 authorId: user.id,
                 llm: null,
             } satisfies MessageSchema);
@@ -44,8 +51,8 @@ function ConversationContext(props: { conversationId: string }) {
                     id: newMessageId,
                     title: content,
                     content,
-                    conversationId: props.conversationId,
-                    replyToId: messageTree[messageTree.length - 1]?.id ?? null,
+                    conversationId: conversation.id,
+                    replyToId,
                     llms,
                 },
             });
@@ -58,7 +65,7 @@ function ConversationContext(props: { conversationId: string }) {
             // Add data to local database
             await db.messages.put(message, message.id);
         },
-        [props.conversationId, user.id, messageTree]
+        [conversation.id, user.id, messageTree]
     );
 
     /**************************************************************************/
@@ -85,7 +92,7 @@ function RouteComponent() {
     /* Render */
     return (
         <ConversationProvider conversationId={chatId}>
-            <ConversationContext conversationId={chatId} />
+            <Conversation />
         </ConversationProvider>
     );
 }
