@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import * as React from "react";
 
-import { CopyIcon, Undo2Icon } from "lucide-react";
+import { BanIcon, CheckIcon, CopyIcon, EditIcon, Undo2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 import { MessageSchema, updateConversation } from "@/api";
@@ -17,6 +18,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/ui/carousel";
+import { Textarea } from "@/ui/textarea";
 import { cn, formatDatetime } from "@/utils";
 
 import { Markdown } from "./markdown";
@@ -47,33 +49,38 @@ function CopyButton(props: { value: string }) {
     );
 }
 
-function UnsetBranchButton(props: { unsetBranch: (() => void) | null }) {
+function ActionButton(props: {
+    onClick: (() => void) | null;
+    tooltip: string;
+    children: React.ReactNode;
+}) {
     /**************************************************************************/
     /* Render */
     return (
         <Button
             size="custom"
             className="hover:bg-pantone-light hover:text-gunmetal-dark size-7 rounded"
-            tooltip="Un-branch"
-            disabled={props.unsetBranch === null}
+            tooltip={props.tooltip}
+            disabled={props.onClick === null}
             onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
 
-                if (props.unsetBranch) {
-                    props.unsetBranch();
+                if (props.onClick) {
+                    props.onClick();
                 }
             }}
         >
-            <Undo2Icon
-                height={10}
-                width={10}
-            />
+            {props.children}
         </Button>
     );
 }
 
-function MyMessage(props: { message: MessageSchema; unsetBranch: (() => void) | null }) {
+function ViewMyMessage(props: {
+    message: MessageSchema;
+    unsetBranch: (() => void) | null;
+    onEditStart: () => void;
+}) {
     /**************************************************************************/
     /* State */
     const ref = useRef<HTMLDivElement>(null);
@@ -106,13 +113,129 @@ function MyMessage(props: { message: MessageSchema; unsetBranch: (() => void) | 
                     <div className="flex items-center gap-2">
                         <p className="text-base">{formatDatetime(props.message.modified)}</p>
 
-                        <UnsetBranchButton unsetBranch={props.unsetBranch} />
+                        <ActionButton
+                            onClick={props.unsetBranch}
+                            tooltip="Un-branch"
+                        >
+                            <Undo2Icon
+                                height={10}
+                                width={10}
+                            />
+                        </ActionButton>
+
+                        <ActionButton
+                            onClick={props.onEditStart}
+                            tooltip="Edit"
+                        >
+                            <EditIcon
+                                width={20}
+                                height={20}
+                            />
+                        </ActionButton>
 
                         <CopyButton value={props.message.content} />
                     </div>
                 </div>
             </div>
         </div>
+    );
+}
+
+function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void }) {
+    /**************************************************************************/
+    /* State */
+    const conversation = useConversation();
+
+    // Initial content comes from original message
+    const contentRef = useRef(props.message.content);
+
+    const branchMessage = useCallback(() => {
+        const content = contentRef.current;
+
+        if (!content) {
+            toast.warning("Please enter something before saving your message");
+            return;
+        }
+
+        // Create the message locally
+        // Update the conversation message branches to select this, unselect the props message
+
+        // Create the message
+        // Update the conversation
+    }, [props.message.replyToId, props.message.id, conversation.id, conversation.messageBranches]);
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <div
+            data-message-id={props.message.id}
+            className="flex justify-end"
+        >
+            <div
+                data-limit-width
+                className="group relative flex w-[85%] justify-end pb-6"
+            >
+                <div className="bg-gunmetal text-silver w-full overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7">
+                    <Textarea
+                        defaultValue={props.message.content}
+                        onChange={(event) => (contentRef.current = event.target.value)}
+                        placeholder="Type your message here..."
+                        className="max-h-48"
+                    />
+                </div>
+
+                <div className="absolute right-0 -bottom-2 opacity-0 transition-all group-hover:opacity-100">
+                    <div className="flex items-center gap-2">
+                        <ActionButton
+                            onClick={branchMessage}
+                            tooltip="Save"
+                        >
+                            <CheckIcon
+                                height={10}
+                                width={10}
+                            />
+                        </ActionButton>
+
+                        <ActionButton
+                            onClick={props.onEditStop}
+                            tooltip="Cancel"
+                        >
+                            <BanIcon
+                                height={10}
+                                width={10}
+                            />
+                        </ActionButton>
+
+                        <CopyButton value={props.message.content} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function MyMessage(props: { message: MessageSchema; unsetBranch: (() => void) | null }) {
+    /**************************************************************************/
+    /* State */
+    const [editing, setEditing] = useState(false);
+
+    /**************************************************************************/
+    /* Render */
+    if (!editing) {
+        return (
+            <ViewMyMessage
+                message={props.message}
+                unsetBranch={props.unsetBranch}
+                onEditStart={() => setEditing(true)}
+            />
+        );
+    }
+
+    return (
+        <BranchMyMessage
+            message={props.message}
+            onEditStop={() => setEditing(false)}
+        />
     );
 }
 
@@ -150,7 +273,15 @@ function OtherMessage(props: {
                 <div className="flex items-center gap-2">
                     <CopyButton value={props.message.content} />
 
-                    <UnsetBranchButton unsetBranch={props.unsetBranch} />
+                    <ActionButton
+                        onClick={props.unsetBranch}
+                        tooltip="Un-branch"
+                    >
+                        <Undo2Icon
+                            height={10}
+                            width={10}
+                        />
+                    </ActionButton>
 
                     <p className="text-base">{formatDatetime(props.message.modified)}</p>
 
