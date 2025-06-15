@@ -16,10 +16,6 @@ def openai_gpt_4_1(message_id: uuid.UUID) -> None:
     message = models.Message.objects.get(id=message_id)
     settings = models.Setting.objects.get(user_id=message.author_id)
 
-    import logging
-
-    logging.warning(settings.developer_prompt)
-
     messages = models.Message.objects.raw(
         """
 SELECT
