@@ -4,7 +4,7 @@ import * as React from "react";
 import { BanIcon, CheckIcon, CopyIcon, EditIcon, Undo2Icon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageSchema, updateConversation } from "@/api";
+import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
 import { useUser } from "@/api/auth";
 import { llmToImageUrl, llmToName } from "@/api/models";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
@@ -149,7 +149,7 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
     // Initial content comes from original message
     const contentRef = useRef(props.message.content);
 
-    const branchMessage = useCallback(() => {
+    const branchMessage = useCallback(async () => {
         const content = contentRef.current;
 
         if (!content) {
@@ -157,12 +157,104 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
             return;
         }
 
-        // Create the message locally
-        // Update the conversation message branches to select this, unselect the props message
+        const timestamp = new Date().toISOString();
 
-        // Create the message
-        // Update the conversation
-    }, [props.message.replyToId, props.message.id, conversation.id, conversation.messageBranches]);
+        const branchedMessage: NewMessageSchema = {
+            id: crypto.randomUUID(),
+            title: "",
+            content,
+            conversationId: conversation.id,
+            replyToId: props.message.replyToId,
+            llms: [],
+        } as const;
+
+        const messageBranches = {
+            ...conversation.messageBranches,
+            [props.message.id]: false,
+            [branchedMessage.id]: true,
+        };
+
+        // Optimistic local updates
+        db.transaction(
+            "readwrite",
+            db.conversations,
+            db.messages,
+            db.messagesMetadata,
+            async () => {
+                await db.conversations.put(
+                    {
+                        ...conversation,
+                        messageBranches,
+                    },
+                    conversation.id
+                );
+
+                await db.messages.put(
+                    {
+                        created: timestamp,
+                        modified: timestamp,
+                        authorId: props.message.authorId,
+                        llm: null,
+                        ...branchedMessage,
+                    },
+                    branchedMessage.id
+                );
+
+                await db.messagesMetadata.put(
+                    {
+                        id: branchedMessage.id,
+                        created: timestamp,
+                        conversationId: branchedMessage.conversationId,
+                        replyToId: branchedMessage.replyToId,
+                    },
+                    branchedMessage.id
+                );
+            }
+        );
+
+        // Sync with API
+        const { data: confirmedConversation } = await updateConversation({
+            path: {
+                conversation_id: conversation.id,
+            },
+            body: {
+                messageBranches,
+            },
+        });
+
+        if (!confirmedConversation) {
+            throw new Error("Unable to edit message");
+        }
+
+        const { data: confirmedMessage } = await createMessage({
+            body: branchedMessage,
+        });
+
+        if (!confirmedMessage) {
+            throw new Error("Unable to edit message");
+        }
+
+        // Add confirmed data to local database
+        db.transaction(
+            "readwrite",
+            db.conversations,
+            db.messages,
+            db.messagesMetadata,
+            async () => {
+                await db.conversations.put(confirmedConversation, conversation.id);
+                await db.messages.put(confirmedMessage, confirmedMessage.id);
+                await db.messagesMetadata.put(
+                    {
+                        id: confirmedMessage.id,
+                        created: confirmedMessage.created,
+                        conversationId: confirmedMessage.conversationId,
+                        replyToId: confirmedMessage.replyToId,
+                    },
+                    confirmedMessage.id
+                );
+            }
+        );
+    }, [props.message, conversation]);
 
     /**************************************************************************/
     /* Render */
