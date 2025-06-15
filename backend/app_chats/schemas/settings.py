@@ -23,3 +23,10 @@ class UpdateSettingSchema(Schema):
     llm_traits: list[str] | None = None
     llm_context: str | None = None
     llms_available: list[LargeLanguageModel] | None = None
+
+    visual_theme: str | None = None
+    visual_theme_primary_override: str | None = None
+    visual_theme_secondary_override: str | None = None
+    visual_theme_background_override: str | None = None
+    visual_theme_text_override: str | None = None
+    visual_theme_border_override: str | None = None

@@ -313,6 +313,30 @@ export type UpdateSettingSchema = {
      * Llmsavailable
      */
     llmsAvailable?: Array<LargeLanguageModel> | null;
+    /**
+     * Visualtheme
+     */
+    visualTheme?: string | null;
+    /**
+     * Visualthemeprimaryoverride
+     */
+    visualThemePrimaryOverride?: string | null;
+    /**
+     * Visualthemesecondaryoverride
+     */
+    visualThemeSecondaryOverride?: string | null;
+    /**
+     * Visualthemebackgroundoverride
+     */
+    visualThemeBackgroundOverride?: string | null;
+    /**
+     * Visualthemetextoverride
+     */
+    visualThemeTextOverride?: string | null;
+    /**
+     * Visualthemeborderoverride
+     */
+    visualThemeBorderOverride?: string | null;
 };
 
 /**
