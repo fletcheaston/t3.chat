@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import * as React from "react";
 
-import { BanIcon, CheckIcon, CopyIcon, EditIcon, Undo2Icon } from "lucide-react";
+import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
@@ -110,16 +110,17 @@ function ViewMyMessage(props: {
                     ref={ref}
                     className="absolute right-0 -bottom-2 opacity-0 transition-all group-hover:opacity-100"
                 >
-                    <div className="flex items-center gap-2">
-                        <p className="text-base">{formatDatetime(props.message.modified)}</p>
+                    <div className="flex items-center gap-1 text-xs">
+                        <p>{formatDatetime(props.message.modified)}</p>
 
                         <ActionButton
                             onClick={props.unsetBranch}
-                            tooltip="Un-branch"
+                            tooltip="View branches"
                         >
-                            <Undo2Icon
+                            <SplitIcon
                                 height={10}
                                 width={10}
+                                className="rotate-180"
                             />
                         </ActionButton>
 
@@ -128,8 +129,8 @@ function ViewMyMessage(props: {
                             tooltip="Edit"
                         >
                             <EditIcon
-                                width={20}
-                                height={20}
+                                width={10}
+                                height={10}
                             />
                         </ActionButton>
 
@@ -362,34 +363,33 @@ function OtherMessage(props: {
                 ref={ref}
                 className="absolute -bottom-2 left-0 opacity-0 transition-all group-hover:opacity-100"
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 text-xs">
                     <CopyButton value={props.message.content} />
 
                     <ActionButton
                         onClick={props.unsetBranch}
-                        tooltip="Un-branch"
+                        tooltip="View branches"
                     >
-                        <Undo2Icon
+                        <SplitIcon
                             height={10}
                             width={10}
+                            className="rotate-180"
                         />
                     </ActionButton>
 
-                    <p className="text-base">{formatDatetime(props.message.modified)}</p>
+                    <p>{formatDatetime(props.message.modified)}</p>
 
-                    <div className="border-silver h-4 border-l" />
+                    <div className="border-silver h-3 border-l" />
 
-                    <div className="flex items-center gap-1">
-                        <p className="text-pantone-light text-base">{props.authorName}</p>
+                    <p className="text-pantone-light">{props.authorName}</p>
 
-                        {props.authorImageUrl ? (
-                            <img
-                                src={props.authorImageUrl}
-                                alt={props.authorName}
-                                className="size-6 rounded"
-                            />
-                        ) : null}
-                    </div>
+                    {props.authorImageUrl ? (
+                        <img
+                            src={props.authorImageUrl}
+                            alt={props.authorName}
+                            className="size-4 rounded"
+                        />
+                    ) : null}
                 </div>
             </div>
         </div>
@@ -446,6 +446,8 @@ export function MessageContent(props: { unsetBranch: (() => void) | null }) {
 export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
     /* State */
+    const [orientation] = useState<"horizontal" | "vertical">("vertical");
+
     const conversation = useConversation();
 
     const selectedBranch = useMemo(() => {
@@ -530,16 +532,20 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     return (
         <div className="flex flex-col gap-10">
             <Carousel
+                orientation={orientation}
                 className="w-full"
                 opts={{ startIndex: 0, watchDrag: false }}
             >
-                <CarouselContent className="px-1 pl-4">
+                <CarouselContent
+                    className={orientation === "horizontal" ? "px-1 pl-4" : "py-1 pt-4"}
+                >
                     {props.messageTree.map((tree) => (
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-gunmetal hover:border-gunmetal-light mx-1 h-fit basis-3/5 cursor-pointer rounded-lg border border-transparent pr-1 pb-4 pl-1",
-                                "[&_[data-limit-width]]:w-full"
+                                "group bg-gunmetal hover:border-gunmetal-light h-fit basis-3/5 cursor-pointer rounded-lg border border-transparent pr-1 pb-4 pl-1",
+                                "[&_[data-limit-width]]:w-full",
+                                orientation === "horizontal" ? "mx-1" : "my-1"
                             )}
                             onClick={() => {
                                 setMessageBranch(tree.message.id);

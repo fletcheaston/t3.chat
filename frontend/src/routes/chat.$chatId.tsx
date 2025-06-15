@@ -72,7 +72,7 @@ function Conversation() {
     /* Render */
     return (
         <div className="flex max-w-3xl grow flex-col">
-            <div className="grow px-4 pb-12">
+            <div className="grow px-4 pb-12 text-sm">
                 <MessageTree messageTree={messageTree} />
             </div>
 
