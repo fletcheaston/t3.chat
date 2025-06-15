@@ -9,6 +9,54 @@ export type CsrfAuthUserSchema = {
      */
     csrfToken: string;
     user: UserSchema;
+    settings: SettingSchema;
+};
+
+/**
+ * LargeLanguageModel
+ */
+export type LargeLanguageModel =
+    | "utils-echo"
+    | "openai-gpt-4.1"
+    | "openai-gpt-4.1-mini"
+    | "openai-gpt-4.1-nano";
+
+/**
+ * SettingSchema
+ */
+export type SettingSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
+     * Llmnickname
+     */
+    llmNickname: string;
+    /**
+     * Llmjob
+     */
+    llmJob: string;
+    /**
+     * Llmtraits
+     */
+    llmTraits: Array<string>;
+    /**
+     * Llmcontext
+     */
+    llmContext: string;
+    /**
+     * Llmsavailable
+     */
+    llmsAvailable: Array<LargeLanguageModel>;
 };
 
 /**
@@ -43,15 +91,6 @@ export type ErrorMessage =
 export type ErrorSchema = {
     detail: ErrorMessage;
 };
-
-/**
- * LargeLanguageModel
- */
-export type LargeLanguageModel =
-    | "utils-echo"
-    | "openai-gpt-4.1"
-    | "openai-gpt-4.1-mini"
-    | "openai-gpt-4.1-nano";
 
 /**
  * MessageSchema
@@ -248,6 +287,32 @@ export type UpdateTagSchema = {
      * Color
      */
     color: string;
+};
+
+/**
+ * UpdateSettingSchema
+ */
+export type UpdateSettingSchema = {
+    /**
+     * Llmnickname
+     */
+    llmNickname?: string | null;
+    /**
+     * Llmjob
+     */
+    llmJob?: string | null;
+    /**
+     * Llmtraits
+     */
+    llmTraits?: Array<string> | null;
+    /**
+     * Llmcontext
+     */
+    llmContext?: string | null;
+    /**
+     * Llmsavailable
+     */
+    llmsAvailable?: Array<LargeLanguageModel> | null;
 };
 
 /**
@@ -546,6 +611,22 @@ export type UpdateTagResponses = {
 };
 
 export type UpdateTagResponse = UpdateTagResponses[keyof UpdateTagResponses];
+
+export type UpdateMySettingsData = {
+    body: UpdateSettingSchema;
+    path?: never;
+    query?: never;
+    url: "/api/settings/update";
+};
+
+export type UpdateMySettingsResponses = {
+    /**
+     * OK
+     */
+    200: SettingSchema;
+};
+
+export type UpdateMySettingsResponse = UpdateMySettingsResponses[keyof UpdateMySettingsResponses];
 
 export type GlobalSyncTypesData = {
     body?: never;

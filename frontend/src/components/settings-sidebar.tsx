@@ -1,8 +1,7 @@
 import * as React from "react";
 
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, LinkComponentProps, useLocation } from "@tanstack/react-router";
 
-import { useConversations } from "@/sync/conversations";
 import {
     Sidebar,
     SidebarContent,
@@ -19,10 +18,12 @@ import { cn } from "@/utils";
 import { SidebarButtons } from "./sidebar-buttons";
 import { SidebarHeader } from "./sidebar-header";
 
-function ConversationLink(props: { id: string; title: string; pathname: string }) {
+type To = NonNullable<LinkComponentProps["to"]>;
+
+function SettingsLink(props: { title: string; to: To; pathname: string }) {
     /**************************************************************************/
     /* State */
-    const selected = props.pathname.includes(props.id);
+    const selected = props.pathname.includes(props.to);
 
     /**************************************************************************/
     /* Render */
@@ -37,23 +38,16 @@ function ConversationLink(props: { id: string; title: string; pathname: string }
                         : "hover:border-b-pantone-lighter border-b-silver-dull"
                 )}
             >
-                <Link
-                    to="/chat/$chatId"
-                    params={{ chatId: props.id }}
-                >
-                    {props.title}
-                </Link>
+                <Link to={props.to}>{props.title}</Link>
             </SidebarMenuButton>
         </SidebarMenuItem>
     );
 }
 
-export function ConversationSidebar() {
+export function SettingsSidebar() {
     /**************************************************************************/
     /* State */
     const pathname = useLocation({ select: (state) => state.pathname });
-
-    const conversations = useConversations();
 
     /**************************************************************************/
     /* Render */
@@ -69,20 +63,45 @@ export function ConversationSidebar() {
 
                 <SidebarContent>
                     <SidebarGroup>
-                        <SidebarGroupLabel>Chats</SidebarGroupLabel>
+                        <SidebarGroupLabel>Settings</SidebarGroupLabel>
 
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {conversations.map((conversation) => {
-                                    return (
-                                        <ConversationLink
-                                            key={conversation.id}
-                                            id={conversation.id}
-                                            title={conversation.title}
-                                            pathname={pathname}
-                                        />
-                                    );
-                                })}
+                                <SettingsLink
+                                    title="Account"
+                                    to="/settings/account"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="Models"
+                                    to="/settings/models"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="Visuals"
+                                    to="/settings/visuals"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="History"
+                                    to="/settings/history"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="API Keys"
+                                    to="/settings/api-keys"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="Support"
+                                    to="/settings/support"
+                                    pathname={pathname}
+                                />
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>
