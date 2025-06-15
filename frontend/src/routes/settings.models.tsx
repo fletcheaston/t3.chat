@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { BanIcon, PlusIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { LargeLanguageModel } from "@/api";
 import { useSettings, useUpdateSetting, useUser } from "@/api/auth";
 import { llmToDescription, llmToImageUrl, llmToName } from "@/api/models";
+import { Button } from "@/ui/button";
 import { Card, CardContent } from "@/ui/card";
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
@@ -65,6 +68,110 @@ function Job() {
                     }
                 }}
             />
+        </div>
+    );
+}
+
+const exampleTraits = [
+    "friendly",
+    "witty",
+    "concise",
+    "curious",
+    "empathetic",
+    "creative",
+    "patient",
+] as const;
+
+function Traits() {
+    /**************************************************************************/
+    /* State */
+    const settings = useSettings();
+    const updateSettings = useUpdateSetting();
+
+    const filteredExampleTraits = exampleTraits.filter(
+        (trait) => !settings.llmTraits.includes(trait)
+    );
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <div>
+            <Label htmlFor="trait">What traits should the models have?</Label>
+
+            <div className="border-silver rounded-md border">
+                {settings.llmTraits.length > 0 ? (
+                    <div className="border-b-silver-dull flex gap-1 border-b px-1 py-1 text-sm">
+                        {settings.llmTraits.map((trait) => {
+                            return (
+                                <Button
+                                    key={trait}
+                                    variant="default"
+                                    size="custom"
+                                    className="bg-pantone-lighter hover:bg-pantone hover:border-pantone border-pantone-lighter text-gunmetal-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
+                                    tooltip={`Remove trait "${trait}"`}
+                                    onClick={() => {
+                                        updateSettings(
+                                            "llmTraits",
+                                            settings.llmTraits.filter(
+                                                (llmTrait) => llmTrait !== trait
+                                            )
+                                        );
+                                    }}
+                                >
+                                    {trait}
+
+                                    <BanIcon />
+                                </Button>
+                            );
+                        })}
+                    </div>
+                ) : null}
+
+                <Input
+                    id="trait"
+                    placeholder="Type a trait and press Enter or Tab"
+                    className="text-pantone-lighter border-none"
+                    onKeyDown={(event) => {
+                        const value = event.currentTarget.value;
+
+                        if (event.key === "Enter" || event.key === "Tab") {
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            if (!value) {
+                                toast.warning("Please enter a trait first");
+                                return;
+                            }
+
+                            updateSettings("llmTraits", [...settings.llmTraits, value]);
+                            event.currentTarget.value = "";
+                        }
+                    }}
+                />
+            </div>
+
+            {filteredExampleTraits.length > 0 ? (
+                <div className="mt-2 flex gap-1">
+                    {filteredExampleTraits.map((trait) => {
+                        return (
+                            <Button
+                                key={trait}
+                                variant="default"
+                                size="custom"
+                                className="bg-pantone-lighter hover:bg-pantone hover:border-pantone border-pantone-lighter text-gunmetal-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
+                                tooltip={`Add trait "${trait}"`}
+                                onClick={() => {
+                                    updateSettings("llmTraits", [...settings.llmTraits, trait]);
+                                }}
+                            >
+                                {trait}
+
+                                <PlusIcon />
+                            </Button>
+                        );
+                    })}
+                </div>
+            ) : null}
         </div>
     );
 }
@@ -150,7 +257,7 @@ function RouteComponent() {
     /**************************************************************************/
     /* Render */
     return (
-        <>
+        <div className="pb-8">
             <h1 className="text-4xl font-semibold">Model Settings</h1>
 
             <div className="mt-4">
@@ -161,6 +268,8 @@ function RouteComponent() {
                 <Nickname />
 
                 <Job />
+
+                <Traits />
 
                 <Context />
             </div>
@@ -191,6 +300,6 @@ function RouteComponent() {
                     <ModelCard llm="utils-echo" />
                 </div>
             </div>
-        </>
+        </div>
     );
 }
