@@ -16,6 +16,8 @@ import { Route as LoginImport } from "./routes/login"
 import { Route as ChatImport } from "./routes/chat"
 import { Route as IndexImport } from "./routes/index"
 import { Route as ChatIndexImport } from "./routes/chat.index"
+import { Route as SettingsVisualsImport } from "./routes/settings.visuals"
+import { Route as SettingsModelsImport } from "./routes/settings.models"
 import { Route as ChatChatIdImport } from "./routes/chat.$chatId"
 
 // Create/Update Routes
@@ -48,6 +50,18 @@ const ChatIndexRoute = ChatIndexImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => ChatRoute,
+} as any)
+
+const SettingsVisualsRoute = SettingsVisualsImport.update({
+  id: "/visuals",
+  path: "/visuals",
+  getParentRoute: () => SettingsRoute,
+} as any)
+
+const SettingsModelsRoute = SettingsModelsImport.update({
+  id: "/models",
+  path: "/models",
+  getParentRoute: () => SettingsRoute,
 } as any)
 
 const ChatChatIdRoute = ChatChatIdImport.update({
@@ -95,6 +109,20 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ChatChatIdImport
       parentRoute: typeof ChatImport
     }
+    "/settings/models": {
+      id: "/settings/models"
+      path: "/models"
+      fullPath: "/settings/models"
+      preLoaderRoute: typeof SettingsModelsImport
+      parentRoute: typeof SettingsImport
+    }
+    "/settings/visuals": {
+      id: "/settings/visuals"
+      path: "/visuals"
+      fullPath: "/settings/visuals"
+      preLoaderRoute: typeof SettingsVisualsImport
+      parentRoute: typeof SettingsImport
+    }
     "/chat/": {
       id: "/chat/"
       path: "/"
@@ -119,20 +147,38 @@ const ChatRouteChildren: ChatRouteChildren = {
 
 const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
+interface SettingsRouteChildren {
+  SettingsModelsRoute: typeof SettingsModelsRoute
+  SettingsVisualsRoute: typeof SettingsVisualsRoute
+}
+
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsModelsRoute: SettingsModelsRoute,
+  SettingsVisualsRoute: SettingsVisualsRoute,
+}
+
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute
   "/chat": typeof ChatRouteWithChildren
   "/login": typeof LoginRoute
-  "/settings": typeof SettingsRoute
+  "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/settings/models": typeof SettingsModelsRoute
+  "/settings/visuals": typeof SettingsVisualsRoute
   "/chat/": typeof ChatIndexRoute
 }
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute
   "/login": typeof LoginRoute
-  "/settings": typeof SettingsRoute
+  "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/settings/models": typeof SettingsModelsRoute
+  "/settings/visuals": typeof SettingsVisualsRoute
   "/chat": typeof ChatIndexRoute
 }
 
@@ -141,16 +187,33 @@ export interface FileRoutesById {
   "/": typeof IndexRoute
   "/chat": typeof ChatRouteWithChildren
   "/login": typeof LoginRoute
-  "/settings": typeof SettingsRoute
+  "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/settings/models": typeof SettingsModelsRoute
+  "/settings/visuals": typeof SettingsVisualsRoute
   "/chat/": typeof ChatIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/" | "/chat" | "/login" | "/settings" | "/chat/$chatId" | "/chat/"
+  fullPaths:
+    | "/"
+    | "/chat"
+    | "/login"
+    | "/settings"
+    | "/chat/$chatId"
+    | "/settings/models"
+    | "/settings/visuals"
+    | "/chat/"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/login" | "/settings" | "/chat/$chatId" | "/chat"
+  to:
+    | "/"
+    | "/login"
+    | "/settings"
+    | "/chat/$chatId"
+    | "/settings/models"
+    | "/settings/visuals"
+    | "/chat"
   id:
     | "__root__"
     | "/"
@@ -158,6 +221,8 @@ export interface FileRouteTypes {
     | "/login"
     | "/settings"
     | "/chat/$chatId"
+    | "/settings/models"
+    | "/settings/visuals"
     | "/chat/"
   fileRoutesById: FileRoutesById
 }
@@ -166,14 +231,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRouteWithChildren
   LoginRoute: typeof LoginRoute
-  SettingsRoute: typeof SettingsRoute
+  SettingsRoute: typeof SettingsRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRouteWithChildren,
   LoginRoute: LoginRoute,
-  SettingsRoute: SettingsRoute,
+  SettingsRoute: SettingsRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -206,11 +271,23 @@ export const routeTree = rootRoute
       "filePath": "login.tsx"
     },
     "/settings": {
-      "filePath": "settings.tsx"
+      "filePath": "settings.tsx",
+      "children": [
+        "/settings/models",
+        "/settings/visuals"
+      ]
     },
     "/chat/$chatId": {
       "filePath": "chat.$chatId.tsx",
       "parent": "/chat"
+    },
+    "/settings/models": {
+      "filePath": "settings.models.tsx",
+      "parent": "/settings"
+    },
+    "/settings/visuals": {
+      "filePath": "settings.visuals.tsx",
+      "parent": "/settings"
     },
     "/chat/": {
       "filePath": "chat.index.tsx",

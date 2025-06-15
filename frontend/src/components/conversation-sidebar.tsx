@@ -9,6 +9,7 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -18,10 +19,39 @@ import { cn } from "@/utils";
 import { SidebarButtons } from "./sidebar-buttons";
 import { SidebarHeader } from "./sidebar-header";
 
+function ConversationLink(props: { id: string; title: string; pathname: string }) {
+    /**************************************************************************/
+    /* State */
+    const selected = props.pathname.includes(props.id);
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <SidebarMenuItem>
+            <SidebarMenuButton
+                asChild
+                className={cn(
+                    "text-silver hover:bg-pantone-lighter hover:text-gunmetal-dark block rounded-none rounded-t-lg border-b-2 px-0.5 py-0.5 transition-all",
+                    selected
+                        ? "border-b-pantone"
+                        : "hover:border-b-pantone-lighter border-b-silver-dull"
+                )}
+            >
+                <Link
+                    to="/chat/$chatId"
+                    params={{ chatId: props.id }}
+                >
+                    {props.title}
+                </Link>
+            </SidebarMenuButton>
+        </SidebarMenuItem>
+    );
+}
+
 export function ConversationSidebar() {
     /**************************************************************************/
     /* State */
-    const location = useLocation();
+    const pathname = useLocation({ select: (state) => state.pathname });
 
     const conversations = useConversations();
 
@@ -39,30 +69,18 @@ export function ConversationSidebar() {
 
                 <SidebarContent>
                     <SidebarGroup>
-                        <SidebarGroupContent>
-                            <SidebarMenu className="gap-2">
-                                {conversations.map((conversation) => {
-                                    const selected = location.pathname.includes(conversation.id);
+                        <SidebarGroupLabel>Chats</SidebarGroupLabel>
 
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {conversations.map((conversation) => {
                                     return (
-                                        <SidebarMenuItem key={conversation.id}>
-                                            <SidebarMenuButton
-                                                asChild
-                                                className={cn(
-                                                    "h-fit transition-all",
-                                                    selected
-                                                        ? "bg-pantone-lighter text-gunmetal-dark"
-                                                        : "hover:bg-pantone-lighter hover:text-gunmetal-dark"
-                                                )}
-                                            >
-                                                <Link
-                                                    to="/chat/$chatId"
-                                                    params={{ chatId: conversation.id }}
-                                                >
-                                                    {conversation.title}
-                                                </Link>
-                                            </SidebarMenuButton>
-                                        </SidebarMenuItem>
+                                        <ConversationLink
+                                            key={conversation.id}
+                                            id={conversation.id}
+                                            title={conversation.title}
+                                            pathname={pathname}
+                                        />
                                     );
                                 })}
                             </SidebarMenu>
