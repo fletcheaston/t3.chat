@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Link } from "@tanstack/react-router";
-import { PanelLeftIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { PanelLeftIcon, PlusIcon, SearchIcon, Settings2Icon } from "lucide-react";
 
 import { Button } from "@/ui/button";
 import { useSidebar } from "@/ui/sidebar";
@@ -66,6 +66,27 @@ export function SidebarButtons() {
                     >
                         <PlusIcon />
                         <span className="sr-only">New Chat</span>
+                    </Link>
+                </Button>
+
+                <Button
+                    variant="plain"
+                    size="icon"
+                    className={cn(
+                        "hover:bg-gunmetal relative",
+                        open ? "absolute left-0 z-0 opacity-0" : ""
+                    )}
+                    tooltip="Settings"
+                >
+                    <Link
+                        to="/settings/models"
+                        className={cn(
+                            "absolute transition-all delay-150 duration-150 ease-[cubic-bezier(.4,0,.2,1)]",
+                            open ? "-left-24" : "left-2"
+                        )}
+                    >
+                        <Settings2Icon />
+                        <span className="sr-only">Settings</span>
                     </Link>
                 </Button>
             </div>

@@ -438,7 +438,7 @@ export function MessageContent(props: { unsetBranch: (() => void) | null }) {
             message={message}
             unsetBranch={props.unsetBranch}
             authorName={llmToName[llm]}
-            authorImageUrl={llmToImageUrl[llm] ?? ""}
+            authorImageUrl={llmToImageUrl[llm]}
         />
     );
 }
