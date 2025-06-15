@@ -70,13 +70,16 @@ function SidebarButtons() {
                     )}
                     tooltip="New chat"
                 >
-                    <PlusIcon
+                    <Link
+                        to="/chat"
                         className={cn(
                             "absolute transition-all delay-150 duration-150 ease-[cubic-bezier(.4,0,.2,1)]",
                             open ? "-left-15" : "left-2"
                         )}
-                    />
-                    <span className="sr-only">New Chat</span>
+                    >
+                        <PlusIcon />
+                        <span className="sr-only">New Chat</span>
+                    </Link>
                 </Button>
             </div>
         </div>
