@@ -34,6 +34,13 @@ class Setting(DjangoModel):
         blank=True,
         default=list,
     )
+    llms_available = ArrayField(
+        models.TextField(
+            choices=[(llm.value, llm.name) for llm in schemas.LargeLanguageModel],
+        ),
+        blank=True,
+        default=list,
+    )
 
     ############################################################################
     # Queryset managers

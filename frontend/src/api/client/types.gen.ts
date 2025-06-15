@@ -13,6 +13,15 @@ export type CsrfAuthUserSchema = {
 };
 
 /**
+ * LargeLanguageModel
+ */
+export type LargeLanguageModel =
+    | "utils-echo"
+    | "openai-gpt-4.1"
+    | "openai-gpt-4.1-mini"
+    | "openai-gpt-4.1-nano";
+
+/**
  * SettingSchema
  */
 export type SettingSchema = {
@@ -44,6 +53,14 @@ export type SettingSchema = {
      * Llmcontext
      */
     llmContext: string;
+    /**
+     * Llmsselected
+     */
+    llmsSelected: Array<LargeLanguageModel>;
+    /**
+     * Llmsavailable
+     */
+    llmsAvailable: Array<LargeLanguageModel>;
 };
 
 /**
@@ -78,15 +95,6 @@ export type ErrorMessage =
 export type ErrorSchema = {
     detail: ErrorMessage;
 };
-
-/**
- * LargeLanguageModel
- */
-export type LargeLanguageModel =
-    | "utils-echo"
-    | "openai-gpt-4.1"
-    | "openai-gpt-4.1-mini"
-    | "openai-gpt-4.1-nano";
 
 /**
  * MessageSchema
@@ -309,6 +317,10 @@ export type UpdateSettingSchema = {
      * Llmsselected
      */
     llmsSelected?: Array<LargeLanguageModel> | null;
+    /**
+     * Llmsavailable
+     */
+    llmsAvailable?: Array<LargeLanguageModel> | null;
 };
 
 /**

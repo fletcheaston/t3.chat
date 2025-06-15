@@ -33,6 +33,9 @@ def update_my_settings(
     if data.llms_selected is not None:
         setting.llms_selected = data.llms_selected
 
+    if data.llms_available is not None:
+        setting.llms_available = data.llms_available
+
     setting.save()
 
     return setting
