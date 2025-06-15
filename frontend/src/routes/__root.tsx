@@ -94,7 +94,12 @@ function RouteComponent() {
                 <main>
                     {user === null ? <Anonymous /> : <Authenticated />}
 
-                    <Toaster position="top-right" />
+                    <Toaster
+                        expand
+                        richColors
+                        duration={1500}
+                        position="top-right"
+                    />
                 </main>
             </body>
         </>

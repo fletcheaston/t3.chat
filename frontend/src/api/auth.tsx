@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 
 import { useMountEffect } from "@react-hookz/web";
+import { toast } from "sonner";
 
 import { SettingSchema, UserSchema, updateMySettings, whoAmI } from "@/api/client";
 import { client } from "@/api/client/client.gen";
@@ -35,11 +36,17 @@ export function AuthProvider(props: { children: React.ReactNode }) {
                 body: {
                     [key]: value,
                 },
-            }).then((result) => {
-                if (!result.data) return;
+            })
+                .then((result) => {
+                    if (!result.data) return;
 
-                setSettings(result.data);
-            });
+                    setSettings(result.data);
+
+                    toast.success("Settings updated.");
+                })
+                .catch(() => {
+                    toast.error("Unable to update settings remotely.", { duration: 3000 });
+                });
         },
         [setSettings]
     );
