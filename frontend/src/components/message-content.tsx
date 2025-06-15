@@ -543,7 +543,7 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-background hover:border-background-light h-fit basis-3/5 cursor-pointer rounded-lg border border-transparent pr-1 pb-4 pl-1",
+                                "group bg-background hover:bg-background-light border-background-light h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
                                 "[&_[data-limit-width]]:w-full",
                                 orientation === "horizontal" ? "mx-1" : "my-1"
                             )}

@@ -4,7 +4,14 @@ import { z } from "zod";
 
 import { useSettings } from "@/components/auth";
 
-export const themeNames = ["Default", "Acid Headache", "Halloween", "Christmas"] as const;
+export const themeNames = [
+    "Default",
+    "Black and White",
+    "White and Black",
+    "Acid Headache",
+    "Halloween",
+    "Christmas",
+] as const;
 
 export type ThemeName = (typeof themeNames)[number];
 
@@ -21,10 +28,24 @@ interface ThemeColors {
 export const themeColors: Record<ThemeName, ThemeColors> = {
     Default: {
         "--primary": "#F10975",
-        "--secondary": "#8D37D3",
-        "--background": "#42597C",
+        "--secondary": "#201f4c",
+        "--background": "#201f4c",
         "--text": "#F3FEFF",
         "--border": "#F3FEFF",
+    },
+    "Black and White": {
+        "--primary": "#F3FEFF",
+        "--secondary": "#F3FEFF",
+        "--background": "#272727",
+        "--text": "#F3FEFF",
+        "--border": "#bababa",
+    },
+    "White and Black": {
+        "--primary": "#000000",
+        "--secondary": "#000000",
+        "--background": "#ffffff",
+        "--text": "#000000",
+        "--border": "#a5a5a5",
     },
     "Acid Headache": {
         "--primary": "#5AEC2F",
@@ -34,18 +55,18 @@ export const themeColors: Record<ThemeName, ThemeColors> = {
         "--border": "#FF0041",
     },
     Halloween: {
-        "--primary": "#F10975",
-        "--secondary": "#8D37D3",
-        "--background": "#42597C",
+        "--primary": "#ff4c00",
+        "--secondary": "#8c0000",
+        "--background": "#000000",
         "--text": "#F3FEFF",
-        "--border": "#F3FEFF",
+        "--border": "#ff4a00",
     },
     Christmas: {
-        "--primary": "#F10975",
-        "--secondary": "#8D37D3",
-        "--background": "#42597C",
+        "--primary": "#dd0606",
+        "--secondary": "#ff81ad",
+        "--background": "#074527",
         "--text": "#F3FEFF",
-        "--border": "#F3FEFF",
+        "--border": "#95c5a4",
     },
 } as const;
 

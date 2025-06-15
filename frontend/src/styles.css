@@ -35,7 +35,7 @@
 }
 
 html, main {
-    @apply h-full bg-background-dark text-text;
+    @apply h-full bg-background text-text;
 }
 
 ::-webkit-scrollbar {

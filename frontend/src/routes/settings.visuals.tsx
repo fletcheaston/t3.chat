@@ -137,7 +137,7 @@ function Theme() {
                     updateSettings("visualTheme", parsedValue);
                 }}
             >
-                <SelectTrigger className="hover:bg-background w-36">
+                <SelectTrigger className="hover:bg-background w-40">
                     <SelectValue placeholder="Select a model" />
                 </SelectTrigger>
 

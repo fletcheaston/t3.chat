@@ -61,10 +61,7 @@ export function ConversationSidebar() {
         <>
             <SidebarButtons />
 
-            <Sidebar
-                collapsible="offcanvas"
-                className="bg-background px-4"
-            >
+            <Sidebar collapsible="offcanvas">
                 <SidebarHeader />
 
                 <SidebarContent>

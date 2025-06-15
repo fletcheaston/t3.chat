@@ -11,7 +11,7 @@ export function ConversationsProvider(props: { children: React.ReactNode }) {
     /**************************************************************************/
     /* State */
     const data = useCachedLiveQuery(async () => {
-        return db.conversations.toArray();
+        return db.conversations.orderBy("created").reverse().toArray();
     }, []);
 
     if (data === undefined) return null;

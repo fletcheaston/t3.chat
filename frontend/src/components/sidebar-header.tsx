@@ -23,7 +23,7 @@ export function SidebarHeader() {
                 asChild
                 variant="plain"
                 size="default"
-                className="text-background hover:bg-primary bg-primary-light border-primary mt-4 w-full border text-sm"
+                className="text-background hover:bg-primary bg-primary-light hover:border-primary border-primary-light mt-4 w-full border text-sm"
                 tooltip={null}
             >
                 <Link to="/chat">New Chat</Link>
