@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LargeLanguageModel } from "@/api";
 import { useSettings, useUpdateSetting } from "@/api/auth";
 import { llmToDescription, llmToImageUrl, llmToName } from "@/api/models";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion";
 import { Card, CardContent } from "@/ui/card";
 import { Switch } from "@/ui/switch";
 
@@ -67,25 +68,40 @@ function RouteComponent() {
         <>
             <h1 className="text-4xl font-semibold">Model Settings</h1>
 
-            <h2 className="my-4 text-2xl font-semibold">Available Models</h2>
+            <Accordion
+                type="single"
+                collapsible
+                className="w-full"
+                defaultValue="item-1"
+            >
+                <AccordionItem value="item-1">
+                    <AccordionTrigger>
+                        <div>
+                            <h2 className="text-2xl font-semibold">Available Models</h2>
 
-            <div className="flex flex-col gap-8">
-                <div className="flex flex-col gap-2">
-                    <h3 className="text-xl font-semibold">OpenAI Models</h3>
+                            <p>Choose which models appear in your model selector.</p>
+                        </div>
+                    </AccordionTrigger>
 
-                    <ModelCard llm="openai-gpt-4.1" />
+                    <AccordionContent className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-xl font-semibold">OpenAI Models</h3>
 
-                    <ModelCard llm="openai-gpt-4.1-mini" />
+                            <ModelCard llm="openai-gpt-4.1" />
 
-                    <ModelCard llm="openai-gpt-4.1-nano" />
-                </div>
+                            <ModelCard llm="openai-gpt-4.1-mini" />
 
-                <div className="flex flex-col gap-2">
-                    <h3 className="text-xl font-semibold">Test Models</h3>
+                            <ModelCard llm="openai-gpt-4.1-nano" />
+                        </div>
 
-                    <ModelCard llm="utils-echo" />
-                </div>
-            </div>
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-xl font-semibold">Test Models</h3>
+
+                            <ModelCard llm="utils-echo" />
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </>
     );
 }
