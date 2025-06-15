@@ -80,7 +80,7 @@ export function SettingsSidebar() {
                                 />
 
                                 <SettingsLink
-                                    title="Visauls"
+                                    title="Visuals"
                                     to="/settings/visuals"
                                     pathname={pathname}
                                 />
