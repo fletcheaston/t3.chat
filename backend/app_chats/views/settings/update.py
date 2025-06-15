@@ -30,9 +30,6 @@ def update_my_settings(
         setting.llm_context = data.llm_context
         setting.llm_traits = data.llm_traits
 
-    if data.llms_selected is not None:
-        setting.llms_selected = data.llms_selected
-
     if data.llms_available is not None:
         setting.llms_available = data.llms_available
 

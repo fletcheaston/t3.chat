@@ -27,13 +27,6 @@ class Setting(DjangoModel):
     llm_traits = ArrayField(models.TextField(), default=list)
     llm_context = models.TextField(default="")
 
-    llms_selected = ArrayField(
-        models.TextField(
-            choices=[(llm.value, llm.name) for llm in schemas.LargeLanguageModel],
-        ),
-        blank=True,
-        default=list,
-    )
     llms_available = ArrayField(
         models.TextField(
             choices=[(llm.value, llm.name) for llm in schemas.LargeLanguageModel],

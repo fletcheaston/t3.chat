@@ -54,10 +54,6 @@ export type SettingSchema = {
      */
     llmContext: string;
     /**
-     * Llmsselected
-     */
-    llmsSelected: Array<LargeLanguageModel>;
-    /**
      * Llmsavailable
      */
     llmsAvailable: Array<LargeLanguageModel>;
@@ -313,10 +309,6 @@ export type UpdateSettingSchema = {
      * Llmcontext
      */
     llmContext?: string | null;
-    /**
-     * Llmsselected
-     */
-    llmsSelected?: Array<LargeLanguageModel> | null;
     /**
      * Llmsavailable
      */

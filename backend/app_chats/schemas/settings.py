@@ -14,8 +14,6 @@ class SettingSchema(Schema):
     llm_job: str
     llm_traits: list[str]
     llm_context: str
-
-    llms_selected: list[LargeLanguageModel]
     llms_available: list[LargeLanguageModel]
 
 
@@ -24,6 +22,4 @@ class UpdateSettingSchema(Schema):
     llm_job: str | None = None
     llm_traits: list[str] | None = None
     llm_context: str | None = None
-
-    llms_selected: list[LargeLanguageModel] | None = None
     llms_available: list[LargeLanguageModel] | None = None
