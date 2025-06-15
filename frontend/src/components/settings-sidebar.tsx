@@ -32,7 +32,7 @@ function SettingsLink(props: { title: string; to: To; pathname: string }) {
             <SidebarMenuButton
                 asChild
                 className={cn(
-                    "text-text hover:bg-primary-light hover:text-background-dark block rounded-none rounded-t-lg border-b px-0.5 py-0.5 transition-all",
+                    "text-text hover:bg-primary-light hover:text-background-dark block rounded-none rounded-t-lg border-b px-1.5 py-0.5 transition-all",
                     selected
                         ? "border-b-primary"
                         : "hover:border-b-primary-light border-b-border-dark"

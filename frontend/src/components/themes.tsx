@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useSettings } from "@/components/auth";
 
 export const themeNames = [
-    "Default",
+    "Fletcher's Default",
     "Black and White",
     "White and Black",
     "Acid Headache",
@@ -15,7 +15,7 @@ export const themeNames = [
 
 export type ThemeName = (typeof themeNames)[number];
 
-export const themeParser = z.enum(themeNames).catch("Default");
+export const themeParser = z.enum(themeNames).catch("Fletcher's Default");
 
 interface ThemeColors {
     "--primary": string;
@@ -26,9 +26,9 @@ interface ThemeColors {
 }
 
 export const themeColors: Record<ThemeName, ThemeColors> = {
-    Default: {
+    "Fletcher's Default": {
         "--primary": "#F10975",
-        "--secondary": "#201f4c",
+        "--secondary": "#8580ff",
         "--background": "#201f4c",
         "--text": "#F3FEFF",
         "--border": "#F3FEFF",
