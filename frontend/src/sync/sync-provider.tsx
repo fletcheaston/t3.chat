@@ -4,7 +4,7 @@ import { useIntervalEffect, useMountEffect } from "@react-hookz/web";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
 import { globalSyncBootstrap } from "@/api";
-import { useAnonUser } from "@/api/auth";
+import { useAnonUser } from "@/components/auth";
 import { apiUrl } from "@/env";
 
 import { SyncData, addSyncedData } from "./database";

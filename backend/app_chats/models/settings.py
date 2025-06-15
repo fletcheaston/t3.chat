@@ -22,10 +22,10 @@ class Setting(DjangoModel):
         on_delete=models.PROTECT,
     )
 
-    llm_nickname = models.TextField(default="")
-    llm_job = models.TextField(default="")
-    llm_traits = ArrayField(models.TextField(), default=list)
-    llm_context = models.TextField(default="")
+    llm_nickname = models.TextField(default="", blank=True)
+    llm_job = models.TextField(default="", blank=True)
+    llm_traits = ArrayField(models.TextField(), default=list, blank=True)
+    llm_context = models.TextField(default="", blank=True)
 
     llms_available = ArrayField(
         models.TextField(
@@ -34,6 +34,13 @@ class Setting(DjangoModel):
         blank=True,
         default=list,
     )
+
+    visual_theme = models.TextField(default="", blank=True)
+    visual_theme_primary_override = models.TextField(default="", blank=True)
+    visual_theme_secondary_override = models.TextField(default="", blank=True)
+    visual_theme_background_override = models.TextField(default="", blank=True)
+    visual_theme_text_override = models.TextField(default="", blank=True)
+    visual_theme_border_override = models.TextField(default="", blank=True)
 
     ############################################################################
     # Queryset managers

@@ -1,24 +1,41 @@
 @import "tailwindcss";
 
+
+:root {
+    --primary: #F10975;
+    --secondary: #8D37D3;
+    --background: #42597C;
+    --text: #F3FEFF;
+    --border: #F3FEFF;
+}
+
+
 @theme {
-    --color-pantone: rgb(255, 91, 4);
-    --color-pantone-light: rgb(255, 133, 62);
-    --color-pantone-lighter: rgb(255, 188, 143);
+    --color-primary: var(--primary);
+    --color-primary-light: color-mix(in srgb, var(--primary), #FFFFFF 30%);
+    --color-primary-dark: color-mix(in rgb, var(--primary), #000000 30%);
 
-    --color-gunmetal-light: rgb(70, 96, 112);
-    --color-gunmetal: rgb(35, 48, 56);
-    --color-gunmetal-dark: rgb(22, 33, 37);
+    --color-secondary: var(--secondary);
+    --color-secondary-light: color-mix(in srgb, var(--secondary), #FFFFFF 30%);
+    --color-secondary-dark: color-mix(in srgb, var(--secondary), #000000 30%);
 
-    --color-ivory: rgb(253, 246, 227);
+    --color-background: var(--background);
+    --color-background-light: color-mix(in srgb, var(--background), #FFFFFF 30%);
+    --color-background-dark: color-mix(in srgb, var(--background), #000000 30%);
 
-    --color-silver: rgb(243, 254, 255);
-    --color-silver-dull: rgb(156, 159, 159);
+    --color-text: var(--text);
+    --color-text-light: color-mix(in srgb, var(--text), #FFFFFF 30%);
+    --color-text-dark: color-mix(in srgb, var(--text), #000000 30%);
+
+    --color-border: var(--border);
+    --color-border-light: color-mix(in srgb, var(--border), #FFFFFF 30%);
+    --color-border-dark: color-mix(in srgb, var(--border), #000000 30%);
 
     --blur-xxs: 2px;
 }
 
 html, main {
-    @apply h-full bg-gunmetal-dark text-silver;
+    @apply h-full bg-background text-text;
 }
 
 ::-webkit-scrollbar {
@@ -30,13 +47,13 @@ html, main {
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-pantone-lighter border border-gunmetal rounded-4xl;
+    @apply bg-primary-light border border-background rounded-4xl;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-pantone border-none cursor-pointer;
+    @apply bg-primary border-none cursor-pointer;
 }
 
 ::selection {
-    @apply bg-pantone text-gunmetal-dark;
+    @apply bg-primary-light text-background-dark;
 }

@@ -4,8 +4,8 @@ import { StrictMode } from "react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 
-import { AuthProvider, useAnonUser } from "@/api/auth";
 import { client } from "@/api/client/client.gen";
+import { AuthProvider, useAnonUser } from "@/components/auth";
 import { routeTree } from "@/routeTree.gen";
 import "@/styles.css";
 

@@ -5,8 +5,6 @@ import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react"
 import { toast } from "sonner";
 
 import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
-import { useUser } from "@/api/auth";
-import { llmToImageUrl, llmToName } from "@/api/models";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
 import { db } from "@/sync/database";
 import { MessageProvider, useMessage } from "@/sync/message";
@@ -21,7 +19,9 @@ import {
 import { Textarea } from "@/ui/textarea";
 import { cn, formatDatetime } from "@/utils";
 
+import { useUser } from "./auth";
 import { Markdown } from "./markdown";
+import { llmToImageUrl, llmToName } from "./models";
 
 function CopyButton(props: { value: string }) {
     /**************************************************************************/
@@ -29,7 +29,7 @@ function CopyButton(props: { value: string }) {
     return (
         <Button
             size="custom"
-            className="hover:bg-pantone-light hover:text-gunmetal-dark size-7 rounded"
+            className="hover:bg-primary-light hover:text-background-dark size-7 rounded"
             tooltip="Copy message"
             onClick={(event) => {
                 event.preventDefault();
@@ -59,7 +59,7 @@ function ActionButton(props: {
     return (
         <Button
             size="custom"
-            className="hover:bg-pantone-light hover:text-gunmetal-dark size-7 rounded"
+            className="hover:bg-primary-light hover:text-background-dark size-7 rounded"
             tooltip={props.tooltip}
             disabled={props.onClick === null}
             onClick={(event) => {
@@ -102,7 +102,7 @@ function ViewMyMessage(props: {
                 data-limit-width
                 className="group relative flex w-[85%] justify-end pb-6"
             >
-                <div className="bg-gunmetal text-silver overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7 text-wrap">
+                <div className="bg-background text-text overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7 text-wrap">
                     <Markdown content={props.message.content} />
                 </div>
 
@@ -268,7 +268,7 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
                 data-limit-width
                 className="group relative flex w-[85%] justify-end pb-6"
             >
-                <div className="bg-gunmetal text-silver w-full overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7">
+                <div className="bg-background text-text w-full overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7">
                     <Textarea
                         defaultValue={props.message.content}
                         onChange={(event) => (contentRef.current = event.target.value)}
@@ -363,7 +363,7 @@ function OtherMessage(props: {
                 ref={ref}
                 className="absolute -bottom-2 left-0 opacity-0 transition-all group-hover:opacity-100"
             >
-                <div className="flex items-center gap-1 text-xs">
+                <div className="flex items-center gap-1 text-xs font-medium">
                     <CopyButton value={props.message.content} />
 
                     <ActionButton
@@ -379,9 +379,9 @@ function OtherMessage(props: {
 
                     <p>{formatDatetime(props.message.modified)}</p>
 
-                    <div className="border-silver h-3 border-l" />
+                    <div className="border-background-light h-3 border-l" />
 
-                    <p className="text-pantone-light">{props.authorName}</p>
+                    <p className="text-primary">{props.authorName}</p>
 
                     {props.authorImageUrl ? (
                         <img
@@ -543,7 +543,7 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-gunmetal hover:border-gunmetal-light h-fit basis-3/5 cursor-pointer rounded-lg border border-transparent pr-1 pb-4 pl-1",
+                                "group bg-background hover:bg-background-light border-background-light h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
                                 "[&_[data-limit-width]]:w-full",
                                 orientation === "horizontal" ? "mx-1" : "my-1"
                             )}

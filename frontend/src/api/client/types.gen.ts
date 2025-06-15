@@ -57,6 +57,30 @@ export type SettingSchema = {
      * Llmsavailable
      */
     llmsAvailable: Array<LargeLanguageModel>;
+    /**
+     * Visualtheme
+     */
+    visualTheme: string;
+    /**
+     * Visualthemeprimaryoverride
+     */
+    visualThemePrimaryOverride: string;
+    /**
+     * Visualthemesecondaryoverride
+     */
+    visualThemeSecondaryOverride: string;
+    /**
+     * Visualthemebackgroundoverride
+     */
+    visualThemeBackgroundOverride: string;
+    /**
+     * Visualthemetextoverride
+     */
+    visualThemeTextOverride: string;
+    /**
+     * Visualthemeborderoverride
+     */
+    visualThemeBorderOverride: string;
 };
 
 /**
@@ -313,6 +337,30 @@ export type UpdateSettingSchema = {
      * Llmsavailable
      */
     llmsAvailable?: Array<LargeLanguageModel> | null;
+    /**
+     * Visualtheme
+     */
+    visualTheme?: string | null;
+    /**
+     * Visualthemeprimaryoverride
+     */
+    visualThemePrimaryOverride?: string | null;
+    /**
+     * Visualthemesecondaryoverride
+     */
+    visualThemeSecondaryOverride?: string | null;
+    /**
+     * Visualthemebackgroundoverride
+     */
+    visualThemeBackgroundOverride?: string | null;
+    /**
+     * Visualthemetextoverride
+     */
+    visualThemeTextOverride?: string | null;
+    /**
+     * Visualthemeborderoverride
+     */
+    visualThemeBorderOverride?: string | null;
 };
 
 /**

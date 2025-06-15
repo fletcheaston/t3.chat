@@ -3,8 +3,8 @@ import { BanIcon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { LargeLanguageModel } from "@/api";
-import { useSettings, useUpdateSetting, useUser } from "@/api/auth";
-import { llmToDescription, llmToImageUrl, llmToName } from "@/api/models";
+import { useSettings, useUpdateSetting, useUser } from "@/components/auth";
+import { llmToDescription, llmToImageUrl, llmToName } from "@/components/models";
 import { Button } from "@/ui/button";
 import { Card, CardContent } from "@/ui/card";
 import { Input } from "@/ui/input";
@@ -34,7 +34,6 @@ function Nickname() {
                 id="nickname"
                 placeholder={user.name}
                 defaultValue={settings.llmNickname}
-                className="text-pantone-lighter"
                 onBlur={(event) => {
                     if (event.target.value !== settings.llmNickname) {
                         updateSettings("llmNickname", event.target.value);
@@ -61,7 +60,6 @@ function Job() {
                 id="job"
                 placeholder="Engineer, student, etc."
                 defaultValue={settings.llmJob}
-                className="text-pantone-lighter"
                 onBlur={(event) => {
                     if (event.target.value !== settings.llmJob) {
                         updateSettings("llmJob", event.target.value);
@@ -98,16 +96,16 @@ function Traits() {
         <div>
             <Label htmlFor="trait">What traits should the models have?</Label>
 
-            <div className="border-silver rounded-md border">
+            <div className="border-border rounded-md border">
                 {settings.llmTraits.length > 0 ? (
-                    <div className="border-b-silver-dull flex gap-1 border-b px-1 py-1 text-sm">
+                    <div className="border-b-border-dark flex gap-1 border-b px-1 py-1 text-sm">
                         {settings.llmTraits.map((trait) => {
                             return (
                                 <Button
                                     key={trait}
                                     variant="default"
                                     size="custom"
-                                    className="bg-pantone-lighter hover:bg-pantone hover:border-pantone border-pantone-lighter text-gunmetal-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
+                                    className="bg-primary-light hover:bg-primary hover:border-primary border-primary-light text-background-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
                                     tooltip={`Remove trait "${trait}"`}
                                     onClick={() => {
                                         updateSettings(
@@ -130,7 +128,7 @@ function Traits() {
                 <Input
                     id="trait"
                     placeholder="Type a trait and press Enter or Tab"
-                    className="text-pantone-lighter border-none"
+                    className="border-none"
                     onKeyDown={(event) => {
                         const value = event.currentTarget.value;
 
@@ -158,7 +156,7 @@ function Traits() {
                                 key={trait}
                                 variant="default"
                                 size="custom"
-                                className="bg-pantone-lighter hover:bg-pantone hover:border-pantone border-pantone-lighter text-gunmetal-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
+                                className="bg-primary-light hover:bg-primary hover:border-primary border-primary-light text-background-dark h-fit gap-1.5 py-0.5 pr-1 pl-2 text-xs"
                                 tooltip={`Add trait "${trait}"`}
                                 onClick={() => {
                                     updateSettings("llmTraits", [...settings.llmTraits, trait]);
@@ -192,7 +190,7 @@ function Context() {
                 id="context"
                 placeholder="Interests, values, or preferences to keep in mind"
                 defaultValue={settings.llmContext}
-                className="text-pantone-lighter border-silver min-h-32 resize-y rounded-md border px-2 py-1.5"
+                className="text-primary-light border-border min-h-32 resize-y rounded-md border px-2 py-1.5"
                 onBlur={(event) => {
                     if (event.target.value !== settings.llmContext) {
                         updateSettings("llmContext", event.target.value);

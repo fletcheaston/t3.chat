@@ -30,8 +30,8 @@ export function MessageWindow(props: {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="bg-gunmetal/50 rounded-t-2xl p-2 pb-0 backdrop-blur-xs">
-            <div className="bg-gunmetal-light/30 mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3 backdrop-blur-xs">
+        <div className="bg-background/50 rounded-t-2xl p-2 pb-0 backdrop-blur-xs">
+            <div className="bg-background-light/30 mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3 backdrop-blur-xs">
                 <Textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
@@ -82,8 +82,8 @@ export function MessageWindow(props: {
                     <Button
                         size="icon"
                         className={cn(
-                            "bg-pantone-light",
-                            empty ? "cursor-default opacity-50" : "hover:bg-pantone"
+                            "bg-primary-light",
+                            empty ? "cursor-default opacity-50" : "hover:bg-primary"
                         )}
                         onClick={() => {
                             if (!message) return;
@@ -96,7 +96,7 @@ export function MessageWindow(props: {
                         }}
                         tooltip={empty ? "Message requires text" : "Send message"}
                     >
-                        <ArrowUpIcon className="text-gunmetal-dark size-5" />
+                        <ArrowUpIcon className="text-background-dark size-5" />
                         <span className="sr-only">Send Message</span>
                     </Button>
                 </div>

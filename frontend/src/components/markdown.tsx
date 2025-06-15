@@ -88,7 +88,7 @@ const components: Components = {
         return (
             <ul
                 className={cn(
-                    "marker:text-silver list-outside list-disc pl-3 marker:content-['⁃']",
+                    "marker:text-text list-outside list-disc pl-3 marker:content-['⁃']",
                     className
                 )}
                 {...rest}
@@ -101,7 +101,7 @@ const components: Components = {
         return (
             <blockquote
                 className={cn(
-                    "[&>p]:border-gunmetal-light [&>blockquote]:border-gunmetal-light [&>blockquote]:border-l-4 [&>blockquote]:pl-3 [&>p]:border-l-4 [&>p]:pl-3",
+                    "[&>p]:border-background-light [&>blockquote]:border-background-light [&>blockquote]:border-l-4 [&>blockquote]:pl-3 [&>p]:border-l-4 [&>p]:pl-3",
                     className
                 )}
                 {...rest}
@@ -223,7 +223,7 @@ const components: Components = {
         return (
             <ol
                 className={cn(
-                    "marker:text-silver list-inside list-decimal marker:content-[counter]",
+                    "marker:text-text list-inside list-decimal marker:content-[counter]",
                     className
                 )}
                 {...rest}
@@ -249,7 +249,7 @@ const components: Components = {
         return (
             <a
                 className={cn(
-                    "group hover:text-pantone text-pantone-lighter visited:text-pantone-light inline-flex items-center",
+                    "group hover:text-primary text-primary-light visited:text-secondary-light hover:visited:text-secondary inline-flex items-center font-medium underline",
                     className
                 )}
                 href={href}
@@ -275,7 +275,7 @@ const components: Components = {
             <div className="overflow-x-auto">
                 <table
                     className={cn(
-                        "border-gunmetal-light [&_td]:border-gunmetal-light [&_th]:border-gunmetal-light my-2 border-collapse border [&_td]:border [&_td]:px-2 [&_td]:py-0.5 [&_th]:border [&_th]:px-2 [&_th]:text-nowrap",
+                        "border-background-light [&_td]:border-background-light [&_th]:border-background-light my-2 border-collapse border [&_td]:border [&_td]:px-2 [&_td]:py-0.5 [&_th]:border [&_th]:px-2 [&_th]:text-nowrap",
                         className
                     )}
                     {...rest}
@@ -288,7 +288,7 @@ const components: Components = {
 
         return (
             <kbd
-                className={cn("bg-gunmetal-light mx-1 rounded px-1 py-0.5", className)}
+                className={cn("bg-background-light mx-1 rounded px-1 py-0.5", className)}
                 {...rest}
             />
         );
@@ -313,7 +313,7 @@ const components: Components = {
 
         return (
             <pre
-                className={cn("bg-gunmetal-dark my-2 overflow-x-auto rounded", className)}
+                className={cn("bg-background-dark my-2 overflow-x-auto rounded", className)}
                 {...rest}
             />
         );
@@ -338,7 +338,7 @@ const components: Components = {
 
         return (
             <code
-                className={cn("bg-gunmetal-light rounded px-1 py-0.5", className)}
+                className={cn("bg-background-light rounded px-1 py-0.5", className)}
                 {...rest}
             />
         );
@@ -354,7 +354,7 @@ const components: Components = {
                     {...rest}
                 />
 
-                <figcaption className="text-silver-dull text-center text-sm">
+                <figcaption className="text-text-dark text-center text-sm">
                     <i>{alt}</i>
                 </figcaption>
             </figure>
@@ -365,7 +365,7 @@ const components: Components = {
 
         return (
             <hr
-                className={cn("border-gunmetal-light my-4", className)}
+                className={cn("border-background-light my-4", className)}
                 {...rest}
             />
         );
