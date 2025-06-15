@@ -47,7 +47,7 @@ html, main {
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-primary-dark border border-background rounded-4xl;
+    @apply bg-primary-light border border-background rounded-4xl;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -55,5 +55,5 @@ html, main {
 }
 
 ::selection {
-    @apply bg-primary text-background-dark;
+    @apply bg-primary-light text-background-dark;
 }
