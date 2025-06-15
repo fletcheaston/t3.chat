@@ -45,7 +45,7 @@ function SelectTrigger({
             data-slot="select-trigger"
             data-size={size}
             className={cn(
-                "data-[placeholder]:text-text-dark text-primary-light [&_svg:not([class*='text-'])]:text-text-dark hover:bg-background-dark flex w-fit cursor-pointer items-center justify-between gap-2 rounded bg-transparent px-2 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                "data-[placeholder]:text-text-dark text-primary-light [&_svg:not([class*='text-'])]:text-text-dark hover:bg-background-dark flex w-fit cursor-pointer items-center justify-between gap-2 rounded bg-transparent px-2 py-2 text-sm font-medium whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
                 className
             )}
             {...props}
@@ -53,7 +53,7 @@ function SelectTrigger({
             {children}
 
             <SelectPrimitive.Icon asChild>
-                <ChevronDownIcon className="text-primary-light size-4 opacity-80" />
+                <ChevronDownIcon className="text-primary-light size-5 opacity-80" />
             </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
     );
@@ -113,7 +113,7 @@ function SelectItem({
         <SelectPrimitive.Item
             data-slot="select-item"
             className={cn(
-                "hover:bg-background-dark [&_svg:not([class*='text-'])]:text-primary-light relative flex w-full cursor-pointer items-center gap-2 py-1 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+                "hover:bg-background-dark [&_svg:not([class*='text-'])]:text-primary-light relative flex w-full cursor-pointer items-center gap-2 py-1 pr-8 pl-2 text-sm font-medium outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
                 className
             )}
             {...props}

@@ -57,6 +57,30 @@ export type SettingSchema = {
      * Llmsavailable
      */
     llmsAvailable: Array<LargeLanguageModel>;
+    /**
+     * Visualtheme
+     */
+    visualTheme: string;
+    /**
+     * Visualthemeprimaryoverride
+     */
+    visualThemePrimaryOverride: string;
+    /**
+     * Visualthemesecondaryoverride
+     */
+    visualThemeSecondaryOverride: string;
+    /**
+     * Visualthemebackgroundoverride
+     */
+    visualThemeBackgroundOverride: string;
+    /**
+     * Visualthemetextoverride
+     */
+    visualThemeTextOverride: string;
+    /**
+     * Visualthemeborderoverride
+     */
+    visualThemeBorderOverride: string;
 };
 
 /**

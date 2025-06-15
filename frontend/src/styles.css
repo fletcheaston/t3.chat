@@ -2,34 +2,34 @@
 
 
 :root {
-    --primary: 241, 9, 117;
-    --secondary: 141, 55, 211;
-    --background: 66, 89, 124;
-    --text: 243, 254, 255;
-    --border: 243, 254, 255;
+    --primary: #F10975;
+    --secondary: #8D37D3;
+    --background: #42597C;
+    --text: #F3FEFF;
+    --border: #F3FEFF;
 }
 
 
 @theme {
-    --color-primary: rgb(var(--primary));
-    --color-primary-light: color-mix(in srgb, rgb(var(--primary)), rgb(255, 255, 255) 30%);
-    --color-primary-dark: color-mix(in srgb, rgb(var(--primary)), rgb(0, 0, 0) 30%);
+    --color-primary: var(--primary);
+    --color-primary-light: color-mix(in srgb, var(--primary), #FFFFFF 30%);
+    --color-primary-dark: color-mix(in rgb, var(--primary), #000000 30%);
 
-    --color-secondary: rgb(var(--secondary));
-    --color-secondary-light: color-mix(in srgb, rgb(var(--secondary)), rgb(255, 255, 255) 30%);
-    --color-secondary-dark: color-mix(in srgb, rgb(var(--secondary)), rgb(0, 0, 0) 30%);
+    --color-secondary: var(--secondary);
+    --color-secondary-light: color-mix(in srgb, var(--secondary), #FFFFFF 30%);
+    --color-secondary-dark: color-mix(in srgb, var(--secondary), #000000 30%);
 
-    --color-background: rgb(var(--background));
-    --color-background-light: color-mix(in srgb, rgb(var(--background)), rgb(255, 255, 255) 30%);
-    --color-background-dark: color-mix(in srgb, rgb(var(--background)), rgb(0, 0, 0) 30%);
+    --color-background: var(--background);
+    --color-background-light: color-mix(in srgb, var(--background), #FFFFFF 30%);
+    --color-background-dark: color-mix(in srgb, var(--background), #000000 30%);
 
-    --color-text: rgb(var(--text));
-    --color-text-light: color-mix(in srgb, rgb(var(--text)), rgb(255, 255, 255) 30%);
-    --color-text-dark: color-mix(in srgb, rgb(var(--text)), rgb(0, 0, 0) 30%);
+    --color-text: var(--text);
+    --color-text-light: color-mix(in srgb, var(--text), #FFFFFF 30%);
+    --color-text-dark: color-mix(in srgb, var(--text), #000000 30%);
 
-    --color-border: rgb(var(--border));
-    --color-border-light: color-mix(in srgb, rgb(var(--border)), rgb(255, 255, 255) 30%);
-    --color-border-dark: color-mix(in srgb, rgb(var(--border)), rgb(0, 0, 0) 30%);
+    --color-border: var(--border);
+    --color-border-light: color-mix(in srgb, var(--border), #FFFFFF 30%);
+    --color-border-dark: color-mix(in srgb, var(--border), #000000 30%);
 
     --blur-xxs: 2px;
 }

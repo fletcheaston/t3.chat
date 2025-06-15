@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 
 import { UserSchema } from "@/api";
 import { useAnonUser } from "@/components/auth";
+import { useTheme } from "@/components/themes";
 import sonnerCss from "@/sonner.css?url";
 import appCss from "@/styles.css?url";
 import { ConversationsProvider } from "@/sync/conversations";
@@ -60,6 +61,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 });
 
 function Authenticated() {
+    /**************************************************************************/
+    /* Effects */
+    useTheme();
+
     /**************************************************************************/
     /* Render */
     return (

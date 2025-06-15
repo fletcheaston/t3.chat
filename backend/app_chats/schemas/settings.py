@@ -16,6 +16,13 @@ class SettingSchema(Schema):
     llm_context: str
     llms_available: list[LargeLanguageModel]
 
+    visual_theme: str
+    visual_theme_primary_override: str
+    visual_theme_secondary_override: str
+    visual_theme_background_override: str
+    visual_theme_text_override: str
+    visual_theme_border_override: str
+
 
 class UpdateSettingSchema(Schema):
     llm_nickname: str | None = None
