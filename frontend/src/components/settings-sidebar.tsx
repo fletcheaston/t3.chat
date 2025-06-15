@@ -68,6 +68,12 @@ export function SettingsSidebar() {
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 <SettingsLink
+                                    title="Account"
+                                    to="/settings/account"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
                                     title="Models"
                                     to="/settings/models"
                                     pathname={pathname}
@@ -76,6 +82,24 @@ export function SettingsSidebar() {
                                 <SettingsLink
                                     title="Visauls"
                                     to="/settings/visuals"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="History"
+                                    to="/settings/history"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="API Keys"
+                                    to="/settings/api-keys"
+                                    pathname={pathname}
+                                />
+
+                                <SettingsLink
+                                    title="Support"
+                                    to="/settings/support"
                                     pathname={pathname}
                                 />
                             </SidebarMenu>
