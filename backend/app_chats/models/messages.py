@@ -79,6 +79,9 @@ class Message(DjangoModel):
 
         super().save(*args, **kwargs)
 
+        self.broadcast()
+
+    def broadcast(self) -> None:
         # Broadcast via channels
         channel_layer = get_channel_layer()
 

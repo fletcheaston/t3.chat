@@ -27,6 +27,8 @@ import type {
     LogoutResponses,
     UpdateConversationData,
     UpdateConversationResponses,
+    UpdateMySettingsData,
+    UpdateMySettingsResponses,
     UpdateTagData,
     UpdateTagResponses,
     WhoAmIData,
@@ -271,6 +273,33 @@ export const updateTag = <ThrowOnError extends boolean = false>(
             },
         ],
         url: "/api/tags/update/{tag_id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Update My Settings
+ */
+export const updateMySettings = <ThrowOnError extends boolean = false>(
+    options: Options<UpdateMySettingsData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).patch<
+        UpdateMySettingsResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/settings/update",
         ...options,
         headers: {
             "Content-Type": "application/json",

@@ -9,6 +9,41 @@ export type CsrfAuthUserSchema = {
      */
     csrfToken: string;
     user: UserSchema;
+    settings: SettingSchema;
+};
+
+/**
+ * SettingSchema
+ */
+export type SettingSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
+     * Llmnickname
+     */
+    llmNickname: string;
+    /**
+     * Llmjob
+     */
+    llmJob: string;
+    /**
+     * Llmtraits
+     */
+    llmTraits: Array<string>;
+    /**
+     * Llmcontext
+     */
+    llmContext: string;
 };
 
 /**
@@ -248,6 +283,32 @@ export type UpdateTagSchema = {
      * Color
      */
     color: string;
+};
+
+/**
+ * UpdateSettingSchema
+ */
+export type UpdateSettingSchema = {
+    /**
+     * Llmnickname
+     */
+    llmNickname?: string | null;
+    /**
+     * Llmjob
+     */
+    llmJob?: string | null;
+    /**
+     * Llmtraits
+     */
+    llmTraits?: Array<string> | null;
+    /**
+     * Llmcontext
+     */
+    llmContext?: string | null;
+    /**
+     * Llmsselected
+     */
+    llmsSelected?: Array<LargeLanguageModel> | null;
 };
 
 /**
@@ -546,6 +607,22 @@ export type UpdateTagResponses = {
 };
 
 export type UpdateTagResponse = UpdateTagResponses[keyof UpdateTagResponses];
+
+export type UpdateMySettingsData = {
+    body: UpdateSettingSchema;
+    path?: never;
+    query?: never;
+    url: "/api/settings/update";
+};
+
+export type UpdateMySettingsResponses = {
+    /**
+     * OK
+     */
+    200: SettingSchema;
+};
+
+export type UpdateMySettingsResponse = UpdateMySettingsResponses[keyof UpdateMySettingsResponses];
 
 export type GlobalSyncTypesData = {
     body?: never;

@@ -28,6 +28,11 @@ class SyncUser(schemas.Schema):
     data: schemas.UserSchema
 
 
+class SyncSettingSchema(schemas.Schema):
+    type: Literal["setting"]
+    data: schemas.SettingSchema
+
+
 GlobalSyncTypes = (
     SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser
 )

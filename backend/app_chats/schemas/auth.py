@@ -1,6 +1,7 @@
 import uuid
 
 from .base import Schema
+from .settings import SettingSchema
 
 
 class UserSchema(Schema):
@@ -12,3 +13,4 @@ class UserSchema(Schema):
 class CsrfAuthUserSchema(Schema):
     csrf_token: str
     user: UserSchema
+    settings: SettingSchema
