@@ -12,7 +12,7 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 plain: "",
-                default: "hover:opacity-80 focus:opacity-80 border border-silver-dull",
+                default: "hover:opacity-80 focus:opacity-80 border border-border-dark",
             },
             size: {
                 custom: "",
@@ -37,10 +37,20 @@ function Button({
     ...props
 }: React.ComponentProps<"button"> &
     VariantProps<typeof buttonVariants> & {
-        tooltip: string;
+        tooltip: string | null;
         asChild?: boolean;
     }) {
     const Comp = asChild ? Slot : "button";
+
+    if (tooltip === null) {
+        return (
+            <Comp
+                data-slot="button"
+                className={cn(buttonVariants({ variant, size, className }))}
+                {...props}
+            />
+        );
+    }
 
     return (
         <Tooltip>

@@ -90,15 +90,15 @@ export function CodeBlock(props: { content: string; language: Language }) {
     /**************************************************************************/
     /* Render */
     return (
-        <div className="border-gunmetal-light rounded border-x-2 border-b-2">
-            <div className="bg-gunmetal-light flex items-center py-0.5 pr-2 pl-4">
+        <div className="border-background-light rounded border-x-2 border-b-2">
+            <div className="bg-background-light flex items-center py-0.5 pr-2 pl-4">
                 <p>{props.language}</p>
 
                 <div className="grow" />
 
                 <Button
                     tooltip="Copy to clipboard"
-                    className="text-silver hover:text-gunmetal hover:bg-pantone-lighter size-6 py-0 pr-1.5 pl-1.5"
+                    className="text-text hover:text-background hover:bg-primary-light size-6 py-0 pr-1.5 pl-1.5"
                     onClick={async () => {
                         await navigator.clipboard.writeText(props.content);
 
@@ -117,7 +117,7 @@ export function CodeBlock(props: { content: string; language: Language }) {
                 <div className="flex gap-x-2 overflow-x-clip">
                     <div
                         className={cn(
-                            "border-silver text-silver-dull flex-shrink-0 border-r pr-2 text-right select-none",
+                            "border-border text-text-dark flex-shrink-0 border-r pr-2 text-right select-none",
                             width
                         )}
                     >

@@ -35,6 +35,10 @@ class Setting(DjangoModel):
         default=list,
     )
 
+    # visual_theme = models.TextField(default="")
+    # visual_theme_primary_override = models.TextField(default="")
+    # visual_theme_secondary_override = models.TextField(default="")
+
     ############################################################################
     # Queryset managers
     objects = SettingQuerySet.as_manager()

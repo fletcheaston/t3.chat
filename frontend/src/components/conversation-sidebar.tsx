@@ -31,10 +31,10 @@ function ConversationLink(props: { id: string; title: string; pathname: string }
             <SidebarMenuButton
                 asChild
                 className={cn(
-                    "text-silver hover:bg-pantone-lighter hover:text-gunmetal-dark block rounded-none rounded-t-lg border-b-2 px-0.5 py-0.5 transition-all",
+                    "text-text hover:bg-primary-light hover:text-background-dark block rounded-none rounded-t-lg border-b px-0.5 py-0.5 transition-all",
                     selected
-                        ? "border-b-pantone"
-                        : "hover:border-b-pantone-lighter border-b-silver-dull"
+                        ? "border-b-primary"
+                        : "hover:border-b-primary-light border-b-border-dark"
                 )}
             >
                 <Link
@@ -63,7 +63,7 @@ export function ConversationSidebar() {
 
             <Sidebar
                 collapsible="offcanvas"
-                className="bg-gunmetal px-4"
+                className="bg-background px-4"
             >
                 <SidebarHeader />
 

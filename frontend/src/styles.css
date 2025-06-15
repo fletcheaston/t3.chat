@@ -1,24 +1,41 @@
 @import "tailwindcss";
 
+
+:root {
+    --primary: 241, 9, 117;
+    --secondary: 141, 55, 211;
+    --background: 66, 89, 124;
+    --text: 243, 254, 255;
+    --border: 243, 254, 255;
+}
+
+
 @theme {
-    --color-pantone: rgb(255, 91, 4);
-    --color-pantone-light: rgb(255, 133, 62);
-    --color-pantone-lighter: rgb(255, 188, 143);
+    --color-primary: rgb(var(--primary));
+    --color-primary-light: color-mix(in srgb, rgb(var(--primary)), rgb(255, 255, 255) 30%);
+    --color-primary-dark: color-mix(in srgb, rgb(var(--primary)), rgb(0, 0, 0) 30%);
 
-    --color-gunmetal-light: rgb(70, 96, 112);
-    --color-gunmetal: rgb(35, 48, 56);
-    --color-gunmetal-dark: rgb(22, 33, 37);
+    --color-secondary: rgb(var(--secondary));
+    --color-secondary-light: color-mix(in srgb, rgb(var(--secondary)), rgb(255, 255, 255) 30%);
+    --color-secondary-dark: color-mix(in srgb, rgb(var(--secondary)), rgb(0, 0, 0) 30%);
 
-    --color-ivory: rgb(253, 246, 227);
+    --color-background: rgb(var(--background));
+    --color-background-light: color-mix(in srgb, rgb(var(--background)), rgb(255, 255, 255) 30%);
+    --color-background-dark: color-mix(in srgb, rgb(var(--background)), rgb(0, 0, 0) 30%);
 
-    --color-silver: rgb(243, 254, 255);
-    --color-silver-dull: rgb(156, 159, 159);
+    --color-text: rgb(var(--text));
+    --color-text-light: color-mix(in srgb, rgb(var(--text)), rgb(255, 255, 255) 30%);
+    --color-text-dark: color-mix(in srgb, rgb(var(--text)), rgb(0, 0, 0) 30%);
+
+    --color-border: rgb(var(--border));
+    --color-border-light: color-mix(in srgb, rgb(var(--border)), rgb(255, 255, 255) 30%);
+    --color-border-dark: color-mix(in srgb, rgb(var(--border)), rgb(0, 0, 0) 30%);
 
     --blur-xxs: 2px;
 }
 
 html, main {
-    @apply h-full bg-gunmetal-dark text-silver;
+    @apply h-full bg-background-dark text-text;
 }
 
 ::-webkit-scrollbar {
@@ -30,13 +47,13 @@ html, main {
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-pantone-lighter border border-gunmetal rounded-4xl;
+    @apply bg-primary-dark border border-background rounded-4xl;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-pantone border-none cursor-pointer;
+    @apply bg-primary border-none cursor-pointer;
 }
 
 ::selection {
-    @apply bg-pantone text-gunmetal-dark;
+    @apply bg-primary text-background-dark;
 }
