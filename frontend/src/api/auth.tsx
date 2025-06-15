@@ -1,44 +1,85 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 import { useMountEffect } from "@react-hookz/web";
 
-import { UserSchema, whoAmI } from "@/api/client";
+import { SettingSchema, UserSchema, updateMySettings, whoAmI } from "@/api/client";
 import { client } from "@/api/client/client.gen";
 
 const UserContext = createContext<UserSchema | null>(null);
+const SettingsContext = createContext<SettingSchema | null>(null);
+const UpdateSettingsContext = createContext<
+    (<K extends keyof SettingKey>(key: K, value: SettingSchema[K]) => void) | null
+>(null);
+
+type SettingKey = Omit<SettingSchema, "id" | "created" | "modified">;
 
 export function AuthProvider(props: { children: React.ReactNode }) {
     /**************************************************************************/
     /* State */
     const [user, setUser] = useState<UserSchema | undefined | null>(undefined);
+    const [settings, setSettings] = useState<SettingSchema | undefined | null>(undefined);
 
-    useMountEffect(() => {
-        whoAmI()
-            .then((result) => {
-                if (result.data?.user) {
-                    setUser(result.data.user);
-
-                    client.setConfig({
-                        headers: {
-                            "X-CSRFToken": result.data.csrfToken,
-                        },
-                    });
-
-                    return;
-                }
-
-                setUser(null);
-            })
-            .catch(() => {
-                setUser(null);
+    const updateSetting = useCallback(
+        <K extends keyof SettingKey>(key: K, value: SettingSchema[K]) => {
+            // Optimistic update to state
+            setSettings((prevState) => {
+                if (!prevState) return prevState;
+                return {
+                    ...prevState,
+                    [key]: value,
+                };
             });
+
+            // Sync to API and update local state again when it goes through
+            updateMySettings({
+                body: {
+                    [key]: value,
+                },
+            }).then((result) => {
+                if (!result.data) return;
+
+                setSettings(result.data);
+            });
+        },
+        [setSettings]
+    );
+
+    useMountEffect(async () => {
+        try {
+            const result = await whoAmI();
+
+            if (!result.data) {
+                throw new Error("Unauthenticated user.");
+            }
+
+            setUser(result.data.user);
+            setSettings(result.data.settings);
+
+            client.setConfig({
+                headers: {
+                    "X-CSRFToken": result.data.csrfToken,
+                },
+            });
+        } catch {
+            setUser(null);
+            setSettings(null);
+        }
     });
 
     /**************************************************************************/
     /* Render */
     if (user === undefined) return null;
+    if (settings === undefined) return null;
 
-    return <UserContext.Provider value={user}>{props.children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={user}>
+            <SettingsContext.Provider value={settings}>
+                <UpdateSettingsContext.Provider value={updateSetting}>
+                    {props.children}
+                </UpdateSettingsContext.Provider>
+            </SettingsContext.Provider>
+        </UserContext.Provider>
+    );
 }
 
 export function useAnonUser() {
@@ -53,4 +94,24 @@ export function useUser() {
     }
 
     return user;
+}
+
+export function useSettings() {
+    const value = useContext(SettingsContext);
+
+    if (value === null) {
+        throw new Error("Missing context provider.");
+    }
+
+    return value;
+}
+
+export function useUpdateSetting() {
+    const value = useContext(UpdateSettingsContext);
+
+    if (value === null) {
+        throw new Error("Missing context provider.");
+    }
+
+    return value;
 }
