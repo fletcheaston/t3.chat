@@ -3,8 +3,8 @@ import { BanIcon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { LargeLanguageModel } from "@/api";
-import { useSettings, useUpdateSetting, useUser } from "@/api/auth";
-import { llmToDescription, llmToImageUrl, llmToName } from "@/api/models";
+import { useSettings, useUpdateSetting, useUser } from "@/components/auth";
+import { llmToDescription, llmToImageUrl, llmToName } from "@/components/models";
 import { Button } from "@/ui/button";
 import { Card, CardContent } from "@/ui/card";
 import { Input } from "@/ui/input";

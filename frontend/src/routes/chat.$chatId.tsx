@@ -4,7 +4,7 @@ import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { LargeLanguageModel, MessageSchema, createMessage } from "@/api";
-import { useUser } from "@/api/auth";
+import { useUser } from "@/components/auth";
 import { MessageTree } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
 import { ConversationProvider, useConversation, useMessageTree } from "@/sync/conversation";

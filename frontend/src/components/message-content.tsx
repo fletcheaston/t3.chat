@@ -5,8 +5,6 @@ import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react"
 import { toast } from "sonner";
 
 import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
-import { useUser } from "@/api/auth";
-import { llmToImageUrl, llmToName } from "@/api/models";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
 import { db } from "@/sync/database";
 import { MessageProvider, useMessage } from "@/sync/message";
@@ -21,7 +19,9 @@ import {
 import { Textarea } from "@/ui/textarea";
 import { cn, formatDatetime } from "@/utils";
 
+import { useUser } from "./auth";
 import { Markdown } from "./markdown";
+import { llmToImageUrl, llmToName } from "./models";
 
 function CopyButton(props: { value: string }) {
     /**************************************************************************/
