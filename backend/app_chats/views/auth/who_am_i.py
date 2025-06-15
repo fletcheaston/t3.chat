@@ -22,7 +22,7 @@ def who_am_i(request: HttpRequest) -> Any:
         return {
             "csrf_token": get_token(request),
             "user": request.user,
-            "setting": setting,
+            "settings": setting,
         }
 
     return 401, schemas.ErrorSchema(detail=schemas.ErrorMessage.UNAUTHENTICATED_USER)
