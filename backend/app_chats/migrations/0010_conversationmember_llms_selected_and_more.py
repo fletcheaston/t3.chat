@@ -6,25 +6,52 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app_chats', '0009_alter_historicalsetting_llm_context_and_more'),
+        ("app_chats", "0009_alter_historicalsetting_llm_context_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='conversationmember',
-            name='llms_selected',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.TextField(choices=[('utils-echo', 'UTILS_ECHO'), ('openai-gpt-4.1', 'OPENAI_GPT_4_1'), ('openai-gpt-4.1-mini', 'OPENAI_GPT_4_1_MINI'), ('openai-gpt-4.1-nano', 'OPENAI_GPT_4_1_NANO')]), blank=True, default=list, size=None),
+            model_name="conversationmember",
+            name="llms_selected",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.TextField(
+                    choices=[
+                        ("utils-echo", "UTILS_ECHO"),
+                        ("openai-gpt-4.1", "OPENAI_GPT_4_1"),
+                        ("openai-gpt-4.1-mini", "OPENAI_GPT_4_1_MINI"),
+                        ("openai-gpt-4.1-nano", "OPENAI_GPT_4_1_NANO"),
+                    ]
+                ),
+                blank=True,
+                default=list,
+                size=None,
+            ),
         ),
         migrations.AddField(
-            model_name='historicalconversationmember',
-            name='llms_selected',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.TextField(choices=[('utils-echo', 'UTILS_ECHO'), ('openai-gpt-4.1', 'OPENAI_GPT_4_1'), ('openai-gpt-4.1-mini', 'OPENAI_GPT_4_1_MINI'), ('openai-gpt-4.1-nano', 'OPENAI_GPT_4_1_NANO')]), blank=True, default=list, size=None),
+            model_name="historicalconversationmember",
+            name="llms_selected",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.TextField(
+                    choices=[
+                        ("utils-echo", "UTILS_ECHO"),
+                        ("openai-gpt-4.1", "OPENAI_GPT_4_1"),
+                        ("openai-gpt-4.1-mini", "OPENAI_GPT_4_1_MINI"),
+                        ("openai-gpt-4.1-nano", "OPENAI_GPT_4_1_NANO"),
+                    ]
+                ),
+                blank=True,
+                default=list,
+                size=None,
+            ),
         ),
         migrations.AlterField(
-            model_name='conversationmember',
-            name='conversation',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='db_members', to='app_chats.conversation'),
+            model_name="conversationmember",
+            name="conversation",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="db_members",
+                to="app_chats.conversation",
+            ),
         ),
     ]

@@ -15,15 +15,11 @@ def create_conversation(
     request: AuthenticatedHttpRequest,
     data: schemas.NewConversationSchema,
 ) -> models.Conversation:
-    conversation = models.Conversation(
+    conversation = models.Conversation.objects.create(
         id=data.id,
         title=data.title,
         owner=request.user,
     )
-
-    conversation.db_tags.set(data.tag_ids)  # ty:ignore[possibly-unbound-attribute]
-
-    conversation.save()
 
     models.ConversationMember.objects.create(
         conversation=conversation,

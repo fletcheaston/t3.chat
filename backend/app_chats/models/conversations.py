@@ -1,5 +1,4 @@
 from datetime import timedelta
-from typing import TYPE_CHECKING
 
 import jwt
 from asgiref.sync import async_to_sync
@@ -14,9 +13,6 @@ from app_utils.models import DjangoModel
 
 from .users import User
 
-if TYPE_CHECKING:
-    from .tags import Tag
-
 
 class ConversationQuerySet(models.QuerySet["Conversation"]):
     pass
@@ -30,12 +26,6 @@ class Conversation(DjangoModel):
     owner = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-    )
-
-    db_tags = models.ManyToManyField(
-        "Tag",
-        related_name="conversations",
-        through="ConversationToTag",
     )
 
     message_branches = models.JSONField(default=dict)
@@ -53,9 +43,6 @@ class Conversation(DjangoModel):
 
     ############################################################################
     # Properties
-    @property
-    def tags(self) -> list["Tag"]:
-        return self.db_tags.all()
 
     ############################################################################
     # Methods

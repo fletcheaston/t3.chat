@@ -27,7 +27,7 @@ def preview_conversation(
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return 400, schemas.ErrorSchema(detail=schemas.ErrorMessage.INVALID_TOKEN)
 
-    except models.Conversation.DoesNotExist:
+    except models.Conversation.DoesNotExist:  # ty: ignore[unresolved-attribute]
         return 400, schemas.ErrorSchema(
             detail=schemas.ErrorMessage.RESOURCE_DOES_NOT_EXIST
         )
@@ -47,7 +47,9 @@ def join_conversation(
         conversation = models.Conversation.validate_share_link(data.token)
 
         # Check if user is already a member
-        member = conversation.db_members.filter(user=request.user).first()
+        member = conversation.db_members.filter(  # ty: ignore[unresolved-attribute]
+            user=request.user
+        ).first()
 
         if member:
             # If they are a member, just make sure they can see it
@@ -67,7 +69,7 @@ def join_conversation(
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return 400, schemas.ErrorSchema(detail=schemas.ErrorMessage.INVALID_TOKEN)
 
-    except models.Conversation.DoesNotExist:
+    except models.Conversation.DoesNotExist:  # ty: ignore[unresolved-attribute]
         return 400, schemas.ErrorSchema(
             detail=schemas.ErrorMessage.RESOURCE_DOES_NOT_EXIST
         )

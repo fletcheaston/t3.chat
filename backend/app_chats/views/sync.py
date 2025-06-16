@@ -24,7 +24,7 @@ def global_sync_types() -> None:
     response={200: list[schemas.GlobalSyncTypes]},
     by_alias=True,
 )
-def global_sync_bootstrap(  # noqa: C901
+def global_sync_bootstrap(
     request: AuthenticatedHttpRequest,
     timestamp: datetime | None = None,
 ) -> Any:
@@ -53,16 +53,6 @@ def global_sync_bootstrap(  # noqa: C901
 
     for value in members:
         data.append(schemas.SyncMember(type="member", data=value))
-
-    ############################################################################
-    # Tags
-    tags = models.Tag.objects.filter(owner=request.user)
-
-    if timestamp is not None:
-        tags = tags.filter(modified__gte=timestamp)
-
-    for value in tags:
-        data.append(schemas.SyncTag(type="tag", data=value))
 
     ############################################################################
     # Conversations

@@ -14,8 +14,6 @@ class ConversationAdmin(SimpleHistoryAdmin):
 
 admin.site.register(models.Conversation, ConversationAdmin)
 admin.site.register(models.ConversationMember, SimpleHistoryAdmin)
-admin.site.register(models.Tag, SimpleHistoryAdmin)
-admin.site.register(models.ConversationToTag, SimpleHistoryAdmin)
 
 
 class MessageAdmin(SimpleHistoryAdmin):

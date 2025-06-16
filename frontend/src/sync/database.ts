@@ -6,7 +6,6 @@ import {
     SyncMember,
     SyncMessage,
     SyncMessageMetadata,
-    SyncTag,
     SyncUser,
 } from "@/api";
 
@@ -17,7 +16,6 @@ const db = new Dexie("F3Chat") as Dexie & {
     messages: EntityTable<SyncMessage["data"], "id">;
     conversations: EntityTable<SyncConversation["data"], "id">;
     members: EntityTable<SyncMember["data"], "id">;
-    tags: EntityTable<SyncTag["data"], "id">;
     users: EntityTable<SyncUser["data"], "id">;
 };
 
@@ -26,7 +24,6 @@ db.version(1).stores({
     messages: "id,conversationId,created",
     conversations: "id,created",
     members: "id,conversationId,[conversationId+userId],created",
-    tags: "id,created",
     users: "id,created",
 });
 
@@ -89,11 +86,6 @@ export function addSyncedData(value: SyncData) {
                     db.members.put(value.data, value.data.id);
                 }
             });
-            return;
-        }
-
-        case "tag": {
-            db.tags.put(value.data, value.data.id);
             return;
         }
 

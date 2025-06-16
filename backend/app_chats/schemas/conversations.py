@@ -3,7 +3,6 @@ from datetime import datetime
 
 from .auth import UserSchema
 from .base import Schema
-from .tags import TagSchema
 
 
 class ConversationSchema(Schema):
@@ -12,7 +11,6 @@ class ConversationSchema(Schema):
     modified: datetime
 
     title: str
-    tags: list[TagSchema]
 
     owner_id: uuid.UUID
 
@@ -27,7 +25,6 @@ class NewConversationSchema(Schema):
 
 class UpdateConversationSchema(Schema):
     title: str | None = None
-    tag_ids: list[uuid.UUID] | None = None
     message_branches: dict[str, bool] | None = None
 
 

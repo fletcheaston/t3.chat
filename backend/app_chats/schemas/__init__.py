@@ -7,4 +7,3 @@ from .messages import *  # noqa: F403
 from .models import *  # noqa: F403
 from .settings import *  # noqa: F403
 from .sync import *  # noqa: F403
-from .tags import *  # noqa: F403

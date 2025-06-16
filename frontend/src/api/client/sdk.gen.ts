@@ -8,8 +8,6 @@ import type {
     CreateMessageData,
     CreateMessageErrors,
     CreateMessageResponses,
-    CreateTagData,
-    CreateTagResponses,
     GenerateShareLinkData,
     GenerateShareLinkResponses,
     GithubCallbackData,
@@ -26,8 +24,6 @@ import type {
     ListMyConversationsResponses,
     ListMyMessagesData,
     ListMyMessagesResponses,
-    ListMyTagsData,
-    ListMyTagsResponses,
     LogoutData,
     LogoutResponses,
     PreviewConversationData,
@@ -36,8 +32,6 @@ import type {
     UpdateConversationResponses,
     UpdateMySettingsData,
     UpdateMySettingsResponses,
-    UpdateTagData,
-    UpdateTagResponses,
     WhoAmIData,
     WhoAmIErrors,
     WhoAmIResponses,
@@ -295,71 +289,6 @@ export const updateConversation = <ThrowOnError extends boolean = false>(
             },
         ],
         url: "/api/conversations/update/{conversation_id}",
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers,
-        },
-    });
-};
-
-/**
- * List My Tags
- */
-export const listMyTags = <ThrowOnError extends boolean = false>(
-    options?: Options<ListMyTagsData, ThrowOnError>
-) => {
-    return (options?.client ?? _heyApiClient).get<ListMyTagsResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/list",
-        ...options,
-    });
-};
-
-/**
- * Create Tag
- */
-export const createTag = <ThrowOnError extends boolean = false>(
-    options: Options<CreateTagData, ThrowOnError>
-) => {
-    return (options.client ?? _heyApiClient).post<CreateTagResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/create",
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers,
-        },
-    });
-};
-
-/**
- * Update Tag
- */
-export const updateTag = <ThrowOnError extends boolean = false>(
-    options: Options<UpdateTagData, ThrowOnError>
-) => {
-    return (options.client ?? _heyApiClient).put<UpdateTagResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/update/{tag_id}",
         ...options,
         headers: {
             "Content-Type": "application/json",

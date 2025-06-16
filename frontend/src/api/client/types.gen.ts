@@ -206,10 +206,6 @@ export type ConversationSchema = {
      */
     title: string;
     /**
-     * Tags
-     */
-    tags: Array<TagSchema>;
-    /**
      * Ownerid
      */
     ownerId: string;
@@ -219,32 +215,6 @@ export type ConversationSchema = {
     messageBranches: {
         [key: string]: boolean;
     };
-};
-
-/**
- * TagSchema
- */
-export type TagSchema = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Created
-     */
-    created: string;
-    /**
-     * Modified
-     */
-    modified: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
 };
 
 /**
@@ -317,47 +287,11 @@ export type UpdateConversationSchema = {
      */
     title?: string | null;
     /**
-     * Tagids
-     */
-    tagIds?: Array<string> | null;
-    /**
      * Messagebranches
      */
     messageBranches?: {
         [key: string]: boolean;
     } | null;
-};
-
-/**
- * NewTagSchema
- */
-export type NewTagSchema = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
-};
-
-/**
- * UpdateTagSchema
- */
-export type UpdateTagSchema = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
 };
 
 /**
@@ -512,17 +446,6 @@ export type SyncMessageMetadata = {
      */
     type: "message-metadata";
     data: MessageMetadataSchema;
-};
-
-/**
- * SyncTag
- */
-export type SyncTag = {
-    /**
-     * Type
-     */
-    type: "tag";
-    data: TagSchema;
 };
 
 /**
@@ -770,60 +693,6 @@ export type UpdateConversationResponses = {
 export type UpdateConversationResponse =
     UpdateConversationResponses[keyof UpdateConversationResponses];
 
-export type ListMyTagsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: "/api/tags/list";
-};
-
-export type ListMyTagsResponses = {
-    /**
-     * Response
-     * OK
-     */
-    200: Array<TagSchema>;
-};
-
-export type ListMyTagsResponse = ListMyTagsResponses[keyof ListMyTagsResponses];
-
-export type CreateTagData = {
-    body: NewTagSchema;
-    path?: never;
-    query?: never;
-    url: "/api/tags/create";
-};
-
-export type CreateTagResponses = {
-    /**
-     * OK
-     */
-    200: TagSchema;
-};
-
-export type CreateTagResponse = CreateTagResponses[keyof CreateTagResponses];
-
-export type UpdateTagData = {
-    body: UpdateTagSchema;
-    path: {
-        /**
-         * Tag Id
-         */
-        tag_id: string;
-    };
-    query?: never;
-    url: "/api/tags/update/{tag_id}";
-};
-
-export type UpdateTagResponses = {
-    /**
-     * OK
-     */
-    200: TagSchema;
-};
-
-export type UpdateTagResponse = UpdateTagResponses[keyof UpdateTagResponses];
-
 export type UpdateMySettingsData = {
     body: UpdateSettingSchema;
     path?: never;
@@ -852,7 +721,7 @@ export type GlobalSyncTypesResponses = {
      * Response
      * OK
      */
-    200: SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncTag | SyncUser;
+    200: SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncUser;
 };
 
 export type GlobalSyncTypesResponse = GlobalSyncTypesResponses[keyof GlobalSyncTypesResponses];
@@ -874,9 +743,7 @@ export type GlobalSyncBootstrapResponses = {
      * Response
      * OK
      */
-    200: Array<
-        SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncTag | SyncUser
-    >;
+    200: Array<SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncUser>;
 };
 
 export type GlobalSyncBootstrapResponse =
