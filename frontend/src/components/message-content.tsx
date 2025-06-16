@@ -387,7 +387,7 @@ function OtherMessage(props: {
                         <img
                             src={props.authorImageUrl}
                             alt={props.authorName}
-                            className="size-4 rounded"
+                            className="mb-1 size-4 rounded"
                         />
                     ) : null}
                 </div>

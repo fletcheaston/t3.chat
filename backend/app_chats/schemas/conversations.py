@@ -26,3 +26,11 @@ class UpdateConversationSchema(Schema):
     title: str | None = None
     tag_ids: list[uuid.UUID] | None = None
     message_branches: dict[str, bool] | None = None
+
+
+class ShareLinkSchema(Schema):
+    token: str
+
+
+class JoinConversationSchema(Schema):
+    token: str
