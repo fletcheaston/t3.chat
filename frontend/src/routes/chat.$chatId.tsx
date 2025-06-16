@@ -5,6 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { LargeLanguageModel, MessageSchema, createMessage } from "@/api";
 import { useUser } from "@/components/auth";
+import { MembersDialog } from "@/components/members";
 import { MessageTree } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
 import { ConversationProvider, useConversation, useMessageTree } from "@/sync/conversation";
@@ -72,6 +73,8 @@ function Conversation() {
     /* Render */
     return (
         <div className="flex max-w-3xl grow flex-col">
+            <MembersDialog />
+
             <div className="grow px-4 pb-12 text-sm">
                 <MessageTree messageTree={messageTree} />
             </div>
