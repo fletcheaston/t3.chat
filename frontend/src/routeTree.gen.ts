@@ -22,6 +22,7 @@ import { Route as SettingsModelsImport } from "./routes/settings.models"
 import { Route as SettingsHistoryImport } from "./routes/settings.history"
 import { Route as SettingsApiKeysImport } from "./routes/settings.api-keys"
 import { Route as SettingsAccountImport } from "./routes/settings.account"
+import { Route as JoinTokenImport } from "./routes/join.$token"
 import { Route as ChatChatIdImport } from "./routes/chat.$chatId"
 
 // Create/Update Routes
@@ -92,6 +93,12 @@ const SettingsAccountRoute = SettingsAccountImport.update({
   getParentRoute: () => SettingsRoute,
 } as any)
 
+const JoinTokenRoute = JoinTokenImport.update({
+  id: "/join/$token",
+  path: "/join/$token",
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ChatChatIdRoute = ChatChatIdImport.update({
   id: "/$chatId",
   path: "/$chatId",
@@ -136,6 +143,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/chat/$chatId"
       preLoaderRoute: typeof ChatChatIdImport
       parentRoute: typeof ChatImport
+    }
+    "/join/$token": {
+      id: "/join/$token"
+      path: "/join/$token"
+      fullPath: "/join/$token"
+      preLoaderRoute: typeof JoinTokenImport
+      parentRoute: typeof rootRoute
     }
     "/settings/account": {
       id: "/settings/account"
@@ -231,6 +245,7 @@ export interface FileRoutesByFullPath {
   "/login": typeof LoginRoute
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/join/$token": typeof JoinTokenRoute
   "/settings/account": typeof SettingsAccountRoute
   "/settings/api-keys": typeof SettingsApiKeysRoute
   "/settings/history": typeof SettingsHistoryRoute
@@ -245,6 +260,7 @@ export interface FileRoutesByTo {
   "/login": typeof LoginRoute
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/join/$token": typeof JoinTokenRoute
   "/settings/account": typeof SettingsAccountRoute
   "/settings/api-keys": typeof SettingsApiKeysRoute
   "/settings/history": typeof SettingsHistoryRoute
@@ -261,6 +277,7 @@ export interface FileRoutesById {
   "/login": typeof LoginRoute
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
+  "/join/$token": typeof JoinTokenRoute
   "/settings/account": typeof SettingsAccountRoute
   "/settings/api-keys": typeof SettingsApiKeysRoute
   "/settings/history": typeof SettingsHistoryRoute
@@ -278,6 +295,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/settings"
     | "/chat/$chatId"
+    | "/join/$token"
     | "/settings/account"
     | "/settings/api-keys"
     | "/settings/history"
@@ -291,6 +309,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/settings"
     | "/chat/$chatId"
+    | "/join/$token"
     | "/settings/account"
     | "/settings/api-keys"
     | "/settings/history"
@@ -305,6 +324,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/settings"
     | "/chat/$chatId"
+    | "/join/$token"
     | "/settings/account"
     | "/settings/api-keys"
     | "/settings/history"
@@ -320,6 +340,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRouteWithChildren
   LoginRoute: typeof LoginRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  JoinTokenRoute: typeof JoinTokenRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -327,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRouteWithChildren,
   LoginRoute: LoginRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  JoinTokenRoute: JoinTokenRoute,
 }
 
 export const routeTree = rootRoute
@@ -342,7 +364,8 @@ export const routeTree = rootRoute
         "/",
         "/chat",
         "/login",
-        "/settings"
+        "/settings",
+        "/join/$token"
       ]
     },
     "/": {
@@ -372,6 +395,9 @@ export const routeTree = rootRoute
     "/chat/$chatId": {
       "filePath": "chat.$chatId.tsx",
       "parent": "/chat"
+    },
+    "/join/$token": {
+      "filePath": "join.$token.tsx"
     },
     "/settings/account": {
       "filePath": "settings.account.tsx",
