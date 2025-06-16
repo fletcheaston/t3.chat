@@ -15,15 +15,3 @@ class MemberSchema(Schema):
     added_by_id: uuid.UUID
 
     llms_selected: list[LargeLanguageModel]
-
-
-class NewConversationSchema(Schema):
-    id: uuid.UUID
-    title: str
-    tag_ids: list[uuid.UUID]
-
-
-class UpdateConversationSchema(Schema):
-    title: str | None = None
-    tag_ids: list[uuid.UUID] | None = None
-    message_branches: dict[str, bool] | None = None

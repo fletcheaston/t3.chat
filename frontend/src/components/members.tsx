@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { useMountEffect } from "@react-hookz/web";
-import { Users } from "lucide-react";
+import { UsersIcon } from "lucide-react";
 
 import { useUserMap } from "@/sync/conversation";
 import { db } from "@/sync/database";
@@ -151,7 +151,7 @@ export function MembersDialog(props: { conversationId: string }) {
                     size="icon"
                     tooltip="View Members"
                 >
-                    <Users className="h-5 w-5" />
+                    <UsersIcon className="h-5 w-5" />
                 </Button>
             </DialogTrigger>
 
