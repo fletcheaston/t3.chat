@@ -102,7 +102,7 @@ function ViewMyMessage(props: {
                 data-limit-width
                 className="group relative flex w-[85%] justify-end pb-6"
             >
-                <div className="bg-background text-text overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7 text-wrap">
+                <div className="bg-background-dark border-border-dark text-text overflow-x-hidden rounded-xl rounded-br-none border px-4 py-2 leading-7 text-wrap">
                     <Markdown content={props.message.content} />
                 </div>
 
@@ -250,7 +250,7 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
                 data-limit-width
                 className="group relative flex w-[85%] justify-end pb-6"
             >
-                <div className="bg-background text-text w-full overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7">
+                <div className="bg-background-dark text-text w-full overflow-x-hidden rounded-xl rounded-br-none px-4 py-2 leading-7">
                     <Textarea
                         defaultValue={props.message.content}
                         onChange={(event) => (contentRef.current = event.target.value)}
