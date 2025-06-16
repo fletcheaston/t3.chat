@@ -15,3 +15,5 @@ class MemberSchema(Schema):
     added_by_id: uuid.UUID
 
     llms_selected: list[LargeLanguageModel]
+
+    hidden: bool

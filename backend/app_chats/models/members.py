@@ -44,6 +44,8 @@ class ConversationMember(DjangoModel):
         default=list,
     )
 
+    hidden = models.BooleanField(default=False)
+
     ############################################################################
     # Queryset managers
     objects = ConversationMemberQuerySet.as_manager()

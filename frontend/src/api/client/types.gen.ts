@@ -442,6 +442,10 @@ export type MemberSchema = {
      * Llmsselected
      */
     llmsSelected: Array<LargeLanguageModel>;
+    /**
+     * Hidden
+     */
+    hidden: boolean;
 };
 
 /**

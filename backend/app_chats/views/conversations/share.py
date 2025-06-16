@@ -47,7 +47,14 @@ def join_conversation(
         conversation = models.Conversation.validate_share_link(data.token)
 
         # Check if user is already a member
-        if not conversation.db_members.filter(user=request.user).exists():
+        member = conversation.db_members.filter(user=request.user).first()
+
+        if member:
+            # If they are a member, just make sure they can see it
+            member.hidden = False
+            member.save()
+        else:
+            # Otherwise, create their membership
             models.ConversationMember.objects.create(
                 conversation=conversation,
                 user=request.user,
