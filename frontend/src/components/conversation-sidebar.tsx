@@ -74,9 +74,9 @@ function ConversationLink(props: { id: string; title: string; hidden: boolean; p
                     tooltip={props.hidden ? "Show chat" : "Hide chat"}
                 >
                     {props.hidden ? (
-                        <EyeIcon className="h-4 w-4" />
-                    ) : (
                         <EyeOffIcon className="h-4 w-4" />
+                    ) : (
+                        <EyeIcon className="h-4 w-4" />
                     )}
                 </Button>
             </>
@@ -112,13 +112,13 @@ export function ConversationSidebar() {
 
                 <SidebarContent>
                     <SidebarGroup>
-                        <SidebarGroupLabel className="flex justify-between">
+                        <SidebarGroupLabel className="flex justify-between gap-2">
                             <h2>Chats</h2>
 
                             <Button
                                 size="icon"
                                 variant="plain"
-                                className="hover:bg-background-light bg-background size-6"
+                                className="hover:bg-background-light bg-background size-6 opacity-0 group-hover:opacity-100"
                                 onClick={() => setShowAll((prevState) => !prevState)}
                                 tooltip={showAll ? "Show all chats" : "Hide hidden chats"}
                             >
