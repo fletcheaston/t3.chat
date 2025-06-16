@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
+import { useMountEffect } from "@react-hookz/web";
 import { Users } from "lucide-react";
 
 import { useUserMap } from "@/sync/conversation";
@@ -15,10 +16,18 @@ function MembersDialogContent(props: { conversationId: string }) {
     /**************************************************************************/
     /* State */
     const userMap = useUserMap();
+    const [isLoading, setIsLoading] = useState(true);
 
     const messages = useCachedLiveQuery(async () => {
         return db.messages.where("conversationId").equals(props.conversationId).sortBy("created");
     }, [props.conversationId]);
+
+    useMountEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+        return () => clearTimeout(timer);
+    });
 
     // Calculate message counts
     const userMessageCounts = useMemo(() => {
@@ -43,11 +52,9 @@ function MembersDialogContent(props: { conversationId: string }) {
         );
     }, [messages]);
 
-    console.log(messages);
-
     /**************************************************************************/
     /* Render */
-    if (!messages) {
+    if (!messages || isLoading) {
         return (
             <div className="flex flex-col gap-4">
                 <div>
