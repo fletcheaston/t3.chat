@@ -266,9 +266,32 @@ export type NewConversationSchema = {
 };
 
 /**
- * ShareLinkSchema
+ * PreviewConversationSchema
  */
-export type ShareLinkSchema = {
+export type PreviewConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
+     * Title
+     */
+    title: string;
+    owner: UserSchema;
+};
+
+/**
+ * SharedConversationSchema
+ */
+export type SharedConversationSchema = {
     /**
      * Token
      */
@@ -276,9 +299,9 @@ export type ShareLinkSchema = {
 };
 
 /**
- * JoinConversationSchema
+ * ShareLinkSchema
  */
-export type JoinConversationSchema = {
+export type ShareLinkSchema = {
     /**
      * Token
      */
@@ -657,33 +680,28 @@ export type CreateConversationResponses = {
 export type CreateConversationResponse =
     CreateConversationResponses[keyof CreateConversationResponses];
 
-export type GenerateShareLinkData = {
-    body?: never;
-    path: {
-        /**
-         * Conversation Id
-         */
-        conversation_id: string;
-    };
+export type PreviewConversationData = {
+    body: SharedConversationSchema;
+    path?: never;
     query?: never;
-    url: "/api/conversations/share/{conversation_id}/share";
+    url: "/api/conversations/share/preview";
 };
 
-export type GenerateShareLinkResponses = {
+export type PreviewConversationResponses = {
     /**
      * OK
      */
-    200: ShareLinkSchema;
+    200: PreviewConversationSchema;
 };
 
-export type GenerateShareLinkResponse =
-    GenerateShareLinkResponses[keyof GenerateShareLinkResponses];
+export type PreviewConversationResponse =
+    PreviewConversationResponses[keyof PreviewConversationResponses];
 
 export type JoinConversationData = {
-    body: JoinConversationSchema;
+    body: SharedConversationSchema;
     path?: never;
     query?: never;
-    url: "/api/conversations/share/join/{token}";
+    url: "/api/conversations/share/join";
 };
 
 export type JoinConversationErrors = {
@@ -703,6 +721,28 @@ export type JoinConversationResponses = {
 };
 
 export type JoinConversationResponse = JoinConversationResponses[keyof JoinConversationResponses];
+
+export type GenerateShareLinkData = {
+    body?: never;
+    path: {
+        /**
+         * Conversation Id
+         */
+        conversation_id: string;
+    };
+    query?: never;
+    url: "/api/conversations/share/{conversation_id}";
+};
+
+export type GenerateShareLinkResponses = {
+    /**
+     * OK
+     */
+    200: ShareLinkSchema;
+};
+
+export type GenerateShareLinkResponse =
+    GenerateShareLinkResponses[keyof GenerateShareLinkResponses];
 
 export type UpdateConversationData = {
     body: UpdateConversationSchema;

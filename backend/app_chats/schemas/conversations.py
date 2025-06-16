@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+from .auth import UserSchema
 from .base import Schema
 from .tags import TagSchema
 
@@ -34,5 +35,15 @@ class ShareLinkSchema(Schema):
     token: str
 
 
-class JoinConversationSchema(Schema):
+class SharedConversationSchema(Schema):
     token: str
+
+
+class PreviewConversationSchema(Schema):
+    id: uuid.UUID
+    created: datetime
+    modified: datetime
+
+    title: str
+
+    owner: UserSchema

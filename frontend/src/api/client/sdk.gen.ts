@@ -30,6 +30,8 @@ import type {
     ListMyTagsResponses,
     LogoutData,
     LogoutResponses,
+    PreviewConversationData,
+    PreviewConversationResponses,
     UpdateConversationData,
     UpdateConversationResponses,
     UpdateMySettingsData,
@@ -195,14 +197,14 @@ export const createConversation = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Generate Share Link
- * Generate a shareable link for a conversation.
+ * Preview Conversation
+ * Get basic conversation details from a shared link token.
  */
-export const generateShareLink = <ThrowOnError extends boolean = false>(
-    options: Options<GenerateShareLinkData, ThrowOnError>
+export const previewConversation = <ThrowOnError extends boolean = false>(
+    options: Options<PreviewConversationData, ThrowOnError>
 ) => {
     return (options.client ?? _heyApiClient).post<
-        GenerateShareLinkResponses,
+        PreviewConversationResponses,
         unknown,
         ThrowOnError
     >({
@@ -213,8 +215,12 @@ export const generateShareLink = <ThrowOnError extends boolean = false>(
                 type: "apiKey",
             },
         ],
-        url: "/api/conversations/share/{conversation_id}/share",
+        url: "/api/conversations/share/preview",
         ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
     });
 };
 
@@ -237,12 +243,36 @@ export const joinConversation = <ThrowOnError extends boolean = false>(
                 type: "apiKey",
             },
         ],
-        url: "/api/conversations/share/join/{token}",
+        url: "/api/conversations/share/join",
         ...options,
         headers: {
             "Content-Type": "application/json",
             ...options.headers,
         },
+    });
+};
+
+/**
+ * Generate Share Link
+ * Generate a shareable link for a conversation.
+ */
+export const generateShareLink = <ThrowOnError extends boolean = false>(
+    options: Options<GenerateShareLinkData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        GenerateShareLinkResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/{conversation_id}",
+        ...options,
     });
 };
 

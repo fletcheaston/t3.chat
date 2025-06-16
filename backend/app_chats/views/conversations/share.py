@@ -10,33 +10,37 @@ router = Router()
 
 
 @router.post(
-    "/{conversation_id}/share",
-    response={200: schemas.ShareLinkSchema},
+    "/preview",
+    response={200: schemas.PreviewConversationSchema},
     by_alias=True,
 )
-def generate_share_link(
+def preview_conversation(
     request: AuthenticatedHttpRequest,
-    conversation_id: str,
-) -> dict:
-    """Generate a shareable link for a conversation."""
-    conversation = models.Conversation.objects.get(
-        id=conversation_id,
-        owner=request.user,
-    )
+    data: schemas.SharedConversationSchema,
+) -> Any:
+    """Get basic conversation details from a shared link token."""
+    try:
+        conversation = models.Conversation.validate_share_link(data.token)
 
-    token = conversation.generate_share_link()
+        return conversation
 
-    return {"token": token}
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        return 400, schemas.ErrorSchema(detail=schemas.ErrorMessage.INVALID_TOKEN)
+
+    except models.Conversation.DoesNotExist:
+        return 400, schemas.ErrorSchema(
+            detail=schemas.ErrorMessage.RESOURCE_DOES_NOT_EXIST
+        )
 
 
 @router.post(
-    "/join/{token}",
+    "/join",
     response={200: schemas.ConversationSchema, 400: schemas.ErrorSchema},
     by_alias=True,
 )
 def join_conversation(
     request: AuthenticatedHttpRequest,
-    data: schemas.JoinConversationSchema,
+    data: schemas.SharedConversationSchema,
 ) -> Any:
     """Join a conversation using a share link."""
     try:
@@ -60,3 +64,23 @@ def join_conversation(
         return 400, schemas.ErrorSchema(
             detail=schemas.ErrorMessage.RESOURCE_DOES_NOT_EXIST
         )
+
+
+@router.post(
+    "/{conversation_id}",
+    response={200: schemas.ShareLinkSchema},
+    by_alias=True,
+)
+def generate_share_link(
+    request: AuthenticatedHttpRequest,
+    conversation_id: str,
+) -> dict:
+    """Generate a shareable link for a conversation."""
+    conversation = models.Conversation.objects.get(
+        id=conversation_id,
+        owner=request.user,
+    )
+
+    token = conversation.generate_share_link()
+
+    return {"token": token}
