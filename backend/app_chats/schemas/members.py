@@ -15,5 +15,6 @@ class MemberSchema(Schema):
     added_by_id: uuid.UUID
 
     llms_selected: list[LargeLanguageModel]
+    message_branches: dict[str, bool]
 
     hidden: bool

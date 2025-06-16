@@ -2,8 +2,7 @@ import uuid
 
 from ninja import Router
 
-from app_chats import schemas
-from app_chats.models import Conversation
+from app_chats import models, schemas
 from app_utils.requests import AuthenticatedHttpRequest
 
 router = Router()
@@ -18,8 +17,8 @@ def update_conversation(
     request: AuthenticatedHttpRequest,
     conversation_id: uuid.UUID,
     data: schemas.UpdateConversationSchema,
-) -> Conversation:
-    conversation = Conversation.objects.get(
+) -> models.Conversation:
+    conversation = models.Conversation.objects.get(
         id=conversation_id,
         owner=request.user,
     )
@@ -31,5 +30,15 @@ def update_conversation(
         conversation.message_branches = data.message_branches
 
     conversation.save()
+
+    member = models.ConversationMember.objects.get(
+        conversation=conversation,
+        user=request.user,
+    )
+
+    if data.hidden is not None:
+        member.hidden = data.hidden
+
+    member.save()
 
     return conversation

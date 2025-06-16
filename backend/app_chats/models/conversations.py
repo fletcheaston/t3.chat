@@ -28,8 +28,6 @@ class Conversation(DjangoModel):
         on_delete=models.PROTECT,
     )
 
-    message_branches = models.JSONField(default=dict)
-
     ############################################################################
     # Queryset managers
     objects = ConversationQuerySet.as_manager()

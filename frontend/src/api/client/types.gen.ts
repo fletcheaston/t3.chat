@@ -209,12 +209,6 @@ export type ConversationSchema = {
      * Ownerid
      */
     ownerId: string;
-    /**
-     * Messagebranches
-     */
-    messageBranches: {
-        [key: string]: boolean;
-    };
 };
 
 /**
@@ -292,6 +286,14 @@ export type UpdateConversationSchema = {
     messageBranches?: {
         [key: string]: boolean;
     } | null;
+    /**
+     * Llmsselected
+     */
+    llmsSelected?: Array<LargeLanguageModel> | null;
+    /**
+     * Hidden
+     */
+    hidden?: boolean | null;
 };
 
 /**
@@ -376,6 +378,12 @@ export type MemberSchema = {
      * Llmsselected
      */
     llmsSelected: Array<LargeLanguageModel>;
+    /**
+     * Messagebranches
+     */
+    messageBranches: {
+        [key: string]: boolean;
+    };
     /**
      * Hidden
      */

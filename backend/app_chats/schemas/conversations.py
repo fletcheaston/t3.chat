@@ -3,6 +3,7 @@ from datetime import datetime
 
 from .auth import UserSchema
 from .base import Schema
+from .models import LargeLanguageModel
 
 
 class ConversationSchema(Schema):
@@ -14,8 +15,6 @@ class ConversationSchema(Schema):
 
     owner_id: uuid.UUID
 
-    message_branches: dict[str, bool]
-
 
 class NewConversationSchema(Schema):
     id: uuid.UUID
@@ -25,7 +24,12 @@ class NewConversationSchema(Schema):
 
 class UpdateConversationSchema(Schema):
     title: str | None = None
+
     message_branches: dict[str, bool] | None = None
+
+    llms_selected: list[LargeLanguageModel] | None = None
+
+    hidden: bool | None = None
 
 
 class ShareLinkSchema(Schema):
