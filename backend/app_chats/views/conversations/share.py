@@ -25,6 +25,7 @@ def generate_share_link(
     )
 
     token = conversation.generate_share_link()
+
     return {"token": token}
 
 

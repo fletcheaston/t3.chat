@@ -262,6 +262,26 @@ export type NewConversationSchema = {
 };
 
 /**
+ * ShareLinkSchema
+ */
+export type ShareLinkSchema = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
+ * JoinConversationSchema
+ */
+export type JoinConversationSchema = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
  * UpdateConversationSchema
  */
 export type UpdateConversationSchema = {
@@ -532,6 +552,10 @@ export type GithubCallbackData = {
          * Code
          */
         code: string;
+        /**
+         * Redirect
+         */
+        redirect?: string | null;
     };
     url: "/api/auth/github-callback";
 };
@@ -628,6 +652,53 @@ export type CreateConversationResponses = {
 
 export type CreateConversationResponse =
     CreateConversationResponses[keyof CreateConversationResponses];
+
+export type GenerateShareLinkData = {
+    body?: never;
+    path: {
+        /**
+         * Conversation Id
+         */
+        conversation_id: string;
+    };
+    query?: never;
+    url: "/api/conversations/share/{conversation_id}/share";
+};
+
+export type GenerateShareLinkResponses = {
+    /**
+     * OK
+     */
+    200: ShareLinkSchema;
+};
+
+export type GenerateShareLinkResponse =
+    GenerateShareLinkResponses[keyof GenerateShareLinkResponses];
+
+export type JoinConversationData = {
+    body: JoinConversationSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversations/share/join/{token}";
+};
+
+export type JoinConversationErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorSchema;
+};
+
+export type JoinConversationError = JoinConversationErrors[keyof JoinConversationErrors];
+
+export type JoinConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type JoinConversationResponse = JoinConversationResponses[keyof JoinConversationResponses];
 
 export type UpdateConversationData = {
     body: UpdateConversationSchema;

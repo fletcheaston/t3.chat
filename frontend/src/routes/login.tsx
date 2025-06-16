@@ -7,9 +7,10 @@ import { Button } from "@/ui/button";
 import githubIcon from "/media/github.png";
 
 const loginSearchParser = z.object({
-    redirect: z.string()
+    redirect: z
+        .string()
         .optional()
-        .transform((val) => val?.startsWith("/") ? val : undefined),
+        .transform((val) => (val?.startsWith("/") ? val : undefined)),
 });
 
 export const Route = createFileRoute("/login")({

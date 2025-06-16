@@ -10,6 +10,8 @@ import type {
     CreateMessageResponses,
     CreateTagData,
     CreateTagResponses,
+    GenerateShareLinkData,
+    GenerateShareLinkResponses,
     GithubCallbackData,
     GithubCallbackErrors,
     GithubCallbackResponses,
@@ -17,6 +19,9 @@ import type {
     GlobalSyncBootstrapResponses,
     GlobalSyncTypesData,
     GlobalSyncTypesResponses,
+    JoinConversationData,
+    JoinConversationErrors,
+    JoinConversationResponses,
     ListMyConversationsData,
     ListMyConversationsResponses,
     ListMyMessagesData,
@@ -181,6 +186,58 @@ export const createConversation = <ThrowOnError extends boolean = false>(
             },
         ],
         url: "/api/conversations/create",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Generate Share Link
+ * Generate a shareable link for a conversation.
+ */
+export const generateShareLink = <ThrowOnError extends boolean = false>(
+    options: Options<GenerateShareLinkData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        GenerateShareLinkResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/{conversation_id}/share",
+        ...options,
+    });
+};
+
+/**
+ * Join Conversation
+ * Join a conversation using a share link.
+ */
+export const joinConversation = <ThrowOnError extends boolean = false>(
+    options: Options<JoinConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        JoinConversationResponses,
+        JoinConversationErrors,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/join/{token}",
         ...options,
         headers: {
             "Content-Type": "application/json",
