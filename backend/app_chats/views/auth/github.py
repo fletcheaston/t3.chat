@@ -21,7 +21,7 @@ router = Router()
     by_alias=True,
     auth=None,
 )
-def github_callback(request: HttpRequest, code: str) -> Any:
+def github_callback(request: HttpRequest, code: str, redirect: str | None = None) -> Any:
     # If the user is already authenticated, just redirect
     if request.user.is_authenticated:
         return redirect("/")
@@ -80,4 +80,4 @@ def github_callback(request: HttpRequest, code: str) -> Any:
     django_login(request, user)
 
     # Redirect them back to the app
-    return redirect("/chat")
+    return redirect(redirect if redirect and redirect.startswith("/") else "/chat")

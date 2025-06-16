@@ -1,25 +1,46 @@
 import React, { createContext, useContext } from "react";
 
-import { ConversationSchema, MessageMetadataSchema, UserSchema } from "@/api";
+import { ConversationSchema, LargeLanguageModel, MessageMetadataSchema, UserSchema } from "@/api";
+import { useUser } from "@/components/auth";
 
 import { db } from "./database";
 import { useCachedLiveQuery } from "./utils";
 
-export type MessageTreeSchema = {
+export interface MessageTreeSchema {
     message: MessageMetadataSchema;
     replies: MessageTreeSchema[];
-};
+}
 
-const ConversationContext = createContext<ConversationSchema | null>(null);
+interface CustomizedConversationSchema extends ConversationSchema {
+    llms: Array<LargeLanguageModel>;
+}
+
+const ConversationContext = createContext<CustomizedConversationSchema | null>(null);
 const MessageTreeContext = createContext<Array<MessageTreeSchema> | null>(null);
 const UserMapContext = createContext<Record<string, UserSchema> | null>(null);
 
 export function ConversationProvider(props: { conversationId: string; children: React.ReactNode }) {
     /**************************************************************************/
     /* State */
+    const user = useUser();
+
     const conversation = useCachedLiveQuery(async () => {
-        return db.conversations.get(props.conversationId);
-    }, [props.conversationId]);
+        const conversation = await db.conversations.get(props.conversationId);
+
+        if (!conversation) return;
+
+        const member = await db.members
+            .where(["conversationId", "userId"])
+            .equals([props.conversationId, user.id])
+            .first();
+
+        if (!member) return;
+
+        return {
+            ...conversation,
+            llms: member.llmsSelected,
+        } satisfies CustomizedConversationSchema;
+    }, [props.conversationId, user.id]);
 
     const messageTrees = useCachedLiveQuery(async () => {
         const flatMessages = await db.messagesMetadata
@@ -46,7 +67,14 @@ export function ConversationProvider(props: { conversationId: string; children: 
     }, [props.conversationId]);
 
     const userMap = useCachedLiveQuery(async () => {
-        const users = await db.users.toArray();
+        const members = await db.members
+            .where("conversationId")
+            .equals(props.conversationId)
+            .toArray();
+
+        const userIds = members.map((member) => member.userId);
+
+        const users = await db.users.where("id").anyOf(userIds).toArray();
 
         return Object.fromEntries(users.map((user) => [user.id, user]));
     }, []);

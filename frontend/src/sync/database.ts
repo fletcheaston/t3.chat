@@ -3,6 +3,7 @@ import Dexie, { type EntityTable } from "dexie";
 import {
     GlobalSyncTypesResponses,
     SyncConversation,
+    SyncMember,
     SyncMessage,
     SyncMessageMetadata,
     SyncTag,
@@ -15,6 +16,7 @@ const db = new Dexie("F3Chat") as Dexie & {
     messagesMetadata: EntityTable<SyncMessageMetadata["data"], "id">;
     messages: EntityTable<SyncMessage["data"], "id">;
     conversations: EntityTable<SyncConversation["data"], "id">;
+    members: EntityTable<SyncMember["data"], "id">;
     tags: EntityTable<SyncTag["data"], "id">;
     users: EntityTable<SyncUser["data"], "id">;
 };
@@ -23,6 +25,7 @@ db.version(1).stores({
     messagesMetadata: "id,conversationId,replyToId,created",
     messages: "id",
     conversations: "id,created",
+    members: "id,conversationId,[conversationId+userId]",
     tags: "id,created",
     users: "id,created",
 });
@@ -66,6 +69,24 @@ export function addSyncedData(value: SyncData) {
                 // If we've got a newer value, update it
                 if (new Date(value.data.modified) > new Date(stored.modified)) {
                     db.conversations.put(value.data, value.data.id);
+                }
+            });
+            return;
+        }
+
+        case "member": {
+            db.transaction("readwrite", db.members, async () => {
+                const stored = await db.members.get(value.data.id);
+
+                if (!stored) {
+                    // Add it if we don't have an object for this id yet
+                    db.members.add(value.data, value.data.id);
+                    return;
+                }
+
+                // If we've got a newer value, update it
+                if (new Date(value.data.modified) > new Date(stored.modified)) {
+                    db.members.put(value.data, value.data.id);
                 }
             });
             return;
