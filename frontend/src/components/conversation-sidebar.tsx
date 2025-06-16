@@ -1,8 +1,12 @@
-import * as React from "react";
+import React, { useCallback } from "react";
 
 import { Link, useLocation } from "@tanstack/react-router";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { toast } from "sonner";
 
+import { updateConversation } from "@/api";
 import { useConversations } from "@/sync/conversations";
+import { Button } from "@/ui/button";
 import {
     Sidebar,
     SidebarContent,
@@ -19,31 +23,63 @@ import { cn } from "@/utils";
 import { SidebarButtons } from "./sidebar-buttons";
 import { SidebarHeader } from "./sidebar-header";
 
-function ConversationLink(props: { id: string; title: string; pathname: string }) {
+function ConversationLink(props: { id: string; title: string; hidden: boolean; pathname: string }) {
     /**************************************************************************/
     /* State */
     const selected = props.pathname.includes(props.id);
 
+    const toggleHidden = useCallback(
+        async (event: React.MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            await updateConversation({
+                body: { hidden: !props.hidden },
+                path: { conversation_id: props.id },
+            });
+
+            toast.success(props.hidden ? "Chat displayed" : "Chat hidden");
+        },
+        [props.id, props.hidden]
+    );
+
     /**************************************************************************/
     /* Render */
     return (
-        <SidebarMenuItem>
-            <SidebarMenuButton
-                asChild
-                className={cn(
-                    "text-text hover:bg-primary-light hover:text-background-dark block rounded-none rounded-t-lg border-b px-1.5 py-0.5 transition-all",
-                    selected
-                        ? "border-b-primary"
-                        : "hover:border-b-primary-light border-b-border-dark"
-                )}
-            >
-                <Link
-                    to="/chat/$chatId"
-                    params={{ chatId: props.id }}
+        <SidebarMenuItem className="group relative">
+            <>
+                <SidebarMenuButton
+                    asChild
+                    className={cn(
+                        "text-text hover:bg-primary-light hover:text-background-dark block flex-1 rounded-none rounded-t-lg border-b px-1.5 py-1 transition-all",
+                        selected
+                            ? "border-b-primary"
+                            : "hover:border-b-primary-light border-b-border-dark"
+                    )}
                 >
-                    {props.title}
-                </Link>
-            </SidebarMenuButton>
+                    <Link
+                        to="/chat/$chatId"
+                        params={{ chatId: props.id }}
+                        className="truncate text-nowrap"
+                    >
+                        {props.title}
+                    </Link>
+                </SidebarMenuButton>
+
+                <Button
+                    size="icon"
+                    variant="plain"
+                    className="hover:bg-background-light bg-background absolute top-0.5 right-0.5 size-6 opacity-0 group-hover:opacity-100"
+                    onClick={toggleHidden}
+                    tooltip={props.hidden ? "Show chat" : "Hide chat"}
+                >
+                    {props.hidden ? (
+                        <EyeIcon className="h-4 w-4" />
+                    ) : (
+                        <EyeOffIcon className="h-4 w-4" />
+                    )}
+                </Button>
+            </>
         </SidebarMenuItem>
     );
 }
@@ -76,6 +112,7 @@ export function ConversationSidebar() {
                                             key={conversation.id}
                                             id={conversation.id}
                                             title={conversation.title}
+                                            hidden={conversation.hidden}
                                             pathname={pathname}
                                         />
                                     );

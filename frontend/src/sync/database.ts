@@ -23,7 +23,7 @@ db.version(1).stores({
     messagesMetadata: "id,conversationId,replyToId,created",
     messages: "id,conversationId,created",
     conversations: "id,created",
-    members: "id,conversationId,[conversationId+userId],created",
+    members: "id,conversationId,userId,[conversationId+userId],created",
     users: "id,created",
 });
 
