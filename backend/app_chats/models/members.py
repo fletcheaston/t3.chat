@@ -1,6 +1,10 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from simple_history.models import HistoricalRecords
 
+from app_chats import schemas
 from app_utils.models import DjangoModel
 
 from .conversations import Conversation
@@ -16,6 +20,7 @@ class ConversationMember(DjangoModel):
     # Normal fields
     conversation = models.ForeignKey(
         Conversation,
+        related_name="db_members",
         on_delete=models.PROTECT,
     )
 
@@ -29,6 +34,14 @@ class ConversationMember(DjangoModel):
         User,
         related_name="+",
         on_delete=models.PROTECT,
+    )
+
+    llms_selected = ArrayField(
+        models.TextField(
+            choices=[(llm.value, llm.name) for llm in schemas.LargeLanguageModel],
+        ),
+        blank=True,
+        default=list,
     )
 
     ############################################################################
@@ -47,3 +60,30 @@ class ConversationMember(DjangoModel):
 
     ############################################################################
     # Methods
+    def save(self, *args, **kwargs) -> None:
+        super().save(*args, **kwargs)
+
+        # Broadcast via channels
+        self.broadcast()
+
+    def broadcast(self) -> None:
+        channel_layer = get_channel_layer()
+
+        # Broadcast to all users in the conversation
+        for user in User.objects.filter(
+            conversations__conversation_id=self.conversation_id
+        ):
+            async_to_sync(channel_layer.group_send)(
+                f"user-{user.id}",
+                {
+                    "type": "send_data",
+                    "event": [
+                        schemas.SyncMember.model_validate(
+                            {
+                                "type": "member",
+                                "data": self,
+                            }
+                        ).model_dump_safe()
+                    ],
+                },
+            )

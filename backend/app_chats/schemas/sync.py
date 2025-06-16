@@ -18,6 +18,11 @@ class SyncConversation(schemas.Schema):
     data: schemas.ConversationSchema
 
 
+class SyncMember(schemas.Schema):
+    type: Literal["member"]
+    data: schemas.MemberSchema
+
+
 class SyncTag(schemas.Schema):
     type: Literal["tag"]
     data: schemas.TagSchema
@@ -29,7 +34,12 @@ class SyncUser(schemas.Schema):
 
 
 GlobalSyncTypes = (
-    SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser
+    SyncMessageMetadata
+    | SyncMessage
+    | SyncConversation
+    | SyncMember
+    | SyncTag
+    | SyncUser
 )
 
 

@@ -2,18 +2,19 @@ import uuid
 from datetime import datetime
 
 from .base import Schema
-from .tags import TagSchema
+from .models import LargeLanguageModel
 
 
-class ConversationSchema(Schema):
+class MemberSchema(Schema):
     id: uuid.UUID
     created: datetime
     modified: datetime
 
-    title: str
-    tags: list[TagSchema]
+    conversation_id: uuid.UUID
+    user_id: uuid.UUID
+    added_by_id: uuid.UUID
 
-    message_branches: dict[str, bool]
+    llms_selected: list[LargeLanguageModel]
 
 
 class NewConversationSchema(Schema):

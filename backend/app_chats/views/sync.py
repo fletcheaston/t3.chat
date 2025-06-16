@@ -32,10 +32,12 @@ def global_sync_bootstrap(
 
     ############################################################################
     # Users
-    users = models.User.objects.all()
+    users = models.User.objects.filter(
+        conversations__conversation__db_members__user_id=request.user.id
+    )
 
     if timestamp is not None:
-        users = users.filter(modified__gte=timestamp)
+        users = users.filter(conversations__modified__gte=timestamp)
 
     for value in users:
         data.append(schemas.SyncUser(type="user", data=value))
@@ -53,7 +55,7 @@ def global_sync_bootstrap(
     ############################################################################
     # Conversations
     conversations = models.Conversation.objects.filter(
-        owner=request.user
+        db_members__user_id=request.user.id
     ).prefetch_related("db_tags__conversations")
 
     if timestamp is not None:

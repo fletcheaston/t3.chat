@@ -1,7 +1,6 @@
 from ninja import Router
 
-from app_chats import schemas
-from app_chats.models import Conversation
+from app_chats import models, schemas
 from app_utils.requests import AuthenticatedHttpRequest
 
 router = Router()
@@ -15,8 +14,8 @@ router = Router()
 def create_conversation(
     request: AuthenticatedHttpRequest,
     data: schemas.NewConversationSchema,
-) -> Conversation:
-    conversation = Conversation(
+) -> models.Conversation:
+    conversation = models.Conversation(
         id=data.id,
         title=data.title,
         owner=request.user,
@@ -25,5 +24,12 @@ def create_conversation(
     conversation.db_tags.set(data.tag_ids)  # ty:ignore[possibly-unbound-attribute]
 
     conversation.save()
+
+    models.ConversationMember.objects.create(
+        conversation=conversation,
+        user=request.user,
+        added_by=request.user,
+        llms_selected=[],
+    )
 
     return conversation
