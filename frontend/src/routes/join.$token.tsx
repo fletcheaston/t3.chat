@@ -37,7 +37,7 @@ function RouteComponent() {
         }
 
         loadPreview().catch(() => {
-            setError("Invalid or expired token");
+            setError("Invalid or expired token.");
         });
     }, [token]);
 
@@ -76,19 +76,19 @@ function RouteComponent() {
                             </Skeleton>
                         ) : null}
 
-                        {error && !isLoading ? "Error" : null}
+                        {error && !isLoading ? <p>Error</p> : null}
 
                         {conversation && !isLoading ? (
-                            <>
+                            <p>
                                 Join Chat:{" "}
                                 <span className="text-primary-light">{conversation.title}</span>
-                            </>
+                            </p>
                         ) : null}
                     </DialogTitle>
                 </DialogHeader>
 
                 {isLoading ? (
-                    <div className="flex flex-col gap-4 leading-6">
+                    <div className="flex flex-col gap-4">
                         <Skeleton className="flex h-fit w-full items-center gap-1">
                             <p>
                                 Owner: <span className="text-primary-light">...</span>
@@ -119,20 +119,21 @@ function RouteComponent() {
                 ) : null}
 
                 {error && !isLoading ? (
-                    <div className="space-y-4">
-                        <p className="text-red-500">{error}</p>
+                    <div className="flex flex-col gap-4">
+                        <p className="text-primary">{error}</p>
+
                         <Button
-                            onClick={() => navigate({ to: "/" })}
-                            className="w-full"
+                            asChild
+                            variant="default"
                             tooltip={null}
                         >
-                            Return Home
+                            <Link to="/chat">Return Home</Link>
                         </Button>
                     </div>
                 ) : null}
 
                 {conversation && !isLoading ? (
-                    <div className="flex flex-col gap-4 leading-6">
+                    <div className="flex flex-col gap-4">
                         <p>
                             Owner:{" "}
                             <span className="text-primary-light">{conversation.owner.name}</span>
