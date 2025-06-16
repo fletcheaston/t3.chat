@@ -56,15 +56,17 @@ function ShareContent(props: { conversationId: string }) {
     return (
         <div className="flex flex-col gap-4">
             {state === "loading" || isDelayed ? (
-                <Skeleton className="flex h-16 items-center">
+                <Skeleton className="flex h-20 items-center justify-center">
                     <p className="text-primary-light font-semibold">Generating sharable link...</p>
                 </Skeleton>
             ) : null}
 
             {state === "done" && shareLink && !isDelayed ? (
-                <div className="flex h-16 flex-col gap-2">
+                <div className="flex h-20 flex-col gap-2">
                     <p className="text-text text-sm">
-                        Share this link with others to let them join the chat:
+                        Share this link with others to let them join the chat.
+                        <br />
+                        This link expires in one week.
                     </p>
 
                     <div className="flex gap-2">
