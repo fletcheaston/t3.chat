@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 
-import { ConversationSchema, LargeLanguageModel, MessageSchema, MessageMetadataSchema, UserSchema } from "@/api";
+import { ConversationSchema, LargeLanguageModel, MessageMetadataSchema, UserSchema } from "@/api";
 import { useUser } from "@/components/auth";
 
 import { db } from "./database";
@@ -18,7 +18,6 @@ interface CustomizedConversationSchema extends ConversationSchema {
 const ConversationContext = createContext<CustomizedConversationSchema | null>(null);
 const MessageTreeContext = createContext<Array<MessageTreeSchema> | null>(null);
 const UserMapContext = createContext<Record<string, UserSchema> | null>(null);
-const MessagesContext = createContext<Array<MessageSchema> | null>(null);
 
 export function ConversationProvider(props: { conversationId: string; children: React.ReactNode }) {
     /**************************************************************************/
@@ -80,28 +79,16 @@ export function ConversationProvider(props: { conversationId: string; children: 
         return Object.fromEntries(users.map((user) => [user.id, user]));
     }, []);
 
-    const messages = useCachedLiveQuery(async () => {
-        return db.messages
-            .where("conversationId")
-            .equals(props.conversationId)
-            .sortBy("created");
-    }, [props.conversationId]);
-
     if (conversation === undefined) return null;
     if (messageTrees === undefined) return null;
     if (userMap === undefined) return null;
-    if (messages === undefined) return null;
 
     /**************************************************************************/
     /* Render */
     return (
         <ConversationContext.Provider value={conversation}>
             <MessageTreeContext.Provider value={messageTrees}>
-                <UserMapContext.Provider value={userMap}>
-                    <MessagesContext.Provider value={messages}>
-                        {props.children}
-                    </MessagesContext.Provider>
-                </UserMapContext.Provider>
+                <UserMapContext.Provider value={userMap}>{props.children}</UserMapContext.Provider>
             </MessageTreeContext.Provider>
         </ConversationContext.Provider>
     );
@@ -129,16 +116,6 @@ export function useMessageTree() {
 
 export function useUserMap() {
     const result = useContext(UserMapContext);
-
-    if (result === null) {
-        throw new Error("Missing context provider.");
-    }
-
-    return result;
-}
-
-export function useMessages() {
-    const result = useContext(MessagesContext);
 
     if (result === null) {
         throw new Error("Missing context provider.");

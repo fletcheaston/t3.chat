@@ -73,7 +73,7 @@ function Conversation() {
     /* Render */
     return (
         <div className="flex max-w-3xl grow flex-col">
-            <MembersDialog />
+            <MembersDialog conversationId={conversation.id} />
 
             <div className="grow px-4 pb-12 text-sm">
                 <MessageTree messageTree={messageTree} />
