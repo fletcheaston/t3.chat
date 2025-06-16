@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { Link, useLocation } from "@tanstack/react-router";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -46,7 +46,7 @@ function ConversationLink(props: { id: string; title: string; hidden: boolean; p
     /**************************************************************************/
     /* Render */
     return (
-        <SidebarMenuItem className="group relative">
+        <SidebarMenuItem className="group/item relative">
             <>
                 <SidebarMenuButton
                     asChild
@@ -69,7 +69,7 @@ function ConversationLink(props: { id: string; title: string; hidden: boolean; p
                 <Button
                     size="icon"
                     variant="plain"
-                    className="hover:bg-background-light bg-background absolute top-0.5 right-0.5 size-6 opacity-0 group-hover:opacity-100"
+                    className="hover:bg-background-light bg-background absolute top-0.5 right-0.5 size-6 opacity-0 group-hover/item:opacity-100"
                     onClick={toggleHidden}
                     tooltip={props.hidden ? "Show chat" : "Hide chat"}
                 >
@@ -87,9 +87,19 @@ function ConversationLink(props: { id: string; title: string; hidden: boolean; p
 export function ConversationSidebar() {
     /**************************************************************************/
     /* State */
+    const [showAll, setShowAll] = useState(false);
+
     const pathname = useLocation({ select: (state) => state.pathname });
 
     const conversations = useConversations();
+
+    const filteredConversations = useMemo(() => {
+        if (showAll) {
+            return conversations;
+        }
+
+        return conversations.filter((conversation) => !conversation.hidden);
+    }, [showAll, conversations]);
 
     /**************************************************************************/
     /* Render */
@@ -102,11 +112,27 @@ export function ConversationSidebar() {
 
                 <SidebarContent>
                     <SidebarGroup>
-                        <SidebarGroupLabel>Chats</SidebarGroupLabel>
+                        <SidebarGroupLabel className="flex justify-between">
+                            <h2>Chats</h2>
+
+                            <Button
+                                size="icon"
+                                variant="plain"
+                                className="hover:bg-background-light bg-background size-6"
+                                onClick={() => setShowAll((prevState) => !prevState)}
+                                tooltip={showAll ? "Show all chats" : "Hide hidden chats"}
+                            >
+                                {showAll ? (
+                                    <EyeOffIcon className="h-4 w-4" />
+                                ) : (
+                                    <EyeIcon className="h-4 w-4" />
+                                )}
+                            </Button>
+                        </SidebarGroupLabel>
 
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {conversations.map((conversation) => {
+                                {filteredConversations.map((conversation) => {
                                     return (
                                         <ConversationLink
                                             key={conversation.id}
