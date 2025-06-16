@@ -145,6 +145,7 @@ function ViewMyMessage(props: {
 function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void }) {
     /**************************************************************************/
     /* State */
+    const user = useUser();
     const conversation = useConversation();
 
     // Initial content comes from original message
@@ -176,57 +177,45 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
         };
 
         // Optimistic local updates
-        db.transaction(
-            "readwrite",
-            db.conversations,
-            db.messages,
-            db.messagesMetadata,
-            async () => {
-                await db.conversations.put(
-                    {
-                        ...conversation,
-                        messageBranches,
-                    },
-                    conversation.id
-                );
+        db.transaction("readwrite", db.members, db.messages, db.messagesMetadata, async () => {
+            const member = await db.members
+                .where(["conversationId", "userId"])
+                .equals([conversation.id, user.id])
+                .first();
 
-                await db.messages.put(
-                    {
-                        created: timestamp,
-                        modified: timestamp,
-                        authorId: props.message.authorId,
-                        llm: null,
-                        ...branchedMessage,
-                    },
-                    branchedMessage.id
-                );
+            if (!member) return;
 
-                await db.messagesMetadata.put(
-                    {
-                        id: branchedMessage.id,
-                        created: timestamp,
-                        conversationId: branchedMessage.conversationId,
-                        replyToId: branchedMessage.replyToId,
-                    },
-                    branchedMessage.id
-                );
-            }
-        );
+            await db.members.put(
+                {
+                    ...member,
+                    messageBranches,
+                },
+                member.id
+            );
 
-        // Sync with API
-        const { data: confirmedConversation } = await updateConversation({
-            path: {
-                conversation_id: conversation.id,
-            },
-            body: {
-                messageBranches,
-            },
+            await db.messages.put(
+                {
+                    created: timestamp,
+                    modified: timestamp,
+                    authorId: props.message.authorId,
+                    llm: null,
+                    ...branchedMessage,
+                },
+                branchedMessage.id
+            );
+
+            await db.messagesMetadata.put(
+                {
+                    id: branchedMessage.id,
+                    created: timestamp,
+                    conversationId: branchedMessage.conversationId,
+                    replyToId: branchedMessage.replyToId,
+                },
+                branchedMessage.id
+            );
         });
 
-        if (!confirmedConversation) {
-            throw new Error("Unable to edit message");
-        }
-
+        // Sync with API
         const { data: confirmedMessage } = await createMessage({
             body: branchedMessage,
         });
@@ -236,26 +225,19 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
         }
 
         // Add confirmed data to local database
-        db.transaction(
-            "readwrite",
-            db.conversations,
-            db.messages,
-            db.messagesMetadata,
-            async () => {
-                await db.conversations.put(confirmedConversation, conversation.id);
-                await db.messages.put(confirmedMessage, confirmedMessage.id);
-                await db.messagesMetadata.put(
-                    {
-                        id: confirmedMessage.id,
-                        created: confirmedMessage.created,
-                        conversationId: confirmedMessage.conversationId,
-                        replyToId: confirmedMessage.replyToId,
-                    },
-                    confirmedMessage.id
-                );
-            }
-        );
-    }, [props.message, conversation]);
+        db.transaction("readwrite", db.messages, db.messagesMetadata, async () => {
+            await db.messages.put(confirmedMessage, confirmedMessage.id);
+            await db.messagesMetadata.put(
+                {
+                    id: confirmedMessage.id,
+                    created: confirmedMessage.created,
+                    conversationId: confirmedMessage.conversationId,
+                    replyToId: confirmedMessage.replyToId,
+                },
+                confirmedMessage.id
+            );
+        });
+    }, [props.message, conversation, user.id]);
 
     /**************************************************************************/
     /* Render */
@@ -446,9 +428,10 @@ export function MessageContent(props: { unsetBranch: (() => void) | null }) {
 export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
     /* State */
-    const [orientation] = useState<"horizontal" | "vertical">("vertical");
-
+    const user = useUser();
     const conversation = useConversation();
+
+    const [orientation] = useState<"horizontal" | "vertical">("vertical");
 
     const selectedBranch = useMemo(() => {
         return props.messageTree.find((tree) => {
@@ -471,16 +454,23 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
                 messageBranches[messageId] = true;
             }
 
-            await db.conversations.put(
+            const member = await db.members
+                .where(["conversationId", "userId"])
+                .equals([conversation.id, user.id])
+                .first();
+
+            if (!member) return;
+
+            await db.members.put(
                 {
-                    ...conversation,
+                    ...member,
                     messageBranches,
                 },
-                conversation.id
+                member.id
             );
 
             // Sync with API
-            const { data: confirmedConversation } = await updateConversation({
+            await updateConversation({
                 path: {
                     conversation_id: conversation.id,
                 },
@@ -488,15 +478,8 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
                     messageBranches,
                 },
             });
-
-            if (!confirmedConversation) {
-                throw new Error("Unable to create conversation");
-            }
-
-            // Add confirmed data to local database
-            await db.conversations.put(confirmedConversation, conversation.id);
         },
-        [props.messageTree, conversation.id]
+        [props.messageTree, conversation.id, user.id]
     );
 
     /**************************************************************************/

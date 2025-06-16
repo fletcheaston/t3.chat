@@ -1,6 +1,12 @@
 import React, { createContext, useContext } from "react";
 
-import { ConversationSchema, LargeLanguageModel, MessageMetadataSchema, UserSchema } from "@/api";
+import {
+    ConversationSchema,
+    LargeLanguageModel,
+    MemberSchema,
+    MessageMetadataSchema,
+    UserSchema,
+} from "@/api";
 import { useUser } from "@/components/auth";
 
 import { db } from "./database";
@@ -13,6 +19,7 @@ export interface MessageTreeSchema {
 
 interface CustomizedConversationSchema extends ConversationSchema {
     llms: Array<LargeLanguageModel>;
+    messageBranches: MemberSchema["messageBranches"];
 }
 
 const ConversationContext = createContext<CustomizedConversationSchema | null>(null);
@@ -39,6 +46,7 @@ export function ConversationProvider(props: { conversationId: string; children: 
         return {
             ...conversation,
             llms: member.llmsSelected,
+            messageBranches: member.messageBranches,
         } satisfies CustomizedConversationSchema;
     }, [props.conversationId, user.id]);
 

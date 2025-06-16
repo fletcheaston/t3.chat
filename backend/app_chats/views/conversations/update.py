@@ -26,15 +26,15 @@ def update_conversation(
     if data.title is not None:
         conversation.title = data.title
 
-    if data.message_branches is not None:
-        conversation.message_branches = data.message_branches
-
     conversation.save()
 
     member = models.ConversationMember.objects.get(
         conversation=conversation,
         user=request.user,
     )
+
+    if data.message_branches is not None:
+        member.message_branches = data.message_branches
 
     if data.hidden is not None:
         member.hidden = data.hidden

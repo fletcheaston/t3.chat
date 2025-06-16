@@ -13,6 +13,4 @@ router = Router()
     by_alias=True,
 )
 def list_my_conversations(request: AuthenticatedHttpRequest) -> list[Conversation]:
-    return Conversation.objects.filter(owner=request.user).prefetch_related(
-        "db_tags__conversations"
-    )
+    return Conversation.objects.filter(owner=request.user)

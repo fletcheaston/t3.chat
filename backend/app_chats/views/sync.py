@@ -58,7 +58,7 @@ def global_sync_bootstrap(
     # Conversations
     conversations = models.Conversation.objects.filter(
         db_members__user_id=request.user.id
-    ).prefetch_related("db_tags__conversations")
+    )
 
     if timestamp is not None:
         conversations = conversations.filter(modified__gte=timestamp)
