@@ -8,6 +8,7 @@ import { useUser } from "@/components/auth";
 import { MembersDialog } from "@/components/members";
 import { MessageTree } from "@/components/message-content";
 import { MessageWindow } from "@/components/message-window";
+import { ShareButton } from "@/components/share";
 import { ConversationProvider, useConversation, useMessageTree } from "@/sync/conversation";
 import { db } from "@/sync/database";
 
@@ -73,8 +74,10 @@ function Conversation() {
     /* Render */
     return (
         <div className="flex max-w-3xl grow flex-col">
-            <div className="absolute top-4 right-4">
-                <MembersDialog conversationId={conversation.id} />
+            <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+                <MembersDialog />
+
+                <ShareButton />
             </div>
 
             <div className="grow px-4 pb-12 text-sm">

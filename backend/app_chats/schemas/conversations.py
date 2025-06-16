@@ -13,6 +13,8 @@ class ConversationSchema(Schema):
     title: str
     tags: list[TagSchema]
 
+    owner_id: uuid.UUID
+
     message_branches: dict[str, bool]
 
 

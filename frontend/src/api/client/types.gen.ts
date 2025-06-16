@@ -210,6 +210,10 @@ export type ConversationSchema = {
      */
     tags: Array<TagSchema>;
     /**
+     * Ownerid
+     */
+    ownerId: string;
+    /**
      * Messagebranches
      */
     messageBranches: {

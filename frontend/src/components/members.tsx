@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { useMountEffect } from "@react-hookz/web";
 import { UsersIcon } from "lucide-react";
 
-import { useUserMap } from "@/sync/conversation";
+import { useConversation, useUserMap } from "@/sync/conversation";
 import { db } from "@/sync/database";
 import { useCachedLiveQuery } from "@/sync/utils";
 import { Button } from "@/ui/button";
@@ -22,6 +22,7 @@ function MembersDialogContent(props: { conversationId: string }) {
         return db.messages.where("conversationId").equals(props.conversationId).sortBy("created");
     }, [props.conversationId]);
 
+    // Artificial delay so we don't see a flash of the loading state
     useMountEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
@@ -137,9 +138,10 @@ function MembersDialogContent(props: { conversationId: string }) {
     );
 }
 
-export function MembersDialog(props: { conversationId: string }) {
+export function MembersDialog() {
     /**************************************************************************/
     /* State */
+    const conversation = useConversation();
 
     /**************************************************************************/
     /* Render */
@@ -149,7 +151,7 @@ export function MembersDialog(props: { conversationId: string }) {
                 <Button
                     variant="default"
                     size="icon"
-                    tooltip="View Members"
+                    tooltip="View members"
                 >
                     <UsersIcon className="h-5 w-5" />
                 </Button>
@@ -160,7 +162,7 @@ export function MembersDialog(props: { conversationId: string }) {
                     <DialogTitle>Conversation Members</DialogTitle>
                 </DialogHeader>
 
-                <MembersDialogContent conversationId={props.conversationId} />
+                <MembersDialogContent conversationId={conversation.id} />
             </DialogContent>
         </Dialog>
     );
