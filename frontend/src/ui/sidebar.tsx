@@ -282,7 +282,7 @@ function SidebarGroupLabel({
             data-slot="sidebar-group-label"
             data-sidebar="group-label"
             className={cn(
-                "text-text mb-2 flex shrink-0 items-center rounded-md px-1 text-center text-lg",
+                "text-text mb-2 flex shrink-0 items-center rounded-md px-0.5 text-center text-lg",
                 className
             )}
             {...props}

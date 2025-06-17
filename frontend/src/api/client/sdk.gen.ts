@@ -8,8 +8,8 @@ import type {
     CreateMessageData,
     CreateMessageErrors,
     CreateMessageResponses,
-    CreateTagData,
-    CreateTagResponses,
+    GenerateShareLinkData,
+    GenerateShareLinkResponses,
     GithubCallbackData,
     GithubCallbackErrors,
     GithubCallbackResponses,
@@ -17,20 +17,21 @@ import type {
     GlobalSyncBootstrapResponses,
     GlobalSyncTypesData,
     GlobalSyncTypesResponses,
+    JoinConversationData,
+    JoinConversationErrors,
+    JoinConversationResponses,
     ListMyConversationsData,
     ListMyConversationsResponses,
     ListMyMessagesData,
     ListMyMessagesResponses,
-    ListMyTagsData,
-    ListMyTagsResponses,
     LogoutData,
     LogoutResponses,
+    PreviewConversationData,
+    PreviewConversationResponses,
     UpdateConversationData,
     UpdateConversationResponses,
     UpdateMySettingsData,
     UpdateMySettingsResponses,
-    UpdateTagData,
-    UpdateTagResponses,
     WhoAmIData,
     WhoAmIErrors,
     WhoAmIResponses,
@@ -190,6 +191,86 @@ export const createConversation = <ThrowOnError extends boolean = false>(
 };
 
 /**
+ * Preview Conversation
+ * Get basic conversation details from a shared link token.
+ */
+export const previewConversation = <ThrowOnError extends boolean = false>(
+    options: Options<PreviewConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        PreviewConversationResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/preview",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Join Conversation
+ * Join a conversation using a share link.
+ */
+export const joinConversation = <ThrowOnError extends boolean = false>(
+    options: Options<JoinConversationData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        JoinConversationResponses,
+        JoinConversationErrors,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/join",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+        },
+    });
+};
+
+/**
+ * Generate Share Link
+ * Generate a shareable link for a conversation.
+ */
+export const generateShareLink = <ThrowOnError extends boolean = false>(
+    options: Options<GenerateShareLinkData, ThrowOnError>
+) => {
+    return (options.client ?? _heyApiClient).post<
+        GenerateShareLinkResponses,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                in: "cookie",
+                name: "sessionid",
+                type: "apiKey",
+            },
+        ],
+        url: "/api/conversations/share/{conversation_id}",
+        ...options,
+    });
+};
+
+/**
  * Update Conversation
  */
 export const updateConversation = <ThrowOnError extends boolean = false>(
@@ -208,71 +289,6 @@ export const updateConversation = <ThrowOnError extends boolean = false>(
             },
         ],
         url: "/api/conversations/update/{conversation_id}",
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers,
-        },
-    });
-};
-
-/**
- * List My Tags
- */
-export const listMyTags = <ThrowOnError extends boolean = false>(
-    options?: Options<ListMyTagsData, ThrowOnError>
-) => {
-    return (options?.client ?? _heyApiClient).get<ListMyTagsResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/list",
-        ...options,
-    });
-};
-
-/**
- * Create Tag
- */
-export const createTag = <ThrowOnError extends boolean = false>(
-    options: Options<CreateTagData, ThrowOnError>
-) => {
-    return (options.client ?? _heyApiClient).post<CreateTagResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/create",
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...options.headers,
-        },
-    });
-};
-
-/**
- * Update Tag
- */
-export const updateTag = <ThrowOnError extends boolean = false>(
-    options: Options<UpdateTagData, ThrowOnError>
-) => {
-    return (options.client ?? _heyApiClient).put<UpdateTagResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                in: "cookie",
-                name: "sessionid",
-                type: "apiKey",
-            },
-        ],
-        url: "/api/tags/update/{tag_id}",
         ...options,
         headers: {
             "Content-Type": "application/json",

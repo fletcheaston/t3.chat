@@ -3,7 +3,7 @@ from typing import Any
 import httpx
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect as django_redirect
 from ninja import Router
 from pydantic import ValidationError
 
@@ -21,10 +21,12 @@ router = Router()
     by_alias=True,
     auth=None,
 )
-def github_callback(request: HttpRequest, code: str) -> Any:
+def github_callback(
+    request: HttpRequest, code: str, redirect: str | None = None
+) -> Any:
     # If the user is already authenticated, just redirect
     if request.user.is_authenticated:
-        return redirect("/")
+        return django_redirect("/")
 
     # Authenticate with GitHub
     gh_callback_response = httpx.post(
@@ -80,4 +82,7 @@ def github_callback(request: HttpRequest, code: str) -> Any:
     django_login(request, user)
 
     # Redirect them back to the app
-    return redirect("/chat")
+    if redirect and redirect.startswith("/"):
+        return django_redirect(redirect)
+
+    return django_redirect("/chat")

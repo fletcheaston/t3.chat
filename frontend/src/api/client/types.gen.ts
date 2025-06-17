@@ -206,41 +206,9 @@ export type ConversationSchema = {
      */
     title: string;
     /**
-     * Tags
+     * Ownerid
      */
-    tags: Array<TagSchema>;
-    /**
-     * Messagebranches
-     */
-    messageBranches: {
-        [key: string]: boolean;
-    };
-};
-
-/**
- * TagSchema
- */
-export type TagSchema = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Created
-     */
-    created: string;
-    /**
-     * Modified
-     */
-    modified: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
+    ownerId: string;
 };
 
 /**
@@ -262,6 +230,49 @@ export type NewConversationSchema = {
 };
 
 /**
+ * PreviewConversationSchema
+ */
+export type PreviewConversationSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
+     * Title
+     */
+    title: string;
+    owner: UserSchema;
+};
+
+/**
+ * SharedConversationSchema
+ */
+export type SharedConversationSchema = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
+ * ShareLinkSchema
+ */
+export type ShareLinkSchema = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
  * UpdateConversationSchema
  */
 export type UpdateConversationSchema = {
@@ -270,47 +281,19 @@ export type UpdateConversationSchema = {
      */
     title?: string | null;
     /**
-     * Tagids
-     */
-    tagIds?: Array<string> | null;
-    /**
      * Messagebranches
      */
     messageBranches?: {
         [key: string]: boolean;
     } | null;
-};
-
-/**
- * NewTagSchema
- */
-export type NewTagSchema = {
     /**
-     * Id
+     * Llmsselected
      */
-    id: string;
+    llmsSelected?: Array<LargeLanguageModel> | null;
     /**
-     * Title
+     * Hidden
      */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
-};
-
-/**
- * UpdateTagSchema
- */
-export type UpdateTagSchema = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Color
-     */
-    color: string;
+    hidden?: boolean | null;
 };
 
 /**
@@ -364,6 +347,50 @@ export type UpdateSettingSchema = {
 };
 
 /**
+ * MemberSchema
+ */
+export type MemberSchema = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Created
+     */
+    created: string;
+    /**
+     * Modified
+     */
+    modified: string;
+    /**
+     * Conversationid
+     */
+    conversationId: string;
+    /**
+     * Userid
+     */
+    userId: string;
+    /**
+     * Addedbyid
+     */
+    addedById: string;
+    /**
+     * Llmsselected
+     */
+    llmsSelected: Array<LargeLanguageModel>;
+    /**
+     * Messagebranches
+     */
+    messageBranches: {
+        [key: string]: boolean;
+    };
+    /**
+     * Hidden
+     */
+    hidden: boolean;
+};
+
+/**
  * MessageMetadataSchema
  */
 export type MessageMetadataSchema = {
@@ -397,6 +424,17 @@ export type SyncConversation = {
 };
 
 /**
+ * SyncMember
+ */
+export type SyncMember = {
+    /**
+     * Type
+     */
+    type: "member";
+    data: MemberSchema;
+};
+
+/**
  * SyncMessage
  */
 export type SyncMessage = {
@@ -416,17 +454,6 @@ export type SyncMessageMetadata = {
      */
     type: "message-metadata";
     data: MessageMetadataSchema;
-};
-
-/**
- * SyncTag
- */
-export type SyncTag = {
-    /**
-     * Type
-     */
-    type: "tag";
-    data: TagSchema;
 };
 
 /**
@@ -487,6 +514,10 @@ export type GithubCallbackData = {
          * Code
          */
         code: string;
+        /**
+         * Redirect
+         */
+        redirect?: string | null;
     };
     url: "/api/auth/github-callback";
 };
@@ -584,6 +615,70 @@ export type CreateConversationResponses = {
 export type CreateConversationResponse =
     CreateConversationResponses[keyof CreateConversationResponses];
 
+export type PreviewConversationData = {
+    body: SharedConversationSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversations/share/preview";
+};
+
+export type PreviewConversationResponses = {
+    /**
+     * OK
+     */
+    200: PreviewConversationSchema;
+};
+
+export type PreviewConversationResponse =
+    PreviewConversationResponses[keyof PreviewConversationResponses];
+
+export type JoinConversationData = {
+    body: SharedConversationSchema;
+    path?: never;
+    query?: never;
+    url: "/api/conversations/share/join";
+};
+
+export type JoinConversationErrors = {
+    /**
+     * Bad Request
+     */
+    400: ErrorSchema;
+};
+
+export type JoinConversationError = JoinConversationErrors[keyof JoinConversationErrors];
+
+export type JoinConversationResponses = {
+    /**
+     * OK
+     */
+    200: ConversationSchema;
+};
+
+export type JoinConversationResponse = JoinConversationResponses[keyof JoinConversationResponses];
+
+export type GenerateShareLinkData = {
+    body?: never;
+    path: {
+        /**
+         * Conversation Id
+         */
+        conversation_id: string;
+    };
+    query?: never;
+    url: "/api/conversations/share/{conversation_id}";
+};
+
+export type GenerateShareLinkResponses = {
+    /**
+     * OK
+     */
+    200: ShareLinkSchema;
+};
+
+export type GenerateShareLinkResponse =
+    GenerateShareLinkResponses[keyof GenerateShareLinkResponses];
+
 export type UpdateConversationData = {
     body: UpdateConversationSchema;
     path: {
@@ -605,60 +700,6 @@ export type UpdateConversationResponses = {
 
 export type UpdateConversationResponse =
     UpdateConversationResponses[keyof UpdateConversationResponses];
-
-export type ListMyTagsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: "/api/tags/list";
-};
-
-export type ListMyTagsResponses = {
-    /**
-     * Response
-     * OK
-     */
-    200: Array<TagSchema>;
-};
-
-export type ListMyTagsResponse = ListMyTagsResponses[keyof ListMyTagsResponses];
-
-export type CreateTagData = {
-    body: NewTagSchema;
-    path?: never;
-    query?: never;
-    url: "/api/tags/create";
-};
-
-export type CreateTagResponses = {
-    /**
-     * OK
-     */
-    200: TagSchema;
-};
-
-export type CreateTagResponse = CreateTagResponses[keyof CreateTagResponses];
-
-export type UpdateTagData = {
-    body: UpdateTagSchema;
-    path: {
-        /**
-         * Tag Id
-         */
-        tag_id: string;
-    };
-    query?: never;
-    url: "/api/tags/update/{tag_id}";
-};
-
-export type UpdateTagResponses = {
-    /**
-     * OK
-     */
-    200: TagSchema;
-};
-
-export type UpdateTagResponse = UpdateTagResponses[keyof UpdateTagResponses];
 
 export type UpdateMySettingsData = {
     body: UpdateSettingSchema;
@@ -688,7 +729,7 @@ export type GlobalSyncTypesResponses = {
      * Response
      * OK
      */
-    200: SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser;
+    200: SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncUser;
 };
 
 export type GlobalSyncTypesResponse = GlobalSyncTypesResponses[keyof GlobalSyncTypesResponses];
@@ -710,7 +751,7 @@ export type GlobalSyncBootstrapResponses = {
      * Response
      * OK
      */
-    200: Array<SyncMessageMetadata | SyncMessage | SyncConversation | SyncTag | SyncUser>;
+    200: Array<SyncMessageMetadata | SyncMessage | SyncConversation | SyncMember | SyncUser>;
 };
 
 export type GlobalSyncBootstrapResponse =

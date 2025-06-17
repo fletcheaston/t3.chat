@@ -1,15 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { githubOauthClientId } from "@/env";
 import { Button } from "@/ui/button";
 
 import githubIcon from "/media/github.png";
 
+const loginSearchParser = z.object({
+    redirect: z
+        .string()
+        .optional()
+        .transform((val) => (val?.startsWith("/") ? val : undefined)),
+});
+
 export const Route = createFileRoute("/login")({
+    validateSearch: loginSearchParser,
     component: RouteComponent,
 });
 
 function RouteComponent() {
+    /**************************************************************************/
+    /* State */
+    const { redirect } = Route.useSearch();
+
     /**************************************************************************/
     /* Render */
     return (
@@ -24,7 +37,9 @@ function RouteComponent() {
                 tooltip="Login"
             >
                 <a
-                    href={`https://github.com/login/oauth/authorize?scope=user:email&client_id=${githubOauthClientId}`}
+                    href={`https://github.com/login/oauth/authorize?scope=user:email&client_id=${githubOauthClientId}${
+                        redirect ? `&redirect_uri=${encodeURIComponent(redirect)}` : ""
+                    }`}
                 >
                     Login with GitHub
                     <img

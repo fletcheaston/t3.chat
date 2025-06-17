@@ -23,7 +23,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             // Already on the login page
             if (isLoginPage) return;
 
-            throw redirect({ to: "/login" });
+            throw redirect({ to: "/login", search: { redirect: location.pathname } });
         }
 
         // Authenticated user

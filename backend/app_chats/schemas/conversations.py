@@ -1,8 +1,9 @@
 import uuid
 from datetime import datetime
 
+from .auth import UserSchema
 from .base import Schema
-from .tags import TagSchema
+from .models import LargeLanguageModel
 
 
 class ConversationSchema(Schema):
@@ -11,10 +12,8 @@ class ConversationSchema(Schema):
     modified: datetime
 
     title: str
-    tags: list[TagSchema]
-    created: datetime
 
-    message_branches: dict[str, bool]
+    owner_id: uuid.UUID
 
 
 class NewConversationSchema(Schema):
@@ -25,5 +24,27 @@ class NewConversationSchema(Schema):
 
 class UpdateConversationSchema(Schema):
     title: str | None = None
-    tag_ids: list[uuid.UUID] | None = None
+
     message_branches: dict[str, bool] | None = None
+
+    llms_selected: list[LargeLanguageModel] | None = None
+
+    hidden: bool | None = None
+
+
+class ShareLinkSchema(Schema):
+    token: str
+
+
+class SharedConversationSchema(Schema):
+    token: str
+
+
+class PreviewConversationSchema(Schema):
+    id: uuid.UUID
+    created: datetime
+    modified: datetime
+
+    title: str
+
+    owner: UserSchema

@@ -139,7 +139,7 @@ SILKY_PYTHON_PROFILER_BINARY = False
 SILKY_PYTHON_PROFILER_RESULT_PATH = "silk_profiling/"
 SILKY_META = False
 SILKY_ANALYZE_QUERIES = False
-SILKY_INTERCEPT_PERCENT = 0
+SILKY_INTERCEPT_PERCENT = 100
 
 ########################################################################################
 # Database

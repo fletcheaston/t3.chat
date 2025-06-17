@@ -8,7 +8,7 @@ export const themeNames = [
     "Fletcher's Default",
     "Black and White",
     "White and Black",
-    "Acid Headache",
+    "Ouch My Eyes",
     "Halloween",
     "Christmas",
 ] as const;
@@ -47,12 +47,12 @@ export const themeColors: Record<ThemeName, ThemeColors> = {
         "--text": "#000000",
         "--border": "#a5a5a5",
     },
-    "Acid Headache": {
-        "--primary": "#5AEC2F",
-        "--secondary": "#EC9A2F",
-        "--background": "#0F143E",
-        "--text": "#C7F8BE",
-        "--border": "#FF0041",
+    "Ouch My Eyes": {
+        "--primary": "#3cff00",
+        "--secondary": "#ff00bf",
+        "--background": "#000f73",
+        "--text": "#00fffb",
+        "--border": "#dbff00",
     },
     Halloween: {
         "--primary": "#ff4c00",
