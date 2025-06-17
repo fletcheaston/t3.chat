@@ -1,12 +1,11 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+DEBUG = os.environ.get("DEBUG")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-    )
-
     ####################################################################################
     # Basic web server settings
     DEBUG: bool = False
@@ -30,5 +29,14 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str
 
 
+class LocalSettings(Settings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+
+
 # Settings derived from .env or env vars
-SETTINGS: Settings = Settings()  # ty: ignore[missing-argument]
+SETTINGS: Settings = (
+    LocalSettings() if DEBUG else Settings()  # ty: ignore[missing-argument]
+)
