@@ -22,4 +22,4 @@ RUN uv sync
 COPY . .
 
 # Run uvicorn with ASGI and trust forwarded headers
-CMD ["uvicorn", "server.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--proxy-headers", "--forwarded-allow-ips", "*"]
+CMD ["uvicorn", "server.asgi:application", "--host", "0.0.0.0", "--port", "8080", "--workers", "4", "--proxy-headers", "--forwarded-allow-ips", "*"]

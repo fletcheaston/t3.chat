@@ -71,3 +71,14 @@ jobs:
             -   name: Docker push sha
                 run: |
                     docker push ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+
+            ##########################################################################
+            # Deploy to Cloud Run
+            -   name: Deploy to Cloud Run
+                uses: "google-github-actions/deploy-cloudrun@v2"
+                with:
+                    service: ${{ secrets.CLOUD_RUN_SERVICE_NAME }}
+                    region: ${{ secrets.CLOUD_RUN_SERVICE_REGION }}
+                    image: ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+                    env_vars: |-
+                        VERSION=${{ github.sha }}
