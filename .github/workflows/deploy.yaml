@@ -46,6 +46,8 @@ jobs:
             ##########################################################################
             # Build
             -   name: Build apps
+                env:
+                    VITE_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.VITE_GITHUB_OAUTH_CLIENT_ID }}
                 run: |
                     npm run build                    
 
@@ -61,6 +63,10 @@ jobs:
             -   name: Docker auth
                 run: |
                     gcloud auth configure-docker ${{ secrets.ARTIFACT_URL }}
+
+            -   name: Retag image
+                run: |
+                    docker image tag llm-chat ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
             -   name: Docker push sha
                 run: |
