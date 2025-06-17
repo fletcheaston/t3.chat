@@ -18,6 +18,12 @@
     "@fletcheaston/frontend#codegen": {
       "dependsOn": ["@fletcheaston/backend#codegen"]
     },
+    "@fletcheaston/backend#cp:frontend": {
+      "dependsOn": ["@fletcheaston/frontend#build"]
+    },
+    "@fletcheaston/backend#build": {
+      "dependsOn": ["@fletcheaston/backend#cp:frontend"]
+    },
     "dev": {
       "dependsOn": ["^dev"],
       "persistent": true,
