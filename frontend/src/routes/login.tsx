@@ -38,7 +38,9 @@ function RouteComponent() {
             >
                 <a
                     href={`https://github.com/login/oauth/authorize?scope=user:email&client_id=${githubOauthClientId}${
-                        redirect ? `&redirect_uri=${encodeURIComponent(redirect)}` : ""
+                        redirect && redirect !== "/"
+                            ? `&redirect_uri=${encodeURIComponent(redirect)}`
+                            : ""
                     }`}
                 >
                     Login with GitHub
