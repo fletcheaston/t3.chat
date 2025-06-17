@@ -21,8 +21,5 @@ RUN uv sync
 # Copy project files
 COPY . .
 
-# Collect static files
-RUN uv run manage.py collectstatic --noinput
-
 # Run uvicorn with ASGI and trust forwarded headers
 CMD ["uvicorn", "server.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--proxy-headers", "--forwarded-allow-ips", "*"]
