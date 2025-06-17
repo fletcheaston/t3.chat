@@ -9,7 +9,7 @@
         "migrate": "uv run manage.py migrate",
         "makemigrations": "uv run manage.py makemigrations",
         "dev": "DEBUG=True uv run manage.py runserver",
-        "build:frontend": "rsync -a ../frontend/dist/ ./chats/static/chats",
+        "build:frontend": "rsync -a ../frontend/dist/ chats/static/chats",
         "build:collectstatic": "uv run manage.py collectstatic --noinput",
         "build": "docker build -t llm-chat .",
         "worker": "uv run celery -A app_chats.jobs worker -l INFO",
