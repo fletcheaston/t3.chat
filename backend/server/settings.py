@@ -44,7 +44,8 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     ####################################################################################
     # Real domains
-    "https://t3chat.fletcheaston.com",
+    "https://llm-chat.com",
+    "https://llms.fletcheaston.com",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
@@ -58,7 +59,8 @@ ALLOWED_HOSTS: list[str] = [
     "localhost",
     ####################################################################################
     # Real domains
-    "t3chat.fletcheaston.com",
+    "llm-chat.com",
+    "llms.fletcheaston.com",
 ]
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "unsafe-none"
@@ -139,7 +141,7 @@ SILKY_PYTHON_PROFILER_BINARY = False
 SILKY_PYTHON_PROFILER_RESULT_PATH = "silk_profiling/"
 SILKY_META = False
 SILKY_ANALYZE_QUERIES = False
-SILKY_INTERCEPT_PERCENT = 100
+SILKY_INTERCEPT_PERCENT = 0
 
 ########################################################################################
 # Database
@@ -157,7 +159,7 @@ DATABASES = {
 ########################################################################################
 # Celery
 # https://docs.celeryq.dev/en/latest/userguide/configuration.html#broker-url
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = f"redis://{SETTINGS.REDIS_HOST}:6379/0"
 
 # https://docs.celeryq.dev/en/latest/userguide/configuration.html#worker-prefetch-multiplier
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1

@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     PG_HOST: str | None = None
 
     ####################################################################################
+    # Redis settings
+    REDIS_HOST: str | None = None
+
+    ####################################################################################
     # GitHub OAuth settings
     GITHUB_OAUTH_CLIENT_ID: str | None = None
     GITHUB_OAUTH_CLIENT_SECRET: str | None = None
