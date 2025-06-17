@@ -15,7 +15,7 @@ router = Router(tags=["static"])
     include_in_schema=False,
 )
 def index_html(request: HttpRequest) -> HttpResponse:
-    with open("app_chats/static/index.html") as f:
+    with open("app_chats/frontend/index.html") as f:
         content = f.read()
 
     return HttpResponse(content, content_type="text/html")
@@ -25,9 +25,9 @@ class StaticPath(StrEnum):
     pass
 
 
-for root, _, files in os.walk("app_chats/static"):
+for root, _, files in os.walk("app_chats/frontend"):
     for file in files:
-        file_path = os.path.join(root, file).replace("app_chats/static/", "")
+        file_path = os.path.join(root, file).replace("app_chats/frontend/", "")
 
         extend_enum(
             StaticPath,
@@ -42,7 +42,7 @@ for root, _, files in os.walk("app_chats/static"):
     include_in_schema=False,
 )
 def static(request: HttpRequest, path_enum: StaticPath) -> HttpResponse:
-    path = f"app_chats/static/{path_enum.value}"
+    path = f"app_chats/frontend/{path_enum.value}"
 
     if path.endswith(".html"):
         with open(path) as f:
@@ -75,3 +75,15 @@ def static(request: HttpRequest, path_enum: StaticPath) -> HttpResponse:
         return HttpResponse(content, content_type="image/png")
 
     raise ValueError(f"Unsupported path: {path}")
+
+
+@router.get(
+    "{path:str}",
+    auth=None,
+    include_in_schema=False,
+)
+def catch_all(request: HttpRequest) -> HttpResponse:
+    with open("app_chats/frontend/index.html") as f:
+        content = f.read()
+
+    return HttpResponse(content, content_type="text/html")
