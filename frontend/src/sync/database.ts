@@ -21,7 +21,7 @@ const db = new Dexie("F3Chat") as Dexie & {
 
 db.version(1).stores({
     messagesMetadata: "id,conversationId,replyToId,created",
-    messages: "id,conversationId,created",
+    messages: "id,conversationId,replyToId,authorId,created",
     conversations: "id,created",
     members: "id,conversationId,userId,[conversationId+userId],created",
     users: "id,created",

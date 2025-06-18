@@ -3,8 +3,35 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { useUser } from "@/components/auth";
+import { db } from "@/sync/database";
+import { useCachedLiveQuery } from "@/sync/utils";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
+
+function DailyMessageCounter() {
+    /**************************************************************************/
+    /* State */
+    const user = useUser();
+
+    const messageCount = useCachedLiveQuery(async () => {
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+        // First, get all messages from the user in the last day
+        const userMessages = await db.messages.where("authorId").equals(user.id).toArray();
+
+        // Then count LLM replies to those messages
+        return db.messages
+            .where("replyToId")
+            .anyOf(userMessages.map((msg) => msg.id))
+            .and((message) => message.llm !== null && new Date(message.created) >= oneDayAgo)
+            .count();
+    }, [user.id]);
+
+    /**************************************************************************/
+    /* Render */
+    return <p className="text-xs tabular-nums">{messageCount} / 100</p>;
+}
 
 export function SidebarFooter() {
     /**************************************************************************/
@@ -26,7 +53,7 @@ export function SidebarFooter() {
                 variant="plain"
                 size="custom"
                 className="hover:bg-background-light -mx-1 flex w-full items-center justify-start gap-2 px-1 py-1 text-left"
-                tooltip={null}
+                tooltip="Daily alottment of LLM messages"
             >
                 <Link to="/settings/support">
                     {user.imageUrl ? (
@@ -37,10 +64,10 @@ export function SidebarFooter() {
                         />
                     ) : null}
 
-                    <div>
+                    <div className="grow">
                         <p className="text-sm">{user.name}</p>
 
-                        <p className="text-xs">Demo</p>
+                        <DailyMessageCounter />
                     </div>
                 </Link>
             </Button>

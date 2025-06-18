@@ -1,3 +1,7 @@
+from datetime import timedelta
+from typing import Any
+
+from django.utils import timezone
 from ninja import Router
 
 from chats import models, schemas
@@ -9,13 +13,16 @@ router = Router()
 
 @router.post(
     "",
-    response={200: schemas.ConversationSchema},
+    response={
+        200: schemas.ConversationSchema,
+        429: schemas.ErrorSchema,
+    },
     by_alias=True,
 )
 def create_conversation(
     request: AuthenticatedHttpRequest,
     data: schemas.NewConversationSchema,
-) -> models.Conversation:
+) -> Any:
     conversation = models.Conversation.objects.create(
         id=data.id,
         title=data.title,
@@ -37,6 +44,17 @@ def create_conversation(
         author=request.user,
         conversation=conversation,
     )
+
+    # Check rate limit - count replies to user's messages in last 24 hours
+    # Only if they're requesting responses from any LLMs
+    if data.llms:
+        one_day_ago = timezone.now() - timedelta(days=1)
+        reply_count = models.Message.objects.filter(
+            reply_to__author=request.user, created__gte=one_day_ago
+        ).count()
+
+        if reply_count >= 100:
+            return 429, schemas.ErrorSchema(detail=schemas.ErrorMessage.RATE_LIMIT)
 
     queue_task(data.message_id, data.llms)
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Link } from "@tanstack/react-router";
-import { PanelLeftIcon, PlusIcon, SearchIcon, Settings2Icon } from "lucide-react";
+import { PanelLeftIcon, PlusIcon, Settings2Icon } from "lucide-react";
 
 import { Button } from "@/ui/button";
 import { useSidebar } from "@/ui/sidebar";
@@ -31,24 +31,6 @@ export function SidebarButtons() {
                 </Button>
 
                 <Button
-                    variant="plain"
-                    size="icon"
-                    className={cn(
-                        "hover:bg-background relative",
-                        open ? "absolute left-0 z-0 opacity-0" : ""
-                    )}
-                    tooltip="Search chats"
-                >
-                    <SearchIcon
-                        className={cn(
-                            "absolute transition-all delay-150 duration-150 ease-[cubic-bezier(.4,0,.2,1)]",
-                            open ? "-left-7" : "left-2"
-                        )}
-                    />
-                    <span className="sr-only">Search Chats</span>
-                </Button>
-
-                <Button
                     asChild
                     variant="plain"
                     size="icon"
@@ -62,7 +44,7 @@ export function SidebarButtons() {
                         <div
                             className={cn(
                                 "absolute transition-all delay-150 duration-150 ease-[cubic-bezier(.4,0,.2,1)]",
-                                open ? "-left-15" : "left-2"
+                                open ? "-left-7" : "left-2"
                             )}
                         >
                             <PlusIcon />
@@ -85,7 +67,7 @@ export function SidebarButtons() {
                         <div
                             className={cn(
                                 "absolute transition-all delay-150 duration-150 ease-[cubic-bezier(.4,0,.2,1)]",
-                                open ? "-left-24" : "left-2"
+                                open ? "-left-15" : "left-2"
                             )}
                         >
                             <Settings2Icon />

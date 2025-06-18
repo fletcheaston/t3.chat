@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 import {
     ConversationSchema,
     LargeLanguageModel,
@@ -81,7 +83,7 @@ export async function createConversation(
     }
 
     // 2. Save to API
-    await apiCreateConversation({
+    const result = await apiCreateConversation({
         body: {
             id: conversation.id,
             title: conversation.title,
@@ -92,6 +94,14 @@ export async function createConversation(
             llms,
         },
     });
+
+    if (result.error) {
+        if (result.response.status === 429) {
+            toast.error("You've exceeded the number of free LLM responses for the last 24 hours.", {
+                duration: 5000,
+            });
+        }
+    }
 }
 
 export async function createMessage(props: {
@@ -159,7 +169,7 @@ export async function createMessage(props: {
     });
 
     // 2. Save to API
-    await apiCreateMessage({
+    const result = await apiCreateMessage({
         body: {
             id: message.id,
             title: message.title,
@@ -169,6 +179,14 @@ export async function createMessage(props: {
             llms: props.llms,
         },
     });
+
+    if (result.error) {
+        if (result.response.status === 429) {
+            toast.error("You've exceeded the number of free LLM responses for the last 24 hours.", {
+                duration: 5000,
+            });
+        }
+    }
 }
 
 export async function updateMessageBranches(props: {
