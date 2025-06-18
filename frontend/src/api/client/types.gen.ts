@@ -95,6 +95,10 @@ export type SettingSchema = {
      * Visualbranchvertical
      */
     visualBranchVertical: boolean;
+    /**
+     * Visualstatsfornerds
+     */
+    visualStatsForNerds: boolean;
 };
 
 /**
@@ -176,6 +180,14 @@ export type MessageSchema = {
      */
     authorId: string | null;
     llm: LargeLanguageModel | null;
+    /**
+     * Llmcompleted
+     */
+    llmCompleted: string | null;
+    /**
+     * Tokens
+     */
+    tokens: number | null;
 };
 
 /**
@@ -387,6 +399,10 @@ export type UpdateSettingSchema = {
      * Visualbranchvertical
      */
     visualBranchVertical?: boolean | null;
+    /**
+     * Visualstatsfornerds
+     */
+    visualStatsForNerds?: boolean | null;
 };
 
 /**
