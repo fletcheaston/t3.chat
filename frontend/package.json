@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && npm run build:seo",
+        "build": "vite build --base=/static/chats",
         "codegen": "cp ../backend/openapi.json openapi.json && openapi-ts && npm run format",
         "type:check": "tsc --noEmit",
         "lint": "eslint . --fix",

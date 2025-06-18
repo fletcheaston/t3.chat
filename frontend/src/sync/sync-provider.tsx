@@ -5,7 +5,6 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 
 import { globalSyncBootstrap } from "@/api";
 import { useAnonUser } from "@/components/auth";
-import { apiUrl } from "@/env";
 
 import { SyncData, addSyncedData } from "./database";
 
@@ -19,7 +18,7 @@ export function SyncProvider(props: { children: React.ReactNode }) {
     useEffect(() => {
         if (!user) return;
 
-        wsRef.current = new ReconnectingWebSocket(`${apiUrl}/ws/sync`, [], {
+        wsRef.current = new ReconnectingWebSocket(`${window.location.origin}/ws/sync`, [], {
             connectionTimeout: 1000, // retry connect if not connected after this time, in ms
         });
 

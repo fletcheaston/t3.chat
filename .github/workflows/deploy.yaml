@@ -1,0 +1,91 @@
+name: Deploy
+on:
+    push:
+        branches:
+            - main
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    DO_NOT_TRACK: 1
+    TURBO_TELEMETRY_DISABLED: 1
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            ##########################################################################
+            # Setup
+            -   uses: actions/checkout@v3
+
+            # Setup TS
+            -   uses: actions/setup-node@v3
+                with:
+                    node-version: 22
+                    architecture: "x64"
+                    cache: "npm"
+                    cache-dependency-path: package-lock.json
+
+            # Install npm dependencies
+            -   name: Install node_modules
+                run: |
+                    npm install
+
+            # Setup Python
+            -   uses: actions/setup-python@v4
+                with:
+                    python-version: "3.13"
+
+            -   name: Install uv
+                uses: astral-sh/setup-uv@v5
+
+            ##########################################################################
+            # Build
+            -   name: Build apps
+                env:
+                    VITE_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.VITE_GITHUB_OAUTH_CLIENT_ID }}
+                run: |
+                    npm run build
+
+            ##########################################################################
+            # Authenticate with GCP
+            -   name: GCP auth
+                uses: "google-github-actions/auth@v2"
+                with:
+                    credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_CREDENTIALS }}
+
+            ##########################################################################
+            # Push to Artifact Registry
+            -   name: Docker auth
+                run: |
+                    gcloud auth configure-docker ${{ secrets.ARTIFACT_URL }}
+
+            -   name: Retag image
+                run: |
+                    docker image tag llm-chat ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+
+            -   name: Docker push sha
+                run: |
+                    docker push ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+
+            ##########################################################################
+            # Upload static files to GCS
+            -   name: GCS upload static files
+                working-directory: backend
+                run: |
+                    gcloud storage cp --recursive ./static gs://${{ secrets.GCP_GCS_BUCKET }}
+
+            ##########################################################################
+            # Deploy to Cloud Run
+            -   name: Deploy to Cloud Run
+                uses: "google-github-actions/deploy-cloudrun@v2"
+                with:
+                    service: ${{ secrets.CLOUD_RUN_SERVICE_NAME }}
+                    region: ${{ secrets.CLOUD_RUN_SERVICE_REGION }}
+                    image: ${{ secrets.ARTIFACT_URL }}/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_REPOSITORY }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+                    env_vars: |-
+                        VERSION=${{ github.sha }}

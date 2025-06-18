@@ -44,7 +44,8 @@ CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     ####################################################################################
     # Real domains
-    "https://t3chat.fletcheaston.com",
+    "https://llm-chat.com",
+    "https://llms.fletcheaston.com",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
@@ -58,14 +59,15 @@ ALLOWED_HOSTS: list[str] = [
     "localhost",
     ####################################################################################
     # Real domains
-    "t3chat.fletcheaston.com",
+    "llm-chat.com",
+    "llms.fletcheaston.com",
 ]
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "unsafe-none"
 
 ########################################################################################
 # Application definition
-AUTH_USER_MODEL = "app_chats.User"
+AUTH_USER_MODEL = "chats.User"
 
 LOGIN_URL = "/login/"
 
@@ -73,8 +75,7 @@ INSTALLED_APPS = [
     ####################################################################################
     # First apps
     "daphne",
-    "app_utils",
-    "app_chats",
+    "chats",
     ####################################################################################
     # Django's builtin apps
     "django.contrib.admin",
@@ -139,7 +140,7 @@ SILKY_PYTHON_PROFILER_BINARY = False
 SILKY_PYTHON_PROFILER_RESULT_PATH = "silk_profiling/"
 SILKY_META = False
 SILKY_ANALYZE_QUERIES = False
-SILKY_INTERCEPT_PERCENT = 100
+SILKY_INTERCEPT_PERCENT = 0
 
 ########################################################################################
 # Database
@@ -157,7 +158,7 @@ DATABASES = {
 ########################################################################################
 # Celery
 # https://docs.celeryq.dev/en/latest/userguide/configuration.html#broker-url
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = f"redis://{SETTINGS.REDIS_HOST}:6379/0"
 
 # https://docs.celeryq.dev/en/latest/userguide/configuration.html#worker-prefetch-multiplier
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
@@ -170,7 +171,7 @@ CELERY_TASK_TIME_LIMIT = 60
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": f"redis://{SETTINGS.REDIS_HOST}:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -183,7 +184,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(SETTINGS.REDIS_HOST, 6379)],
             "capacity": 1000,
             "expiry": 3,
         },
@@ -208,8 +209,9 @@ LOGGING = {
 
 ########################################################################################
 # Static files (CSS, JavaScript, Images)
+STATIC_ROOT = "static/"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+MEDIA_URL = "media/"
 
 ########################################################################################
 # Internationalization

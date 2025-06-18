@@ -10,9 +10,7 @@ import { routeTree } from "@/routeTree.gen";
 import "@/styles.css";
 
 // Configure the API client *before* any requests are made
-client.setConfig({
-    baseUrl: "http://localhost:3000",
-});
+client.setConfig({ baseUrl: window.origin });
 
 // Create a new router instance with default context values
 const router = createRouter({
