@@ -22,6 +22,16 @@ export type LargeLanguageModel =
     | "openai-gpt-4.1-nano";
 
 /**
+ * LargeLanguageModel
+ */
+export const LargeLanguageModel = {
+    UTILS_ECHO: "utils-echo",
+    OPENAI_GPT_4_1: "openai-gpt-4.1",
+    OPENAI_GPT_4_1_MINI: "openai-gpt-4.1-mini",
+    OPENAI_GPT_4_1_NANO: "openai-gpt-4.1-nano",
+} as const;
+
+/**
  * SettingSchema
  */
 export type SettingSchema = {
@@ -112,6 +122,15 @@ export type ErrorMessage =
     | "User is unauthenticated."
     | "Invalid auth token."
     | "Resource does not exist.";
+
+/**
+ * ErrorMessage
+ */
+export const ErrorMessage = {
+    USER_IS_UNAUTHENTICATED: "User is unauthenticated.",
+    INVALID_AUTH_TOKEN: "Invalid auth token.",
+    RESOURCE_DOES_NOT_EXIST: "Resource does not exist.",
+} as const;
 
 /**
  * ErrorSchema

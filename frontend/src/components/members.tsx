@@ -74,7 +74,7 @@ export function MembersDialog() {
                                 return (
                                     <div
                                         key={user.id}
-                                        className="flex items-center justify-between gap-2 border-b py-1 text-sm"
+                                        className="border-border-dark flex items-center justify-between gap-2 border-b py-1 text-sm"
                                     >
                                         <div className="grow">
                                             <p className="font-medium">{user.name}</p>
@@ -101,7 +101,7 @@ export function MembersDialog() {
                                 return (
                                     <div
                                         key={llm}
-                                        className="flex items-center justify-between gap-2 border-b py-1 text-sm"
+                                        className="border-border-dark flex items-center justify-between gap-2 border-b py-1 text-sm"
                                     >
                                         <div className="grow">
                                             <p className="font-medium">{name}</p>

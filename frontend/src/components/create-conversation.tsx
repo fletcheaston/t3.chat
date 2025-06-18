@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { LargeLanguageModel } from "@/api";
 import { useUser } from "@/components/auth";
-import { ModelSelect } from "@/components/model-select";
+import { ModelMultiSelect } from "@/components/model-select";
 import { createConversation } from "@/sync/data";
 import { Button } from "@/ui/button";
 import { Textarea } from "@/ui/textarea";
@@ -29,7 +29,7 @@ export function CreateConversation() {
     /* Render */
     return (
         <div className="bg-background/50 rounded-t-2xl p-2 pb-0 backdrop-blur-xs">
-            <div className="bg-background-light/30 mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3 backdrop-blur-xs">
+            <div className="bg-background-light/30 mb-0 flex flex-col justify-between gap-2 rounded-t-xl p-3 pb-1 backdrop-blur-xs">
                 <Textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
@@ -37,8 +37,8 @@ export function CreateConversation() {
                     className="max-h-48"
                 />
 
-                <div className="flex items-center justify-between">
-                    <ModelSelect
+                <div className="flex items-end justify-between">
+                    <ModelMultiSelect
                         llms={llms}
                         setLlms={setLlms}
                     />
