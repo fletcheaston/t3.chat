@@ -12,7 +12,7 @@ router = Router(tags=["static"])
     include_in_schema=False,
 )
 def index(request: HttpRequest) -> HttpResponse:
-    with open("static/chats/index.html") as f:
+    with open("/app/static/chats/index.html") as f:
         content = f.read()
 
     return HttpResponse(content, content_type="text/html")
@@ -24,7 +24,7 @@ def index(request: HttpRequest) -> HttpResponse:
     include_in_schema=False,
 )
 def catch_all(request: HttpRequest, path: str) -> HttpResponse:
-    with open("static/chats/index.html") as f:
+    with open("/app/static/chats/index.html") as f:
         content = f.read()
 
     return HttpResponse(content, content_type="text/html")
