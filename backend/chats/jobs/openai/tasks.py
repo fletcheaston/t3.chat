@@ -1,6 +1,7 @@
 import uuid
 
 from celery import shared_task
+from channels.layers import get_channel_layer
 from django.utils import timezone
 from openai import OpenAI
 
@@ -44,6 +45,9 @@ FROM
         stream=True,
     )
 
+    # Broadcast via channels
+    channel_layer = get_channel_layer()
+
     new_message = models.Message.objects.create(
         id=uuid.uuid4(),
         title="",
@@ -58,7 +62,7 @@ FROM
             if choice.delta.content:
                 new_message.content += choice.delta.content
                 new_message.modified = timezone.now()
-                new_message.broadcast()
+                new_message.broadcast(channel_layer)
 
     new_message.save()
 
@@ -97,6 +101,9 @@ FROM
         stream=True,
     )
 
+    # Broadcast via channels
+    channel_layer = get_channel_layer()
+
     new_message = models.Message.objects.create(
         id=uuid.uuid4(),
         title="",
@@ -111,7 +118,7 @@ FROM
             if choice.delta.content:
                 new_message.content += choice.delta.content
                 new_message.modified = timezone.now()
-                new_message.broadcast()
+                new_message.broadcast(channel_layer)
 
     new_message.save()
 
@@ -150,6 +157,9 @@ FROM
         stream=True,
     )
 
+    # Broadcast via channels
+    channel_layer = get_channel_layer()
+
     new_message = models.Message.objects.create(
         id=uuid.uuid4(),
         title="",
@@ -164,6 +174,6 @@ FROM
             if choice.delta.content:
                 new_message.content += choice.delta.content
                 new_message.modified = timezone.now()
-                new_message.broadcast()
+                new_message.broadcast(channel_layer)
 
     new_message.save()

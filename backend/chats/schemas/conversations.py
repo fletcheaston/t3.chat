@@ -19,7 +19,13 @@ class ConversationSchema(Schema):
 class NewConversationSchema(Schema):
     id: uuid.UUID
     title: str
-    tag_ids: list[uuid.UUID]
+
+    member_id: uuid.UUID
+
+    message_id: uuid.UUID
+    message_title: str
+    message_content: str
+    llms: list[LargeLanguageModel]
 
 
 class UpdateConversationSchema(Schema):

@@ -1,12 +1,12 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as React from "react";
 
 import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
+import { MessageSchema } from "@/api";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
-import { db } from "@/sync/database";
+import { createMessage, updateMessageBranches } from "@/sync/data";
 import { MessageProvider, useMessage } from "@/sync/message";
 import { Button } from "@/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
 import { Textarea } from "@/ui/textarea";
 import { cn, formatDatetime } from "@/utils";
 
-import { useUser } from "./auth";
+import { useSettings, useUser } from "./auth";
 import { Markdown } from "./markdown";
 import { llmToImageUrl, llmToName } from "./models";
 
@@ -151,94 +151,6 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
     // Initial content comes from original message
     const contentRef = useRef(props.message.content);
 
-    const branchMessage = useCallback(async () => {
-        const content = contentRef.current;
-
-        if (!content) {
-            toast.warning("Please enter something before saving your message");
-            return;
-        }
-
-        const timestamp = new Date().toISOString();
-
-        const branchedMessage: NewMessageSchema = {
-            id: crypto.randomUUID(),
-            title: "",
-            content,
-            conversationId: conversation.id,
-            replyToId: props.message.replyToId,
-            llms: [],
-        } as const;
-
-        const messageBranches = {
-            ...conversation.messageBranches,
-            [props.message.id]: false,
-            [branchedMessage.id]: true,
-        };
-
-        // Optimistic local updates
-        db.transaction("readwrite", db.members, db.messages, db.messagesMetadata, async () => {
-            const member = await db.members
-                .where(["conversationId", "userId"])
-                .equals([conversation.id, user.id])
-                .first();
-
-            if (!member) return;
-
-            await db.members.put(
-                {
-                    ...member,
-                    messageBranches,
-                },
-                member.id
-            );
-
-            await db.messages.put(
-                {
-                    created: timestamp,
-                    modified: timestamp,
-                    authorId: props.message.authorId,
-                    llm: null,
-                    ...branchedMessage,
-                },
-                branchedMessage.id
-            );
-
-            await db.messagesMetadata.put(
-                {
-                    id: branchedMessage.id,
-                    created: timestamp,
-                    conversationId: branchedMessage.conversationId,
-                    replyToId: branchedMessage.replyToId,
-                },
-                branchedMessage.id
-            );
-        });
-
-        // Sync with API
-        const { data: confirmedMessage } = await createMessage({
-            body: branchedMessage,
-        });
-
-        if (!confirmedMessage) {
-            throw new Error("Unable to edit message");
-        }
-
-        // Add confirmed data to local database
-        db.transaction("readwrite", db.messages, db.messagesMetadata, async () => {
-            await db.messages.put(confirmedMessage, confirmedMessage.id);
-            await db.messagesMetadata.put(
-                {
-                    id: confirmedMessage.id,
-                    created: confirmedMessage.created,
-                    conversationId: confirmedMessage.conversationId,
-                    replyToId: confirmedMessage.replyToId,
-                },
-                confirmedMessage.id
-            );
-        });
-    }, [props.message, conversation, user.id]);
-
     /**************************************************************************/
     /* Render */
     return (
@@ -262,7 +174,22 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
                 <div className="absolute right-0 -bottom-2 opacity-0 transition-all group-hover:opacity-100">
                     <div className="flex items-center gap-2">
                         <ActionButton
-                            onClick={branchMessage}
+                            onClick={async () => {
+                                if (!contentRef.current) return;
+
+                                try {
+                                    await createMessage({
+                                        userId: user.id,
+                                        replyToId: props.message.replyToId,
+                                        siblingMessageId: props.message.id,
+                                        conversationId: conversation.id,
+                                        content: contentRef.current,
+                                        llms: conversation.llms,
+                                    });
+                                } catch (e) {
+                                    toast.error(`Unable to create message: ${e}`);
+                                }
+                            }}
                             tooltip="Save"
                         >
                             <CheckIcon
@@ -429,58 +356,14 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
     /* State */
     const user = useUser();
+    const settings = useSettings();
     const conversation = useConversation();
-
-    const [orientation] = useState<"horizontal" | "vertical">("vertical");
 
     const selectedBranch = useMemo(() => {
         return props.messageTree.find((tree) => {
             return conversation.messageBranches[tree.message.id];
         });
     }, [props.messageTree, conversation.messageBranches]);
-
-    const setMessageBranch = useCallback(
-        async (messageId: string | null) => {
-            // Optimistic add data to local database
-            const messageBranches = {
-                ...conversation.messageBranches,
-            };
-
-            props.messageTree.forEach((tree) => {
-                messageBranches[tree.message.id] = false;
-            });
-
-            if (messageId !== null) {
-                messageBranches[messageId] = true;
-            }
-
-            const member = await db.members
-                .where(["conversationId", "userId"])
-                .equals([conversation.id, user.id])
-                .first();
-
-            if (!member) return;
-
-            await db.members.put(
-                {
-                    ...member,
-                    messageBranches,
-                },
-                member.id
-            );
-
-            // Sync with API
-            await updateConversation({
-                path: {
-                    conversation_id: conversation.id,
-                },
-                body: {
-                    messageBranches,
-                },
-            });
-        },
-        [props.messageTree, conversation.id, user.id]
-    );
 
     /**************************************************************************/
     /* Render */
@@ -502,7 +385,20 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
         return (
             <div className="flex flex-col gap-10">
                 <MessageProvider messageId={selectedBranch.message.id}>
-                    <MessageContent unsetBranch={() => setMessageBranch(null)} />
+                    <MessageContent
+                        unsetBranch={async () => {
+                            try {
+                                await updateMessageBranches({
+                                    userId: user.id,
+                                    conversationId: conversation.id,
+                                    hiddenMessageIds: [selectedBranch.message.id],
+                                    shownMessageId: null,
+                                });
+                            } catch (e) {
+                                toast.error(`Unable to change branches: ${e}`);
+                            }
+                        }}
+                    />
                 </MessageProvider>
 
                 {selectedBranch.replies.length > 0 ? (
@@ -515,23 +411,33 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     return (
         <div className="flex flex-col gap-10">
             <Carousel
-                orientation={orientation}
+                orientation={settings.visualBranchVertical ? "vertical" : "horizontal"}
                 className="w-full"
                 opts={{ startIndex: 0, watchDrag: false }}
             >
                 <CarouselContent
-                    className={orientation === "horizontal" ? "px-1 pl-4" : "py-1 pt-4"}
+                    className={settings.visualBranchVertical ? "py-1 pt-4" : "px-1 pl-4"}
                 >
                     {props.messageTree.map((tree) => (
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-background hover:bg-background-light border-background-light h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
-                                "[&_[data-limit-width]]:w-full",
-                                orientation === "horizontal" ? "mx-1" : "my-1"
+                                "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border pb-4",
+                                settings.visualBranchVertical ? "my-1" : "mx-1"
                             )}
-                            onClick={() => {
-                                setMessageBranch(tree.message.id);
+                            onClick={async () => {
+                                try {
+                                    await updateMessageBranches({
+                                        userId: user.id,
+                                        conversationId: conversation.id,
+                                        hiddenMessageIds: props.messageTree
+                                            .map(({ message }) => message.id)
+                                            .filter((id) => id !== tree.message.id),
+                                        shownMessageId: tree.message.id,
+                                    });
+                                } catch (e) {
+                                    toast.error(`Unable to change branches: ${e}`);
+                                }
                             }}
                         >
                             <MessageProvider messageId={tree.message.id}>

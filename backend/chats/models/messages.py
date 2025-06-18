@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -79,12 +79,12 @@ class Message(DjangoModel):
 
         super().save(*args, **kwargs)
 
-        self.broadcast()
-
-    def broadcast(self) -> None:
         # Broadcast via channels
         channel_layer = get_channel_layer()
 
+        self.broadcast(channel_layer)
+
+    def broadcast(self, channel_layer: Any) -> None:
         async_to_sync(channel_layer.group_send)(
             f"user-{self.conversation.owner_id}",
             {

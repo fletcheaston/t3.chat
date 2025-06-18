@@ -9,6 +9,7 @@ export default defineConfig({
             name: "@hey-api/sdk",
         },
         {
+            enums: "javascript",
             name: "@hey-api/typescript",
         },
     ],

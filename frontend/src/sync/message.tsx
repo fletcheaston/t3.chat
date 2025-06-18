@@ -14,7 +14,9 @@ export function MessageProvider(props: { messageId: string; children: React.Reac
         return db.messages.get(props.messageId);
     }, [props.messageId]);
 
-    if (message === undefined) return null;
+    if (message === undefined) {
+        return <div className="min-h-[70px]" />;
+    }
 
     /**************************************************************************/
     /* Render */

@@ -113,14 +113,14 @@ export function ConversationSidebar() {
                 <SidebarContent>
                     <SidebarGroup>
                         <SidebarGroupLabel className="flex justify-between gap-2">
-                            <h2>Chats</h2>
+                            <div>Chats</div>
 
                             <Button
                                 size="icon"
                                 variant="plain"
                                 className="hover:bg-background-light bg-background size-6 opacity-0 group-hover:opacity-100"
                                 onClick={() => setShowAll((prevState) => !prevState)}
-                                tooltip={showAll ? "Show all chats" : "Hide hidden chats"}
+                                tooltip={showAll ? "Hide hidden chats" : "Show all chats"}
                             >
                                 {showAll ? (
                                     <EyeOffIcon className="h-4 w-4" />

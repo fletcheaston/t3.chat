@@ -23,6 +23,8 @@ class SettingSchema(Schema):
     visual_theme_text_override: str
     visual_theme_border_override: str
 
+    visual_branch_vertical: bool
+
 
 class UpdateSettingSchema(Schema):
     llm_nickname: str | None = None
@@ -37,3 +39,5 @@ class UpdateSettingSchema(Schema):
     visual_theme_background_override: str | None = None
     visual_theme_text_override: str | None = None
     visual_theme_border_override: str | None = None
+
+    visual_branch_vertical: bool | None = None

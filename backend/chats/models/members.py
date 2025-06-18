@@ -44,7 +44,7 @@ class ConversationMember(DjangoModel):
         default=list,
     )
 
-    message_branches = models.JSONField(default=dict)
+    message_branches = models.JSONField(blank=True, default=dict)
 
     hidden = models.BooleanField(default=False)
 

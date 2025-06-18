@@ -22,6 +22,16 @@ export type LargeLanguageModel =
     | "openai-gpt-4.1-nano";
 
 /**
+ * LargeLanguageModel
+ */
+export const LargeLanguageModel = {
+    UTILS_ECHO: "utils-echo",
+    OPENAI_GPT_4_1: "openai-gpt-4.1",
+    OPENAI_GPT_4_1_MINI: "openai-gpt-4.1-mini",
+    OPENAI_GPT_4_1_NANO: "openai-gpt-4.1-nano",
+} as const;
+
+/**
  * SettingSchema
  */
 export type SettingSchema = {
@@ -81,6 +91,10 @@ export type SettingSchema = {
      * Visualthemeborderoverride
      */
     visualThemeBorderOverride: string;
+    /**
+     * Visualbranchvertical
+     */
+    visualBranchVertical: boolean;
 };
 
 /**
@@ -108,6 +122,15 @@ export type ErrorMessage =
     | "User is unauthenticated."
     | "Invalid auth token."
     | "Resource does not exist.";
+
+/**
+ * ErrorMessage
+ */
+export const ErrorMessage = {
+    USER_IS_UNAUTHENTICATED: "User is unauthenticated.",
+    INVALID_AUTH_TOKEN: "Invalid auth token.",
+    RESOURCE_DOES_NOT_EXIST: "Resource does not exist.",
+} as const;
 
 /**
  * ErrorSchema
@@ -224,9 +247,25 @@ export type NewConversationSchema = {
      */
     title: string;
     /**
-     * Tagids
+     * Memberid
      */
-    tagIds: Array<string>;
+    memberId: string;
+    /**
+     * Messageid
+     */
+    messageId: string;
+    /**
+     * Messagetitle
+     */
+    messageTitle: string;
+    /**
+     * Messagecontent
+     */
+    messageContent: string;
+    /**
+     * Llms
+     */
+    llms: Array<LargeLanguageModel>;
 };
 
 /**
@@ -344,6 +383,10 @@ export type UpdateSettingSchema = {
      * Visualthemeborderoverride
      */
     visualThemeBorderOverride?: string | null;
+    /**
+     * Visualbranchvertical
+     */
+    visualBranchVertical?: boolean | null;
 };
 
 /**
