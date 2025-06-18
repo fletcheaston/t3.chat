@@ -1,7 +1,16 @@
 import { useMemo, useRef, useState } from "react";
 import * as React from "react";
 
-import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react";
+import {
+    BanIcon,
+    BotIcon,
+    CheckIcon,
+    Clock4Icon,
+    CopyIcon,
+    EditIcon,
+    SplitIcon,
+    ZapIcon,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { MessageSchema } from "@/api";
@@ -249,6 +258,8 @@ function OtherMessage(props: {
 }) {
     /**************************************************************************/
     /* State */
+    const settings = useSettings();
+
     const ref = useRef<HTMLDivElement>(null);
 
     // useEffect(() => {
@@ -256,6 +267,17 @@ function OtherMessage(props: {
     //
     //     ref.current.scrollIntoView({ inline: "end", behavior: "smooth" });
     // }, [props.message.content]);
+
+    const delta = useMemo(() => {
+        if (!props.message.llmCompleted) {
+            return null;
+        }
+
+        const started = new Date(props.message.created);
+        const completed = new Date(props.message.llmCompleted);
+
+        return completed.getTime() - started.getTime();
+    }, [props.message.created, props.message.modified]);
 
     /**************************************************************************/
     /* Render */
@@ -296,8 +318,38 @@ function OtherMessage(props: {
                         <img
                             src={props.authorImageUrl}
                             alt={props.authorName}
-                            className="mb-1 size-4 rounded"
+                            className="size-3 rounded"
                         />
+                    ) : null}
+
+                    {settings.visualStatsForNerds && delta && props.message.tokens ? (
+                        <>
+                            <div className="border-background-light h-3 border-l" />
+
+                            <ZapIcon className="size-3" />
+
+                            <p>{(props.message.tokens / (delta / 1000)).toFixed(1)} tok / sec</p>
+                        </>
+                    ) : null}
+
+                    {settings.visualStatsForNerds && props.message.tokens ? (
+                        <>
+                            <div className="border-background-light h-3 border-l" />
+
+                            <BotIcon className="size-3" />
+
+                            <p>{props.message.tokens} tokens</p>
+                        </>
+                    ) : null}
+
+                    {settings.visualStatsForNerds && delta ? (
+                        <>
+                            <div className="border-background-light h-3 border-l" />
+
+                            <Clock4Icon className="size-3" />
+
+                            <p>{(delta / 1000).toFixed(2)} sec</p>
+                        </>
                     ) : null}
                 </div>
             </div>

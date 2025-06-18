@@ -24,6 +24,7 @@ class SettingSchema(Schema):
     visual_theme_border_override: str
 
     visual_branch_vertical: bool
+    visual_stats_for_nerds: bool
 
 
 class UpdateSettingSchema(Schema):
@@ -41,3 +42,4 @@ class UpdateSettingSchema(Schema):
     visual_theme_border_override: str | None = None
 
     visual_branch_vertical: bool | None = None
+    visual_stats_for_nerds: bool | None = None

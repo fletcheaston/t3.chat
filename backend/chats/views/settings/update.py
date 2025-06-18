@@ -55,6 +55,9 @@ def update_my_settings(  # noqa: C901
     if data.visual_branch_vertical is not None:
         setting.visual_branch_vertical = data.visual_branch_vertical
 
+    if data.visual_stats_for_nerds is not None:
+        setting.visual_stats_for_nerds = data.visual_stats_for_nerds
+
     # Save and return
     setting.save()
 

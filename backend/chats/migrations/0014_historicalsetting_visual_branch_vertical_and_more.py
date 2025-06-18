@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="historicalsetting",
             name="visual_branch_vertical",
-            field=models.TextField(blank=True, default=False),
+            field=models.TextField(blank=True, default=True),
         ),
         migrations.AddField(
             model_name="setting",
             name="visual_branch_vertical",
-            field=models.TextField(blank=True, default=False),
+            field=models.TextField(blank=True, default=True),
         ),
         migrations.AlterField(
             model_name="conversationmember",

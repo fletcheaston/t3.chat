@@ -1,5 +1,6 @@
 import uuid
 
+import tiktoken
 from celery import shared_task
 from channels.layers import get_channel_layer
 from django.utils import timezone
@@ -64,6 +65,12 @@ FROM
                 new_message.modified = timezone.now()
                 new_message.broadcast(channel_layer)
 
+    new_message.llm_completed = timezone.now()
+
+    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
+
+    new_message.tokens = len(tokens)
+
     new_message.save()
 
 
@@ -120,6 +127,12 @@ FROM
                 new_message.modified = timezone.now()
                 new_message.broadcast(channel_layer)
 
+    new_message.llm_completed = timezone.now()
+
+    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
+
+    new_message.tokens = len(tokens)
+
     new_message.save()
 
 
@@ -175,5 +188,11 @@ FROM
                 new_message.content += choice.delta.content
                 new_message.modified = timezone.now()
                 new_message.broadcast(channel_layer)
+
+    new_message.llm_completed = timezone.now()
+
+    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
+
+    new_message.tokens = len(tokens)
 
     new_message.save()

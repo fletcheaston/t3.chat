@@ -42,7 +42,8 @@ class Setting(DjangoModel):
     visual_theme_text_override = models.TextField(default="", blank=True)
     visual_theme_border_override = models.TextField(default="", blank=True)
 
-    visual_branch_vertical = models.TextField(default=False, blank=True)
+    visual_branch_vertical = models.TextField(default=True, blank=True)
+    visual_stats_for_nerds = models.TextField(default=False, blank=True)
 
     ############################################################################
     # Queryset managers

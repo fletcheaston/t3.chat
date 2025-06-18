@@ -16,6 +16,7 @@ import {
 import { ColorPicker } from "@/ui/color-picker";
 import { Label } from "@/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select";
+import { Switch } from "@/ui/switch";
 import { cn } from "@/utils";
 
 export const Route = createFileRoute("/settings/visuals")({
@@ -213,6 +214,34 @@ function Theme() {
     );
 }
 
+function StatsForNerds() {
+    /**************************************************************************/
+    /* State */
+    const settings = useSettings();
+    const updateSettings = useUpdateSetting();
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <div className="flex items-center gap-2">
+            <Label
+                htmlFor="stats"
+                className="mb-0 cursor-pointer pl-2 text-lg"
+            >
+                Stats for Nerds
+            </Label>
+
+            <Switch
+                id="stats"
+                checked={settings.visualStatsForNerds}
+                onCheckedChange={(checked) => {
+                    updateSettings("visualStatsForNerds", checked);
+                }}
+            />
+        </div>
+    );
+}
+
 function BranchOrientation() {
     /**************************************************************************/
     /* State */
@@ -304,8 +333,10 @@ function RouteComponent() {
         <div className="pb-8">
             <h1 className="text-4xl font-semibold">Visual Settings</h1>
 
-            <div className="my-4 flex flex-col gap-16">
+            <div className="my-4 flex flex-col gap-10">
                 <Theme />
+
+                <StatsForNerds />
 
                 <BranchOrientation />
             </div>

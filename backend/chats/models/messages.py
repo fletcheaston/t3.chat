@@ -48,6 +48,17 @@ class Message(DjangoModel):
         on_delete=models.PROTECT,
     )
 
+    llm_completed = models.DateTimeField(
+        blank=True,
+        default=None,
+        null=True,
+    )
+    tokens = models.IntegerField(
+        blank=True,
+        default=None,
+        null=True,
+    )
+
     ############################################################################
     # Queryset managers
     objects = MessageQuerySet.as_manager()

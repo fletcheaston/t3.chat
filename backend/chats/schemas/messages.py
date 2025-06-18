@@ -26,6 +26,9 @@ class MessageSchema(Schema):
 
     llm: LargeLanguageModel | None
 
+    llm_completed: datetime | None
+    tokens: int | None
+
 
 class NewMessageSchema(Schema):
     id: uuid.UUID
