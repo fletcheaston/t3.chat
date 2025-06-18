@@ -1,5 +1,5 @@
-# Use Python 3.12 slim image as base
-FROM python:3.12-slim
+# Use Python 3.13 slim image as base
+FROM python:3.13-slim
 
 # https://docs.astral.sh/uv/guides/integration/docker/#installing-uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/

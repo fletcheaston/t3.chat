@@ -15,16 +15,16 @@
       "dependsOn": ["@fletcheaston/backend#codegen"]
     },
     "@fletcheaston/backend#build:frontend": {
-      "dependsOn": ["@fletcheaston/frontend#build"]
+      "dependsOn": [
+        "@fletcheaston/backend#setup",
+        "@fletcheaston/frontend#build"
+      ]
     },
     "@fletcheaston/backend#build:collectstatic": {
-      "dependsOn": ["@fletcheaston/backend#setup"]
+      "dependsOn": ["@fletcheaston/backend#build:frontend"]
     },
     "@fletcheaston/backend#build": {
-      "dependsOn": [
-        "@fletcheaston/backend#build:frontend",
-        "@fletcheaston/backend#build:collectstatic"
-      ]
+      "dependsOn": ["@fletcheaston/backend#build:collectstatic"]
     },
     "dev": {
       "dependsOn": ["^dev"],
