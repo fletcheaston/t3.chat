@@ -40,7 +40,7 @@ DEBUG=True
 VERSION=local
 SECRET_KEY=local
 
-PG_DB=t3chat
+PG_DB=postgres
 PG_USER=postgres
 PG_PASSWORD=postgres
 PG_HOST=localhost
@@ -51,6 +51,9 @@ GITHUB_OAUTH_CLIENT_SECRET=fake
 OPENAI_API_KEY=fake
 GEMINI_API_KEY=fake
 ```
+
+While you do NOT need to enter a valid `GITHUB_OAUTH_CLIENT_ID` or `GITHUB_OAUTH_CLIENT_SECRET` when running locally,
+you will need to add a valid `OPENAI_API_KEY` and `GEMINI_API_KEY` to run these models.
 
 ## Run database migrations
 
@@ -70,25 +73,7 @@ To do so, run this from the root of the repo:
 npm run dev
 ```
 
-This will run the frontend on [localhost:3000](http://localhost:3000) and the backend
-on [localhost:8000](http://localhost:8000).
+This will run the frontend on [localhost:3000](http://localhost:3000), the backend
+on [localhost:8000](http://localhost:8000), and a Celery worker.
 
 You can ensure the backend is running by visiting [the API docs](http://localhost:8000/api/docs).
-
-## Create user
-
-To create a user, run:
-
-```shell
-cd backend
-npm run create:user
-```
-
-## Run tests
-
-Before running tests, you'll need to create a new local database with the name `test`.
-Once you have that database, run:
-
-```shell
-npm run test
-```
