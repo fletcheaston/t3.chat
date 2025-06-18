@@ -17,7 +17,6 @@ import { Route as ChatImport } from "./routes/chat"
 import { Route as IndexImport } from "./routes/index"
 import { Route as ChatIndexImport } from "./routes/chat.index"
 import { Route as SettingsVisualsImport } from "./routes/settings.visuals"
-import { Route as SettingsSupportImport } from "./routes/settings.support"
 import { Route as SettingsModelsImport } from "./routes/settings.models"
 import { Route as JoinTokenImport } from "./routes/join.$token"
 import { Route as ChatChatIdImport } from "./routes/chat.$chatId"
@@ -57,12 +56,6 @@ const ChatIndexRoute = ChatIndexImport.update({
 const SettingsVisualsRoute = SettingsVisualsImport.update({
   id: "/visuals",
   path: "/visuals",
-  getParentRoute: () => SettingsRoute,
-} as any)
-
-const SettingsSupportRoute = SettingsSupportImport.update({
-  id: "/support",
-  path: "/support",
   getParentRoute: () => SettingsRoute,
 } as any)
 
@@ -137,13 +130,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof SettingsModelsImport
       parentRoute: typeof SettingsImport
     }
-    "/settings/support": {
-      id: "/settings/support"
-      path: "/support"
-      fullPath: "/settings/support"
-      preLoaderRoute: typeof SettingsSupportImport
-      parentRoute: typeof SettingsImport
-    }
     "/settings/visuals": {
       id: "/settings/visuals"
       path: "/visuals"
@@ -177,13 +163,11 @@ const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
 interface SettingsRouteChildren {
   SettingsModelsRoute: typeof SettingsModelsRoute
-  SettingsSupportRoute: typeof SettingsSupportRoute
   SettingsVisualsRoute: typeof SettingsVisualsRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
   SettingsModelsRoute: SettingsModelsRoute,
-  SettingsSupportRoute: SettingsSupportRoute,
   SettingsVisualsRoute: SettingsVisualsRoute,
 }
 
@@ -199,7 +183,6 @@ export interface FileRoutesByFullPath {
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
   "/settings/models": typeof SettingsModelsRoute
-  "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
   "/chat/": typeof ChatIndexRoute
 }
@@ -211,7 +194,6 @@ export interface FileRoutesByTo {
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
   "/settings/models": typeof SettingsModelsRoute
-  "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
   "/chat": typeof ChatIndexRoute
 }
@@ -225,7 +207,6 @@ export interface FileRoutesById {
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
   "/settings/models": typeof SettingsModelsRoute
-  "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
   "/chat/": typeof ChatIndexRoute
 }
@@ -240,7 +221,6 @@ export interface FileRouteTypes {
     | "/chat/$chatId"
     | "/join/$token"
     | "/settings/models"
-    | "/settings/support"
     | "/settings/visuals"
     | "/chat/"
   fileRoutesByTo: FileRoutesByTo
@@ -251,7 +231,6 @@ export interface FileRouteTypes {
     | "/chat/$chatId"
     | "/join/$token"
     | "/settings/models"
-    | "/settings/support"
     | "/settings/visuals"
     | "/chat"
   id:
@@ -263,7 +242,6 @@ export interface FileRouteTypes {
     | "/chat/$chatId"
     | "/join/$token"
     | "/settings/models"
-    | "/settings/support"
     | "/settings/visuals"
     | "/chat/"
   fileRoutesById: FileRoutesById
@@ -319,7 +297,6 @@ export const routeTree = rootRoute
       "filePath": "settings.tsx",
       "children": [
         "/settings/models",
-        "/settings/support",
         "/settings/visuals"
       ]
     },
@@ -332,10 +309,6 @@ export const routeTree = rootRoute
     },
     "/settings/models": {
       "filePath": "settings.models.tsx",
-      "parent": "/settings"
-    },
-    "/settings/support": {
-      "filePath": "settings.support.tsx",
       "parent": "/settings"
     },
     "/settings/visuals": {

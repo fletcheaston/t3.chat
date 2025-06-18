@@ -55,7 +55,7 @@ export function SidebarFooter() {
                 className="hover:bg-background-light -mx-1 flex w-full items-center justify-start gap-2 px-1 py-1 text-left"
                 tooltip="Daily alottment of LLM messages"
             >
-                <Link to="/settings/support">
+                <Link to="/settings/visuals">
                     {user.imageUrl ? (
                         <img
                             src={user.imageUrl}

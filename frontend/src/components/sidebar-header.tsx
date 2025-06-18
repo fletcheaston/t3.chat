@@ -3,7 +3,6 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { Button } from "@/ui/button";
-import { F3 } from "@/ui/logo";
 import { Separator } from "@/ui/separator";
 
 export function SidebarHeader() {
@@ -15,9 +14,7 @@ export function SidebarHeader() {
             data-sidebar="header"
             className="flex flex-col items-center gap-2 py-0.5"
         >
-            <h1 className="mt-0.5 h-3.5 select-none">
-                <F3 />
-            </h1>
+            <h1 className="my-0 h-4 select-none">Fletcher's LLM Chat</h1>
 
             <Button
                 asChild

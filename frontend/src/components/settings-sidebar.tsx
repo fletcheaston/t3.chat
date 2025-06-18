@@ -61,12 +61,6 @@ export function SettingsSidebar() {
                         to="/settings/visuals"
                         pathname={pathname}
                     />
-
-                    <SettingsLink
-                        title="Support"
-                        to="/settings/support"
-                        pathname={pathname}
-                    />
                 </SidebarMenu>
             </SidebarGroupContent>
         </>
