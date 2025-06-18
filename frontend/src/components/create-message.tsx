@@ -34,7 +34,7 @@ export function CreateMessage() {
                     className="max-h-48"
                 />
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-end justify-between">
                     <ModelMultiSelect
                         llms={conversation.llms}
                         setLlms={(llms) => {
