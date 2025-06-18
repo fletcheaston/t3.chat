@@ -3,8 +3,31 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 
 import { useUser } from "@/components/auth";
+import { db } from "@/sync/database";
+import { useCachedLiveQuery } from "@/sync/utils";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
+
+function DailyMessageCounter() {
+    /**************************************************************************/
+    /* State */
+    const user = useUser();
+
+    const messageCount = useCachedLiveQuery(async () => {
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+        return db.messages
+            .where("authorId")
+            .equals(user.id)
+            .and((message) => new Date(message.created) >= oneDayAgo)
+            .count();
+    }, [user.id]);
+
+    /**************************************************************************/
+    /* Render */
+    return <p className="text-xs tabular-nums">{messageCount} / 100 Messages</p>;
+}
 
 export function SidebarFooter() {
     /**************************************************************************/
@@ -37,10 +60,10 @@ export function SidebarFooter() {
                         />
                     ) : null}
 
-                    <div>
+                    <div className="grow">
                         <p className="text-sm">{user.name}</p>
 
-                        <p className="text-xs">Demo</p>
+                        <DailyMessageCounter />
                     </div>
                 </Link>
             </Button>
