@@ -17,10 +17,14 @@ function DailyMessageCounter() {
         const oneDayAgo = new Date();
         oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
+        // First, get all messages from the user in the last day
+        const userMessages = await db.messages.where("authorId").equals(user.id).toArray();
+
+        // Then count LLM replies to those messages
         return db.messages
-            .where("authorId")
-            .equals(user.id)
-            .and((message) => new Date(message.created) >= oneDayAgo)
+            .where("replyToId")
+            .anyOf(userMessages.map((msg) => msg.id))
+            .and((message) => message.llm !== null && new Date(message.created) >= oneDayAgo)
             .count();
     }, [user.id]);
 
