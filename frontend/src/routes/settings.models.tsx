@@ -293,6 +293,20 @@ function RouteComponent() {
                 </div>
 
                 <div className="flex flex-col gap-2">
+                    <h3 className="text-lg font-semibold">Gemini Models</h3>
+
+                    <ModelCard llm="gemini-2.0-flash" />
+
+                    <ModelCard llm="gemini-2.0-flash-lite" />
+
+                    <ModelCard llm="gemini-2.5-pro" />
+
+                    <ModelCard llm="gemini-2.5-flash" />
+
+                    <ModelCard llm="gemini-2.5-flash-lite" />
+                </div>
+
+                <div className="flex flex-col gap-2">
                     <h3 className="text-lg font-semibold">Test Models</h3>
 
                     <ModelCard llm="utils-echo" />

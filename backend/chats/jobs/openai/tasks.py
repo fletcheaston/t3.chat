@@ -1,198 +1,44 @@
 import uuid
 
-import tiktoken
 from celery import shared_task
-from channels.layers import get_channel_layer
-from django.utils import timezone
 from openai import OpenAI
 
-from chats import models, schemas
+from chats import schemas
 from server.env import SETTINGS
+
+from ..stream import stream_completions
 
 client = OpenAI(api_key=SETTINGS.OPENAI_API_KEY)
 
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1}")
 def openai_gpt_4_1(message_id: uuid.UUID) -> None:
-    # https://platform.openai.com/docs/models/gpt-4.1
-    message = models.Message.objects.get(id=message_id)
-    settings = models.Setting.objects.get(user_id=message.author_id)
-
-    messages = models.Message.objects.raw(
-        """
-SELECT
-    *
-FROM
-    threaded_messages(%s, %s::integer);
-""",
-        [message_id, 1_047_576 // 4],
-    )
-
-    stream = client.chat.completions.create(
+    stream_completions(
+        message_id=message_id,
         model="gpt-4.1",
-        messages=[
-            {
-                "role": "developer",
-                "content": settings.developer_prompt,
-            },
-            *[
-                {
-                    "role": message.role,
-                    "content": message.content,
-                }
-                for message in messages
-            ],
-        ],
-        stream=True,
-    )
-
-    # Broadcast via channels
-    channel_layer = get_channel_layer()
-
-    new_message = models.Message.objects.create(
-        id=uuid.uuid4(),
-        title="",
-        content="",
         llm=schemas.LargeLanguageModel.OPENAI_GPT_4_1,
-        conversation_id=message.conversation_id,
-        reply_to=message,
+        input_context_size=1_047_576,
+        client=client,
     )
-
-    for event in stream:
-        for choice in event.choices:
-            if choice.delta.content:
-                new_message.content += choice.delta.content
-                new_message.modified = timezone.now()
-                new_message.broadcast(channel_layer)
-
-    new_message.llm_completed = timezone.now()
-
-    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
-
-    new_message.tokens = len(tokens)
-
-    new_message.save()
 
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1_MINI}")
 def openai_gpt_4_1_mini(message_id: uuid.UUID) -> None:
-    # https://platform.openai.com/docs/models/gpt-4.1-mini
-    message = models.Message.objects.get(id=message_id)
-    settings = models.Setting.objects.get(user_id=message.author_id)
-
-    messages = models.Message.objects.raw(
-        """
-SELECT
-    *
-FROM
-    threaded_messages(%s, %s::integer);
-""",
-        [message_id, 1_047_576 // 4],
-    )
-
-    stream = client.chat.completions.create(
+    stream_completions(
+        message_id=message_id,
         model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "developer",
-                "content": settings.developer_prompt,
-            },
-            *[
-                {
-                    "role": message.role,
-                    "content": message.content,
-                }
-                for message in messages
-            ],
-        ],
-        stream=True,
-    )
-
-    # Broadcast via channels
-    channel_layer = get_channel_layer()
-
-    new_message = models.Message.objects.create(
-        id=uuid.uuid4(),
-        title="",
-        content="",
         llm=schemas.LargeLanguageModel.OPENAI_GPT_4_1_MINI,
-        conversation_id=message.conversation_id,
-        reply_to=message,
+        input_context_size=1_047_576,
+        client=client,
     )
-
-    for event in stream:
-        for choice in event.choices:
-            if choice.delta.content:
-                new_message.content += choice.delta.content
-                new_message.modified = timezone.now()
-                new_message.broadcast(channel_layer)
-
-    new_message.llm_completed = timezone.now()
-
-    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
-
-    new_message.tokens = len(tokens)
-
-    new_message.save()
 
 
 @shared_task(name=f"openai.{schemas.LargeLanguageModel.OPENAI_GPT_4_1_NANO}")
 def openai_gpt_4_1_nano(message_id: uuid.UUID) -> None:
-    # https://platform.openai.com/docs/models/gpt-4.1-nano
-    message = models.Message.objects.get(id=message_id)
-    settings = models.Setting.objects.get(user_id=message.author_id)
-
-    messages = models.Message.objects.raw(
-        """
-SELECT
-    *
-FROM
-    threaded_messages(%s, %s::integer);
-""",
-        [message_id, 1_047_576 // 4],
-    )
-
-    stream = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {
-                "role": "developer",
-                "content": settings.developer_prompt,
-            },
-            *[
-                {
-                    "role": message.role,
-                    "content": message.content,
-                }
-                for message in messages
-            ],
-        ],
-        stream=True,
-    )
-
-    # Broadcast via channels
-    channel_layer = get_channel_layer()
-
-    new_message = models.Message.objects.create(
-        id=uuid.uuid4(),
-        title="",
-        content="",
+    stream_completions(
+        message_id=message_id,
+        model="gpt-4.1-nano",
         llm=schemas.LargeLanguageModel.OPENAI_GPT_4_1_NANO,
-        conversation_id=message.conversation_id,
-        reply_to=message,
+        input_context_size=1_047_576,
+        client=client,
     )
-
-    for event in stream:
-        for choice in event.choices:
-            if choice.delta.content:
-                new_message.content += choice.delta.content
-                new_message.modified = timezone.now()
-                new_message.broadcast(channel_layer)
-
-    new_message.llm_completed = timezone.now()
-
-    tokens = tiktoken.get_encoding("o200k_base").encode(new_message.content)
-
-    new_message.tokens = len(tokens)
-
-    new_message.save()

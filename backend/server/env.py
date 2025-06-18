@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     ####################################################################################
     # API keys
     OPENAI_API_KEY: str | None = None
+    GEMINI_API_KEY: str | None = None
 
 
 # Settings derived from .env or env vars
