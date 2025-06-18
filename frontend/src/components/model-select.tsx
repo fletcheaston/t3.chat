@@ -48,7 +48,7 @@ export function ModelMultiSelect(props: {
     return (
         <div className="grow">
             {props.llms.length > 0 ? (
-                <div className="flex gap-1 px-1 py-1 text-sm">
+                <div className="flex flex-wrap gap-1 px-1 py-1 text-sm">
                     {props.llms.map((llm) => {
                         return (
                             <Button
@@ -71,7 +71,7 @@ export function ModelMultiSelect(props: {
             ) : null}
 
             {unselectedLlms.length > 0 ? (
-                <div className="flex gap-1 px-1 py-1 text-sm">
+                <div className="flex flex-wrap gap-1 px-1 py-1 text-sm">
                     {unselectedLlms.map((llm) => {
                         return (
                             <Button

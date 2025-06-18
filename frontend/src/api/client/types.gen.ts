@@ -19,7 +19,12 @@ export type LargeLanguageModel =
     | "utils-echo"
     | "openai-gpt-4.1"
     | "openai-gpt-4.1-mini"
-    | "openai-gpt-4.1-nano";
+    | "openai-gpt-4.1-nano"
+    | "gemini-2.0-flash"
+    | "gemini-2.0-flash-lite"
+    | "gemini-2.5-pro"
+    | "gemini-2.5-flash"
+    | "gemini-2.5-flash-lite";
 
 /**
  * LargeLanguageModel
@@ -29,6 +34,11 @@ export const LargeLanguageModel = {
     OPENAI_GPT_4_1: "openai-gpt-4.1",
     OPENAI_GPT_4_1_MINI: "openai-gpt-4.1-mini",
     OPENAI_GPT_4_1_NANO: "openai-gpt-4.1-nano",
+    GEMINI_2_0_FLASH: "gemini-2.0-flash",
+    GEMINI_2_0_FLASH_LITE: "gemini-2.0-flash-lite",
+    GEMINI_2_5_PRO: "gemini-2.5-pro",
+    GEMINI_2_5_FLASH: "gemini-2.5-flash",
+    GEMINI_2_5_FLASH_LITE: "gemini-2.5-flash-lite",
 } as const;
 
 /**

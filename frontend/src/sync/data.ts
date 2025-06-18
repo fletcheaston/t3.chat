@@ -49,6 +49,8 @@ export async function createConversation(
         replyToId: null,
         authorId: userId,
         llm: null,
+        llmCompleted: null,
+        tokens: null,
     };
 
     await db.transaction(
@@ -113,6 +115,8 @@ export async function createMessage(props: {
         replyToId: props.replyToId,
         authorId: props.userId,
         llm: null,
+        llmCompleted: null,
+        tokens: null,
     };
 
     await db.transaction("readwrite", db.messages, db.messagesMetadata, db.members, async () => {
