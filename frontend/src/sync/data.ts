@@ -167,19 +167,19 @@ export async function createMessage(props: {
     });
 }
 
-export async function updateMessageBranches(
-    userId: string,
-    conversationId: string,
-    hiddenMessageIds: Array<string>,
-    shownMessageId: string
-) {
+export async function updateMessageBranches(props: {
+    userId: string;
+    conversationId: string;
+    hiddenMessageIds: Array<string>;
+    shownMessageId: string | null;
+}) {
     // 1. Optimistically update local database
     let messageBranches: Record<string, boolean> = {};
 
     await db.transaction("readwrite", db.members, async () => {
         const member = await db.members
             .where(["conversationId", "userId"])
-            .equals([conversationId, userId])
+            .equals([props.conversationId, props.userId])
             .first();
 
         if (!member) {
@@ -188,11 +188,13 @@ export async function updateMessageBranches(
 
         messageBranches = { ...member.messageBranches };
 
-        hiddenMessageIds.forEach((id) => {
+        props.hiddenMessageIds.forEach((id) => {
             messageBranches[id] = false;
         });
 
-        messageBranches[shownMessageId] = true;
+        if (props.shownMessageId) {
+            messageBranches[props.shownMessageId] = true;
+        }
 
         await db.members.put(
             {
@@ -208,7 +210,7 @@ export async function updateMessageBranches(
         body: {
             messageBranches,
         },
-        path: { conversation_id: conversationId },
+        path: { conversation_id: props.conversationId },
     });
 }
 

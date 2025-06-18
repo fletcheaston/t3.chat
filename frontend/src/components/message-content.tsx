@@ -1,13 +1,12 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import * as React from "react";
 
 import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageSchema, updateConversation } from "@/api";
+import { MessageSchema } from "@/api";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
-import { createMessage } from "@/sync/data";
-import { db } from "@/sync/database";
+import { createMessage, updateMessageBranches } from "@/sync/data";
 import { MessageProvider, useMessage } from "@/sync/message";
 import { Button } from "@/ui/button";
 import {
@@ -359,56 +358,13 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     const user = useUser();
     const conversation = useConversation();
 
-    const [orientation] = useState<"horizontal" | "vertical">("vertical");
+    const [orientation] = useState<"horizontal" | "vertical">("horizontal");
 
     const selectedBranch = useMemo(() => {
         return props.messageTree.find((tree) => {
             return conversation.messageBranches[tree.message.id];
         });
     }, [props.messageTree, conversation.messageBranches]);
-
-    const setMessageBranch = useCallback(
-        async (messageId: string | null) => {
-            // Optimistic add data to local database
-            const messageBranches = {
-                ...conversation.messageBranches,
-            };
-
-            props.messageTree.forEach((tree) => {
-                messageBranches[tree.message.id] = false;
-            });
-
-            if (messageId !== null) {
-                messageBranches[messageId] = true;
-            }
-
-            const member = await db.members
-                .where(["conversationId", "userId"])
-                .equals([conversation.id, user.id])
-                .first();
-
-            if (!member) return;
-
-            await db.members.put(
-                {
-                    ...member,
-                    messageBranches,
-                },
-                member.id
-            );
-
-            // Sync with API
-            await updateConversation({
-                path: {
-                    conversation_id: conversation.id,
-                },
-                body: {
-                    messageBranches,
-                },
-            });
-        },
-        [props.messageTree, conversation.id, user.id]
-    );
 
     /**************************************************************************/
     /* Render */
@@ -430,7 +386,20 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
         return (
             <div className="flex flex-col gap-10">
                 <MessageProvider messageId={selectedBranch.message.id}>
-                    <MessageContent unsetBranch={() => setMessageBranch(null)} />
+                    <MessageContent
+                        unsetBranch={async () => {
+                            try {
+                                await updateMessageBranches({
+                                    userId: user.id,
+                                    conversationId: conversation.id,
+                                    hiddenMessageIds: [selectedBranch.message.id],
+                                    shownMessageId: null,
+                                });
+                            } catch (e) {
+                                toast.error(`Unable to change branches: ${e}`);
+                            }
+                        }}
+                    />
                 </MessageProvider>
 
                 {selectedBranch.replies.length > 0 ? (
@@ -454,12 +423,23 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-background hover:bg-background-light border-background-light h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
+                                "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
                                 "[&_[data-limit-width]]:w-full",
                                 orientation === "horizontal" ? "mx-1" : "my-1"
                             )}
-                            onClick={() => {
-                                setMessageBranch(tree.message.id);
+                            onClick={async () => {
+                                try {
+                                    await updateMessageBranches({
+                                        userId: user.id,
+                                        conversationId: conversation.id,
+                                        hiddenMessageIds: props.messageTree
+                                            .map(({ message }) => message.id)
+                                            .filter((id) => id !== tree.message.id),
+                                        shownMessageId: tree.message.id,
+                                    });
+                                } catch (e) {
+                                    toast.error(`Unable to change branches: ${e}`);
+                                }
                             }}
                         >
                             <MessageProvider messageId={tree.message.id}>
