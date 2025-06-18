@@ -224,9 +224,25 @@ export type NewConversationSchema = {
      */
     title: string;
     /**
-     * Tagids
+     * Memberid
      */
-    tagIds: Array<string>;
+    memberId: string;
+    /**
+     * Messageid
+     */
+    messageId: string;
+    /**
+     * Messagetitle
+     */
+    messageTitle: string;
+    /**
+     * Messagecontent
+     */
+    messageContent: string;
+    /**
+     * Llms
+     */
+    llms: Array<LargeLanguageModel>;
 };
 
 /**

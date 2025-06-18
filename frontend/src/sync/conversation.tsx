@@ -31,30 +31,32 @@ export function ConversationProvider(props: { conversationId: string; children: 
     /* State */
     const user = useUser();
 
-    const conversation = useCachedLiveQuery(async () => {
-        const conversation = await db.conversations.get(props.conversationId);
+    const data = useCachedLiveQuery(async () => {
+        const [baseConversation, member, flatMessages] = await Promise.all([
+            db.conversations.get(props.conversationId),
+            db.members
+                .where(["conversationId", "userId"])
+                .equals([props.conversationId, user.id])
+                .first(),
+            db.messagesMetadata
+                .where("conversationId")
+                .equals(props.conversationId)
+                .sortBy("created"),
+        ]);
 
-        if (!conversation) return;
+        if (!baseConversation) {
+            return { conversation: undefined, messageTrees: undefined };
+        }
 
-        const member = await db.members
-            .where(["conversationId", "userId"])
-            .equals([props.conversationId, user.id])
-            .first();
+        if (!member) {
+            return { conversation: undefined, messageTrees: undefined };
+        }
 
-        if (!member) return;
-
-        return {
-            ...conversation,
+        const conversation = {
+            ...baseConversation,
             llms: member.llmsSelected,
             messageBranches: member.messageBranches,
         } satisfies CustomizedConversationSchema;
-    }, [props.conversationId, user.id]);
-
-    const messageTrees = useCachedLiveQuery(async () => {
-        const flatMessages = await db.messagesMetadata
-            .where("conversationId")
-            .equals(props.conversationId)
-            .sortBy("created");
 
         // Build the tree structure
         function buildTree(message: MessageMetadataSchema): MessageTreeSchema {
@@ -69,10 +71,12 @@ export function ConversationProvider(props: { conversationId: string; children: 
         }
 
         // Build the tree from our root messages
-        return flatMessages
+        const messageTrees = flatMessages
             .filter((msg) => msg.replyToId === null)
             .map((rootMessage) => buildTree(rootMessage));
-    }, [props.conversationId]);
+
+        return { conversation, messageTrees };
+    }, [props.conversationId, user.id]);
 
     const userMap = useCachedLiveQuery(async () => {
         const members = await db.members
@@ -87,15 +91,16 @@ export function ConversationProvider(props: { conversationId: string; children: 
         return Object.fromEntries(users.map((user) => [user.id, user]));
     }, []);
 
-    if (conversation === undefined) return null;
-    if (messageTrees === undefined) return null;
+    if (data === undefined) return null;
+    if (data.conversation === undefined) return null;
+    if (data.messageTrees === undefined) return null;
     if (userMap === undefined) return null;
 
     /**************************************************************************/
     /* Render */
     return (
-        <ConversationContext.Provider value={conversation}>
-            <MessageTreeContext.Provider value={messageTrees}>
+        <ConversationContext.Provider value={data.conversation}>
+            <MessageTreeContext.Provider value={data.messageTrees}>
                 <UserMapContext.Provider value={userMap}>{props.children}</UserMapContext.Provider>
             </MessageTreeContext.Provider>
         </ConversationContext.Provider>

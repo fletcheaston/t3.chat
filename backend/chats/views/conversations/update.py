@@ -36,6 +36,9 @@ def update_conversation(
     if data.message_branches is not None:
         member.message_branches = data.message_branches
 
+    if data.llms_selected is not None:
+        member.llms_selected = data.llms_selected
+
     if data.hidden is not None:
         member.hidden = data.hidden
 

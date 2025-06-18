@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import { useMountEffect } from "@react-hookz/web";
 import { UsersIcon } from "lucide-react";
 
 import { useConversation, useUserMap } from "@/sync/conversation";
@@ -8,27 +7,19 @@ import { db } from "@/sync/database";
 import { useCachedLiveQuery } from "@/sync/utils";
 import { Button } from "@/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog";
-import { Skeleton } from "@/ui/skeleton";
 
 import { llmToName } from "./models";
 
-function MembersDialogContent(props: { conversationId: string }) {
+export function MembersDialog() {
     /**************************************************************************/
     /* State */
+    const conversation = useConversation();
+
     const userMap = useUserMap();
-    const [isLoading, setIsLoading] = useState(true);
 
     const messages = useCachedLiveQuery(async () => {
-        return db.messages.where("conversationId").equals(props.conversationId).sortBy("created");
-    }, [props.conversationId]);
-
-    // Artificial delay so we don't see a flash of the loading state
-    useMountEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 500);
-        return () => clearTimeout(timer);
-    });
+        return db.messages.where("conversationId").equals(conversation.id).sortBy("created");
+    }, [conversation.id]);
 
     // Calculate message counts
     const userMessageCounts = useMemo(() => {
@@ -55,96 +46,6 @@ function MembersDialogContent(props: { conversationId: string }) {
 
     /**************************************************************************/
     /* Render */
-    if (!messages || isLoading) {
-        return (
-            <div className="flex flex-col gap-4">
-                <div>
-                    <h3 className="text-lg">Users</h3>
-
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between gap-2 border-b py-1 text-sm">
-                            <Skeleton className="bg-background-light h-6 w-full" />
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 className="text-lg">Models</h3>
-
-                    <div className="flex flex-col gap-1">
-                        <div className="flex items-center justify-between gap-2 border-b py-1 text-sm">
-                            <Skeleton className="bg-background-light h-6 w-full" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="flex flex-col gap-4">
-            <div>
-                <h3 className="text-lg">Users</h3>
-
-                <div className="flex flex-col gap-1">
-                    {Object.values(userMap).map((user) => {
-                        const count = userMessageCounts[user.id];
-
-                        return (
-                            <div
-                                key={user.id}
-                                className="flex items-center justify-between gap-2 border-b py-1 text-sm"
-                            >
-                                <div className="grow">
-                                    <p className="font-medium">{user.name}</p>
-                                </div>
-
-                                <div>
-                                    {count} {count === 1 ? "message" : "messages"}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-
-            <div>
-                <h3 className="text-lg">Models</h3>
-
-                <div className="flex flex-col gap-1">
-                    {Object.entries(llmToName).map(([llm, name]) => {
-                        const count = llmMessageCounts[llm];
-
-                        if (!count) return;
-
-                        return (
-                            <div
-                                key={llm}
-                                className="flex items-center justify-between gap-2 border-b py-1 text-sm"
-                            >
-                                <div className="grow">
-                                    <p className="font-medium">{name}</p>
-                                </div>
-
-                                <div>
-                                    {count} {count === 1 ? "message" : "messages"}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-export function MembersDialog() {
-    /**************************************************************************/
-    /* State */
-    const conversation = useConversation();
-
-    /**************************************************************************/
-    /* Render */
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -162,7 +63,59 @@ export function MembersDialog() {
                     <DialogTitle>Conversation Members</DialogTitle>
                 </DialogHeader>
 
-                <MembersDialogContent conversationId={conversation.id} />
+                <div className="flex flex-col gap-4">
+                    <div>
+                        <h3 className="text-lg">Users</h3>
+
+                        <div className="flex flex-col gap-1">
+                            {Object.values(userMap).map((user) => {
+                                const count = userMessageCounts[user.id];
+
+                                return (
+                                    <div
+                                        key={user.id}
+                                        className="flex items-center justify-between gap-2 border-b py-1 text-sm"
+                                    >
+                                        <div className="grow">
+                                            <p className="font-medium">{user.name}</p>
+                                        </div>
+
+                                        <div>
+                                            {count} {count === 1 ? "message" : "messages"}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="text-lg">Models</h3>
+
+                        <div className="flex flex-col gap-1">
+                            {Object.entries(llmToName).map(([llm, name]) => {
+                                const count = llmMessageCounts[llm];
+
+                                if (!count) return;
+
+                                return (
+                                    <div
+                                        key={llm}
+                                        className="flex items-center justify-between gap-2 border-b py-1 text-sm"
+                                    >
+                                        <div className="grow">
+                                            <p className="font-medium">{name}</p>
+                                        </div>
+
+                                        <div>
+                                            {count} {count === 1 ? "message" : "messages"}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
             </DialogContent>
         </Dialog>
     );

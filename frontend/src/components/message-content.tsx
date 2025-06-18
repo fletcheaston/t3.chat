@@ -4,8 +4,9 @@ import * as React from "react";
 import { BanIcon, CheckIcon, CopyIcon, EditIcon, SplitIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { MessageSchema, NewMessageSchema, createMessage, updateConversation } from "@/api";
+import { MessageSchema, updateConversation } from "@/api";
 import { MessageTreeSchema, useConversation, useUserMap } from "@/sync/conversation";
+import { createMessage } from "@/sync/data";
 import { db } from "@/sync/database";
 import { MessageProvider, useMessage } from "@/sync/message";
 import { Button } from "@/ui/button";
@@ -151,94 +152,6 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
     // Initial content comes from original message
     const contentRef = useRef(props.message.content);
 
-    const branchMessage = useCallback(async () => {
-        const content = contentRef.current;
-
-        if (!content) {
-            toast.warning("Please enter something before saving your message");
-            return;
-        }
-
-        const timestamp = new Date().toISOString();
-
-        const branchedMessage: NewMessageSchema = {
-            id: crypto.randomUUID(),
-            title: "",
-            content,
-            conversationId: conversation.id,
-            replyToId: props.message.replyToId,
-            llms: [],
-        } as const;
-
-        const messageBranches = {
-            ...conversation.messageBranches,
-            [props.message.id]: false,
-            [branchedMessage.id]: true,
-        };
-
-        // Optimistic local updates
-        db.transaction("readwrite", db.members, db.messages, db.messagesMetadata, async () => {
-            const member = await db.members
-                .where(["conversationId", "userId"])
-                .equals([conversation.id, user.id])
-                .first();
-
-            if (!member) return;
-
-            await db.members.put(
-                {
-                    ...member,
-                    messageBranches,
-                },
-                member.id
-            );
-
-            await db.messages.put(
-                {
-                    created: timestamp,
-                    modified: timestamp,
-                    authorId: props.message.authorId,
-                    llm: null,
-                    ...branchedMessage,
-                },
-                branchedMessage.id
-            );
-
-            await db.messagesMetadata.put(
-                {
-                    id: branchedMessage.id,
-                    created: timestamp,
-                    conversationId: branchedMessage.conversationId,
-                    replyToId: branchedMessage.replyToId,
-                },
-                branchedMessage.id
-            );
-        });
-
-        // Sync with API
-        const { data: confirmedMessage } = await createMessage({
-            body: branchedMessage,
-        });
-
-        if (!confirmedMessage) {
-            throw new Error("Unable to edit message");
-        }
-
-        // Add confirmed data to local database
-        db.transaction("readwrite", db.messages, db.messagesMetadata, async () => {
-            await db.messages.put(confirmedMessage, confirmedMessage.id);
-            await db.messagesMetadata.put(
-                {
-                    id: confirmedMessage.id,
-                    created: confirmedMessage.created,
-                    conversationId: confirmedMessage.conversationId,
-                    replyToId: confirmedMessage.replyToId,
-                },
-                confirmedMessage.id
-            );
-        });
-    }, [props.message, conversation, user.id]);
-
     /**************************************************************************/
     /* Render */
     return (
@@ -262,7 +175,22 @@ function BranchMyMessage(props: { message: MessageSchema; onEditStop: () => void
                 <div className="absolute right-0 -bottom-2 opacity-0 transition-all group-hover:opacity-100">
                     <div className="flex items-center gap-2">
                         <ActionButton
-                            onClick={branchMessage}
+                            onClick={async () => {
+                                if (!contentRef.current) return;
+
+                                try {
+                                    await createMessage({
+                                        userId: user.id,
+                                        replyToId: props.message.replyToId,
+                                        siblingMessageId: props.message.id,
+                                        conversationId: conversation.id,
+                                        content: contentRef.current,
+                                        llms: conversation.llms,
+                                    });
+                                } catch (e) {
+                                    toast.error(`Unable to create message: ${e}`);
+                                }
+                            }}
                             tooltip="Save"
                         >
                             <CheckIcon

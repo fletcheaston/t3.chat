@@ -1,16 +1,17 @@
 import React, { createContext, useContext } from "react";
 
-import { ConversationSchema } from "@/api";
+import { ConversationSchema, MemberSchema } from "@/api";
 import { useUser } from "@/components/auth";
 
 import { db } from "./database";
 import { useCachedLiveQuery } from "./utils";
 
-interface CustomizedConversationSchema extends ConversationSchema {
+export interface Conversation extends ConversationSchema {
     hidden: boolean;
+    llmsSelected: MemberSchema["llmsSelected"];
 }
 
-const ConversationsContext = createContext<Array<CustomizedConversationSchema> | null>(null);
+const ConversationsContext = createContext<Array<Conversation> | null>(null);
 
 export function ConversationsProvider(props: { children: React.ReactNode }) {
     /**************************************************************************/
@@ -18,9 +19,10 @@ export function ConversationsProvider(props: { children: React.ReactNode }) {
     const user = useUser();
 
     const data = useCachedLiveQuery(async () => {
-        const conversations = await db.conversations.orderBy("created").reverse().toArray();
-
-        const members = await db.members.where("userId").equals(user.id).toArray();
+        const [conversations, members] = await Promise.all([
+            db.conversations.orderBy("created").reverse().toArray(),
+            db.members.where("userId").equals(user.id).toArray(),
+        ]);
 
         const memberMap = Object.fromEntries(
             members.map((member) => [member.conversationId, member])
@@ -30,6 +32,7 @@ export function ConversationsProvider(props: { children: React.ReactNode }) {
             return {
                 ...conversation,
                 hidden: memberMap[conversation.id]?.hidden || false,
+                llmsSelected: memberMap[conversation.id]?.llmsSelected || [],
             };
         });
     }, [user.id]);

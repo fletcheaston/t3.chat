@@ -1,6 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import * as React from "react";
 
-import { useUser } from "@/components/auth";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
+
+import { ConversationSidebar } from "@/components/conversation-sidebar";
+import { SidebarProvider } from "@/ui/sidebar";
 
 export const Route = createFileRoute("/")({
     component: RouteComponent,
@@ -8,10 +11,18 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
     /**************************************************************************/
-    /* State */
-    const user = useUser();
-
-    /**************************************************************************/
     /* Render */
-    return <div>Hello {user.name}!</div>;
+    return (
+        <SidebarProvider>
+            <div className="relative">
+                <ConversationSidebar />
+            </div>
+
+            <div className="relative h-[100vh] grow overflow-hidden">
+                <div className="flex h-full justify-center overflow-y-scroll px-2 pt-16">
+                    <Outlet />
+                </div>
+            </div>
+        </SidebarProvider>
+    );
 }
