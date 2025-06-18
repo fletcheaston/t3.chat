@@ -3,11 +3,13 @@ import { Toaster } from "sonner";
 
 import { UserSchema } from "@/api";
 import { useAnonUser } from "@/components/auth";
+import { SidebarShared } from "@/components/sidebar-shared";
 import { useTheme } from "@/components/themes";
 import sonnerCss from "@/sonner.css?url";
 import appCss from "@/styles.css?url";
 import { ConversationsProvider } from "@/sync/conversations";
 import { SyncProvider } from "@/sync/sync-provider";
+import { SidebarProvider } from "@/ui/sidebar";
 
 interface RouterContext {
     user: UserSchema | null;
@@ -70,7 +72,15 @@ function Authenticated() {
     return (
         <SyncProvider>
             <ConversationsProvider>
-                <Outlet />
+                <SidebarProvider>
+                    <SidebarProvider>
+                        <div className="relative">
+                            <SidebarShared />
+                        </div>
+
+                        <Outlet />
+                    </SidebarProvider>
+                </SidebarProvider>
             </ConversationsProvider>
         </SyncProvider>
     );

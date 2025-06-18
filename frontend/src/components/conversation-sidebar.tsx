@@ -8,9 +8,6 @@ import { updateConversation } from "@/api";
 import { useConversations } from "@/sync/conversations";
 import { Button } from "@/ui/button";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarMenu,
@@ -18,10 +15,6 @@ import {
     SidebarMenuItem,
 } from "@/ui/sidebar";
 import { cn } from "@/utils";
-
-import { SidebarButtons } from "./sidebar-buttons";
-import { SidebarFooter } from "./sidebar-footer";
-import { SidebarHeader } from "./sidebar-header";
 
 function ConversationLink(props: { id: string; title: string; hidden: boolean; pathname: string }) {
     /**************************************************************************/
@@ -105,51 +98,35 @@ export function ConversationSidebar() {
     /* Render */
     return (
         <>
-            <SidebarButtons />
+            <SidebarGroupLabel className="flex justify-between gap-2">
+                <div>Chats</div>
 
-            <Sidebar collapsible="offcanvas">
-                <SidebarHeader />
+                <Button
+                    size="icon"
+                    variant="plain"
+                    className="hover:bg-background-light bg-background size-6 opacity-0 group-hover:opacity-100"
+                    onClick={() => setShowAll((prevState) => !prevState)}
+                    tooltip={showAll ? "Hide hidden chats" : "Show all chats"}
+                >
+                    {showAll ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                </Button>
+            </SidebarGroupLabel>
 
-                <SidebarContent>
-                    <SidebarGroup>
-                        <SidebarGroupLabel className="flex justify-between gap-2">
-                            <div>Chats</div>
-
-                            <Button
-                                size="icon"
-                                variant="plain"
-                                className="hover:bg-background-light bg-background size-6 opacity-0 group-hover:opacity-100"
-                                onClick={() => setShowAll((prevState) => !prevState)}
-                                tooltip={showAll ? "Hide hidden chats" : "Show all chats"}
-                            >
-                                {showAll ? (
-                                    <EyeOffIcon className="h-4 w-4" />
-                                ) : (
-                                    <EyeIcon className="h-4 w-4" />
-                                )}
-                            </Button>
-                        </SidebarGroupLabel>
-
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                {filteredConversations.map((conversation) => {
-                                    return (
-                                        <ConversationLink
-                                            key={conversation.id}
-                                            id={conversation.id}
-                                            title={conversation.title}
-                                            hidden={conversation.hidden}
-                                            pathname={pathname}
-                                        />
-                                    );
-                                })}
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                </SidebarContent>
-
-                <SidebarFooter />
-            </Sidebar>
+            <SidebarGroupContent>
+                <SidebarMenu>
+                    {filteredConversations.map((conversation) => {
+                        return (
+                            <ConversationLink
+                                key={conversation.id}
+                                id={conversation.id}
+                                title={conversation.title}
+                                hidden={conversation.hidden}
+                                pathname={pathname}
+                            />
+                        );
+                    })}
+                </SidebarMenu>
+            </SidebarGroupContent>
         </>
     );
 }

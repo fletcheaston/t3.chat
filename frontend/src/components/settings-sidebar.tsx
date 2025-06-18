@@ -3,9 +3,6 @@ import * as React from "react";
 import { Link, LinkComponentProps, useLocation } from "@tanstack/react-router";
 
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarMenu,
@@ -13,10 +10,6 @@ import {
     SidebarMenuItem,
 } from "@/ui/sidebar";
 import { cn } from "@/utils";
-
-import { SidebarButtons } from "./sidebar-buttons";
-import { SidebarFooter } from "./sidebar-footer";
-import { SidebarHeader } from "./sidebar-header";
 
 type To = NonNullable<LinkComponentProps["to"]>;
 
@@ -53,41 +46,29 @@ export function SettingsSidebar() {
     /* Render */
     return (
         <>
-            <SidebarButtons />
+            <SidebarGroupLabel>Settings</SidebarGroupLabel>
 
-            <Sidebar collapsible="offcanvas">
-                <SidebarHeader />
+            <SidebarGroupContent>
+                <SidebarMenu>
+                    <SettingsLink
+                        title="Models"
+                        to="/settings/models"
+                        pathname={pathname}
+                    />
 
-                <SidebarContent>
-                    <SidebarGroup>
-                        <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                    <SettingsLink
+                        title="Visuals"
+                        to="/settings/visuals"
+                        pathname={pathname}
+                    />
 
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                <SettingsLink
-                                    title="Models"
-                                    to="/settings/models"
-                                    pathname={pathname}
-                                />
-
-                                <SettingsLink
-                                    title="Visuals"
-                                    to="/settings/visuals"
-                                    pathname={pathname}
-                                />
-
-                                <SettingsLink
-                                    title="Support"
-                                    to="/settings/support"
-                                    pathname={pathname}
-                                />
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                </SidebarContent>
-
-                <SidebarFooter />
-            </Sidebar>
+                    <SettingsLink
+                        title="Support"
+                        to="/settings/support"
+                        pathname={pathname}
+                    />
+                </SidebarMenu>
+            </SidebarGroupContent>
         </>
     );
 }
