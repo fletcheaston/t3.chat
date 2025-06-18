@@ -5,7 +5,6 @@ import { Link, LinkComponentProps, useLocation } from "@tanstack/react-router";
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -16,6 +15,7 @@ import {
 import { cn } from "@/utils";
 
 import { SidebarButtons } from "./sidebar-buttons";
+import { SidebarFooter } from "./sidebar-footer";
 import { SidebarHeader } from "./sidebar-header";
 
 type To = NonNullable<LinkComponentProps["to"]>;
