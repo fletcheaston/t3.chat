@@ -30,7 +30,7 @@ function DailyMessageCounter() {
 
     /**************************************************************************/
     /* Render */
-    return <p className="text-xs tabular-nums">{messageCount} / 100 Messages</p>;
+    return <p className="text-xs tabular-nums">{messageCount} / 100</p>;
 }
 
 export function SidebarFooter() {
@@ -53,7 +53,7 @@ export function SidebarFooter() {
                 variant="plain"
                 size="custom"
                 className="hover:bg-background-light -mx-1 flex w-full items-center justify-start gap-2 px-1 py-1 text-left"
-                tooltip={null}
+                tooltip="Daily alottment of LLM messages"
             >
                 <Link to="/settings/support">
                     {user.imageUrl ? (
