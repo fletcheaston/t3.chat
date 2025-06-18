@@ -10,7 +10,6 @@ import { Button } from "@/ui/button";
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -21,6 +20,7 @@ import {
 import { cn } from "@/utils";
 
 import { SidebarButtons } from "./sidebar-buttons";
+import { SidebarFooter } from "./sidebar-footer";
 import { SidebarHeader } from "./sidebar-header";
 
 function ConversationLink(props: { id: string; title: string; hidden: boolean; pathname: string }) {

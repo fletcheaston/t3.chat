@@ -50,8 +50,9 @@ export function MembersDialog() {
         <Dialog>
             <DialogTrigger asChild>
                 <Button
-                    variant="default"
+                    variant="plain"
                     size="icon"
+                    className="bg-background hover:bg-background-dark border-border-dark border"
                     tooltip="View members"
                 >
                     <UsersIcon className="h-5 w-5" />

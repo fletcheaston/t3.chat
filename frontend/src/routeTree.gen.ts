@@ -19,9 +19,6 @@ import { Route as ChatIndexImport } from "./routes/chat.index"
 import { Route as SettingsVisualsImport } from "./routes/settings.visuals"
 import { Route as SettingsSupportImport } from "./routes/settings.support"
 import { Route as SettingsModelsImport } from "./routes/settings.models"
-import { Route as SettingsHistoryImport } from "./routes/settings.history"
-import { Route as SettingsApiKeysImport } from "./routes/settings.api-keys"
-import { Route as SettingsAccountImport } from "./routes/settings.account"
 import { Route as JoinTokenImport } from "./routes/join.$token"
 import { Route as ChatChatIdImport } from "./routes/chat.$chatId"
 
@@ -72,24 +69,6 @@ const SettingsSupportRoute = SettingsSupportImport.update({
 const SettingsModelsRoute = SettingsModelsImport.update({
   id: "/models",
   path: "/models",
-  getParentRoute: () => SettingsRoute,
-} as any)
-
-const SettingsHistoryRoute = SettingsHistoryImport.update({
-  id: "/history",
-  path: "/history",
-  getParentRoute: () => SettingsRoute,
-} as any)
-
-const SettingsApiKeysRoute = SettingsApiKeysImport.update({
-  id: "/api-keys",
-  path: "/api-keys",
-  getParentRoute: () => SettingsRoute,
-} as any)
-
-const SettingsAccountRoute = SettingsAccountImport.update({
-  id: "/account",
-  path: "/account",
   getParentRoute: () => SettingsRoute,
 } as any)
 
@@ -151,27 +130,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof JoinTokenImport
       parentRoute: typeof rootRoute
     }
-    "/settings/account": {
-      id: "/settings/account"
-      path: "/account"
-      fullPath: "/settings/account"
-      preLoaderRoute: typeof SettingsAccountImport
-      parentRoute: typeof SettingsImport
-    }
-    "/settings/api-keys": {
-      id: "/settings/api-keys"
-      path: "/api-keys"
-      fullPath: "/settings/api-keys"
-      preLoaderRoute: typeof SettingsApiKeysImport
-      parentRoute: typeof SettingsImport
-    }
-    "/settings/history": {
-      id: "/settings/history"
-      path: "/history"
-      fullPath: "/settings/history"
-      preLoaderRoute: typeof SettingsHistoryImport
-      parentRoute: typeof SettingsImport
-    }
     "/settings/models": {
       id: "/settings/models"
       path: "/models"
@@ -218,18 +176,12 @@ const ChatRouteChildren: ChatRouteChildren = {
 const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
 
 interface SettingsRouteChildren {
-  SettingsAccountRoute: typeof SettingsAccountRoute
-  SettingsApiKeysRoute: typeof SettingsApiKeysRoute
-  SettingsHistoryRoute: typeof SettingsHistoryRoute
   SettingsModelsRoute: typeof SettingsModelsRoute
   SettingsSupportRoute: typeof SettingsSupportRoute
   SettingsVisualsRoute: typeof SettingsVisualsRoute
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
-  SettingsAccountRoute: SettingsAccountRoute,
-  SettingsApiKeysRoute: SettingsApiKeysRoute,
-  SettingsHistoryRoute: SettingsHistoryRoute,
   SettingsModelsRoute: SettingsModelsRoute,
   SettingsSupportRoute: SettingsSupportRoute,
   SettingsVisualsRoute: SettingsVisualsRoute,
@@ -246,9 +198,6 @@ export interface FileRoutesByFullPath {
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
-  "/settings/account": typeof SettingsAccountRoute
-  "/settings/api-keys": typeof SettingsApiKeysRoute
-  "/settings/history": typeof SettingsHistoryRoute
   "/settings/models": typeof SettingsModelsRoute
   "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
@@ -261,9 +210,6 @@ export interface FileRoutesByTo {
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
-  "/settings/account": typeof SettingsAccountRoute
-  "/settings/api-keys": typeof SettingsApiKeysRoute
-  "/settings/history": typeof SettingsHistoryRoute
   "/settings/models": typeof SettingsModelsRoute
   "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
@@ -278,9 +224,6 @@ export interface FileRoutesById {
   "/settings": typeof SettingsRouteWithChildren
   "/chat/$chatId": typeof ChatChatIdRoute
   "/join/$token": typeof JoinTokenRoute
-  "/settings/account": typeof SettingsAccountRoute
-  "/settings/api-keys": typeof SettingsApiKeysRoute
-  "/settings/history": typeof SettingsHistoryRoute
   "/settings/models": typeof SettingsModelsRoute
   "/settings/support": typeof SettingsSupportRoute
   "/settings/visuals": typeof SettingsVisualsRoute
@@ -296,9 +239,6 @@ export interface FileRouteTypes {
     | "/settings"
     | "/chat/$chatId"
     | "/join/$token"
-    | "/settings/account"
-    | "/settings/api-keys"
-    | "/settings/history"
     | "/settings/models"
     | "/settings/support"
     | "/settings/visuals"
@@ -310,9 +250,6 @@ export interface FileRouteTypes {
     | "/settings"
     | "/chat/$chatId"
     | "/join/$token"
-    | "/settings/account"
-    | "/settings/api-keys"
-    | "/settings/history"
     | "/settings/models"
     | "/settings/support"
     | "/settings/visuals"
@@ -325,9 +262,6 @@ export interface FileRouteTypes {
     | "/settings"
     | "/chat/$chatId"
     | "/join/$token"
-    | "/settings/account"
-    | "/settings/api-keys"
-    | "/settings/history"
     | "/settings/models"
     | "/settings/support"
     | "/settings/visuals"
@@ -384,9 +318,6 @@ export const routeTree = rootRoute
     "/settings": {
       "filePath": "settings.tsx",
       "children": [
-        "/settings/account",
-        "/settings/api-keys",
-        "/settings/history",
         "/settings/models",
         "/settings/support",
         "/settings/visuals"
@@ -398,18 +329,6 @@ export const routeTree = rootRoute
     },
     "/join/$token": {
       "filePath": "join.$token.tsx"
-    },
-    "/settings/account": {
-      "filePath": "settings.account.tsx",
-      "parent": "/settings"
-    },
-    "/settings/api-keys": {
-      "filePath": "settings.api-keys.tsx",
-      "parent": "/settings"
-    },
-    "/settings/history": {
-      "filePath": "settings.history.tsx",
-      "parent": "/settings"
     },
     "/settings/models": {
       "filePath": "settings.models.tsx",
