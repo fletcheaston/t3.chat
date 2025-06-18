@@ -105,6 +105,9 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
 
     ####################################################################################
     async def send_data(self, event: Any) -> None:
+        import logging
+
+        logging.warning(event)
         data = schemas.SendDataEvent.model_validate(event)
 
         for value in data.event:
