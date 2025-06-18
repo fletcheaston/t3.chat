@@ -8,11 +8,9 @@ class LargeLanguageModel(StrEnum):
     OPENAI_GPT_4_1_MINI = "openai-gpt-4.1-mini"
     OPENAI_GPT_4_1_NANO = "openai-gpt-4.1-nano"
 
-    # OPENAI_GPT_4O_MINI = "openai-gpt-4o-mini"
-    #
-    # OPENAI_O1_MINI = "openai-o1-mini"
-    # OPENAI_O3 = "openai-o3"
-    # OPENAI_O3_MINI = "openai-o3-mini"
-    # OPENAI_O4_MINI = "openai-o4-mini"
-    #
-    # OPENAI_GPT_4O_MINI_SEARCH_PREVIEW = "openai-gpt-4o-mini-search-preview"
+    GEMINI_2_0_FLASH = "gemini-2.0-flash"
+    GEMINI_2_0_FLASH_LITE = "gemini-2.0-flash-lite"
+
+    GENIMI_2_5_PRO = "gemini-2.5-pro"
+    GENIMI_2_5_FLASH = "gemini-2.5-flash"
+    GENIMI_2_5_FLASH_LITE = "gemini-2.5-flash-lite"
