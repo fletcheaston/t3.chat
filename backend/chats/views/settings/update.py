@@ -52,6 +52,9 @@ def update_my_settings(  # noqa: C901
     if data.visual_theme_border_override is not None:
         setting.visual_theme_border_override = data.visual_theme_border_override
 
+    if data.visual_branch_vertical is not None:
+        setting.visual_branch_vertical = data.visual_branch_vertical
+
     # Save and return
     setting.save()
 

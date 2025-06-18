@@ -6,9 +6,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSettings, useUpdateSetting } from "@/components/auth";
 import { themeColors, themeNames, themeParser } from "@/components/themes";
 import { Button } from "@/ui/button";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/ui/carousel";
 import { ColorPicker } from "@/ui/color-picker";
 import { Label } from "@/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select";
+import { cn } from "@/utils";
 
 export const Route = createFileRoute("/settings/visuals")({
     component: RouteComponent,
@@ -205,13 +213,101 @@ function Theme() {
     );
 }
 
+function BranchOrientation() {
+    /**************************************************************************/
+    /* State */
+    const settings = useSettings();
+    const updateSettings = useUpdateSetting();
+
+    /**************************************************************************/
+    /* Render */
+    return (
+        <div>
+            <Label
+                htmlFor="branch"
+                className="mb-1 pl-2"
+            >
+                Branch Orientation
+            </Label>
+
+            <Select
+                defaultValue={settings.visualBranchVertical ? "vertical" : "horizontal"}
+                onValueChange={(value) => {
+                    updateSettings("visualBranchVertical", value === "vertical");
+                }}
+            >
+                <SelectTrigger className="w-44">
+                    <SelectValue placeholder="Branch Orientation" />
+                </SelectTrigger>
+
+                <SelectContent>
+                    <SelectItem value="vertical">Vertical</SelectItem>
+
+                    <SelectItem value="horizontal">Horizontal</SelectItem>
+                </SelectContent>
+            </Select>
+
+            <Carousel
+                orientation={settings.visualBranchVertical ? "vertical" : "horizontal"}
+                className="my-8 w-full"
+                opts={{ startIndex: 0, watchDrag: false }}
+            >
+                <CarouselContent
+                    className={settings.visualBranchVertical ? "py-1 pt-4" : "px-1 pl-4"}
+                >
+                    <CarouselItem
+                        className={cn(
+                            "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border",
+                            settings.visualBranchVertical ? "my-1" : "mx-1"
+                        )}
+                    >
+                        Lorem ipsum dolor sit amet, ei his eirmod utamur, omnis illud dolor et cum,
+                        mei cibo mandamus repudiandae ad. Sint probatus ex duo, eu natum autem
+                        ancillae duo. Cu oratio evertitur vix, cu recteque honestatis mel. Diam
+                        eleifend est id.
+                    </CarouselItem>
+
+                    <CarouselItem
+                        className={cn(
+                            "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border",
+                            settings.visualBranchVertical ? "my-1" : "mx-1"
+                        )}
+                    >
+                        Suscipit mnesarchum voluptatum ne nec, quaeque equidem prodesset eu pri.
+                        Falli liber his ei, cum equidem delicatissimi id. Duo ipsum quaeque
+                        contentiones ex, tale impedit explicari ea mei, ex sed summo verear aliquam.
+                        Et mel omnis dolores. Quod nobis tincidunt usu in, per agam tincidunt at. Ea
+                        sed eirmod eripuit. Ei duis everti vis, eu usu honestatis interpretaris.
+                    </CarouselItem>
+
+                    <CarouselItem
+                        className={cn(
+                            "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border",
+                            settings.visualBranchVertical ? "my-1" : "mx-1"
+                        )}
+                    >
+                        Vim decore accumsan an, tation animal nusquam ut mel, ad everti scripta
+                        nostrud quo. Purto vidisse volumus no vel. His ut putent indoctum
+                        adversarium, ex est meis quas illud. Doctus commune instructior ius in.
+                    </CarouselItem>
+                </CarouselContent>
+
+                <CarouselPrevious tooltip="Previous" />
+                <CarouselNext tooltip="Next" />
+            </Carousel>
+        </div>
+    );
+}
+
 function RouteComponent() {
     return (
         <div className="pb-8">
             <h1 className="text-4xl font-semibold">Visual Settings</h1>
 
-            <div className="my-4 flex flex-col gap-6">
+            <div className="my-4 flex flex-col gap-16">
                 <Theme />
+
+                <BranchOrientation />
             </div>
         </div>
     );

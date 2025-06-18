@@ -81,6 +81,10 @@ export type SettingSchema = {
      * Visualthemeborderoverride
      */
     visualThemeBorderOverride: string;
+    /**
+     * Visualbranchvertical
+     */
+    visualBranchVertical: boolean;
 };
 
 /**
@@ -360,6 +364,10 @@ export type UpdateSettingSchema = {
      * Visualthemeborderoverride
      */
     visualThemeBorderOverride?: string | null;
+    /**
+     * Visualbranchvertical
+     */
+    visualBranchVertical?: boolean | null;
 };
 
 /**

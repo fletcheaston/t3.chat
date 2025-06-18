@@ -19,7 +19,7 @@ import {
 import { Textarea } from "@/ui/textarea";
 import { cn, formatDatetime } from "@/utils";
 
-import { useUser } from "./auth";
+import { useSettings, useUser } from "./auth";
 import { Markdown } from "./markdown";
 import { llmToImageUrl, llmToName } from "./models";
 
@@ -356,9 +356,8 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     /**************************************************************************/
     /* State */
     const user = useUser();
+    const settings = useSettings();
     const conversation = useConversation();
-
-    const [orientation] = useState<"horizontal" | "vertical">("horizontal");
 
     const selectedBranch = useMemo(() => {
         return props.messageTree.find((tree) => {
@@ -412,20 +411,19 @@ export function MessageTree(props: { messageTree: Array<MessageTreeSchema> }) {
     return (
         <div className="flex flex-col gap-10">
             <Carousel
-                orientation={orientation}
+                orientation={settings.visualBranchVertical ? "vertical" : "horizontal"}
                 className="w-full"
                 opts={{ startIndex: 0, watchDrag: false }}
             >
                 <CarouselContent
-                    className={orientation === "horizontal" ? "px-1 pl-4" : "py-1 pt-4"}
+                    className={settings.visualBranchVertical ? "py-1 pt-4" : "px-1 pl-4"}
                 >
                     {props.messageTree.map((tree) => (
                         <CarouselItem
                             key={tree.message.id}
                             className={cn(
-                                "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border pr-1 pb-4 pl-1",
-                                "[&_[data-limit-width]]:w-full",
-                                orientation === "horizontal" ? "mx-1" : "my-1"
+                                "group bg-background hover:bg-background-dark border-border h-fit basis-3/5 cursor-pointer rounded-lg border pb-4",
+                                settings.visualBranchVertical ? "my-1" : "mx-1"
                             )}
                             onClick={async () => {
                                 try {
