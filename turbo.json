@@ -26,6 +26,13 @@
     "@fletcheaston/backend#build": {
       "dependsOn": ["@fletcheaston/backend#build:collectstatic"]
     },
+    "@fletcheaston/backend#worker": {
+      "dependsOn": ["@fletcheaston/backend#setup"]
+    },
+    "@fletcheaston/backend#dev": {
+      "dependsOn": ["@fletcheaston/backend#setup"],
+      "with": ["@fletcheaston/backend#worker"]
+    },
     "dev": {
       "dependsOn": ["^dev"],
       "persistent": true,

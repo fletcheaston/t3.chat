@@ -10,6 +10,7 @@ class Settings(BaseSettings):
 
     ####################################################################################
     # Basic web server settings
+    DEMO: bool = False
     DEBUG: bool = False
     VERSION: str | None = None
     SECRET_KEY: str | None = None

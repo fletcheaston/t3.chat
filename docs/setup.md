@@ -16,7 +16,9 @@ cd backend
 npm run setup
 ```
 
-The backend uses [`uv`](https://docs.astral.sh/uv/) for package/environment management, [`ruff`](https://docs.astral.sh/ruff/) for linting and formatting, and [`ty`](https://github.com/astral-sh/ty) for type-checking.
+The backend uses [`uv`](https://docs.astral.sh/uv/) for package/environment management, [
+`ruff`](https://docs.astral.sh/ruff/) for linting and formatting, and [`ty`](https://github.com/astral-sh/ty) for
+type-checking.
 
 ## Start docker
 
@@ -45,6 +47,9 @@ PG_HOST=localhost
 
 GITHUB_OAUTH_CLIENT_ID=fake
 GITHUB_OAUTH_CLIENT_SECRET=fake
+
+OPENAI_API_KEY=fake
+GEMINI_API_KEY=fake
 ```
 
 ## Run database migrations
@@ -59,13 +64,14 @@ npm run migrate
 ## Running the app
 
 Once you've followed the above steps, try running the app.
-To do so, run:
+To do so, run this from the root of the repo:
 
 ```shell
 npm run dev
 ```
 
-This will run the frontend on [localhost:3000](http://localhost:3000) and the backend on [localhost:8000](http://localhost:8000).
+This will run the frontend on [localhost:3000](http://localhost:3000) and the backend
+on [localhost:8000](http://localhost:8000).
 
 You can ensure the backend is running by visiting [the API docs](http://localhost:8000/api/docs).
 
