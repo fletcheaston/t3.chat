@@ -1,3 +1,5 @@
+import os
+
 from django.http import HttpResponse
 from ninja import Router
 
@@ -12,7 +14,9 @@ router = Router(tags=["static"])
     include_in_schema=False,
 )
 def index(request: HttpRequest) -> HttpResponse:
-    with open("/app/static/chats/index.html") as f:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    with open(os.path.join(current_dir, "index.html")) as f:
         content = f.read()
 
     return HttpResponse(content, content_type="text/html")
@@ -24,7 +28,9 @@ def index(request: HttpRequest) -> HttpResponse:
     include_in_schema=False,
 )
 def catch_all(request: HttpRequest, path: str) -> HttpResponse:
-    with open("/app/static/chats/index.html") as f:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    with open(os.path.join(current_dir, "index.html")) as f:
         content = f.read()
 
     return HttpResponse(content, content_type="text/html")
