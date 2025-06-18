@@ -13,6 +13,7 @@ dependencies = [
     "django-redis>=5.4.0",
     "django-silk>=5.4.0",
     "django-simple-history>=3.8.0",
+    "django-storages[google]>=1.14.6",
     "httpx>=0.28.1",
     "openai>=1.86.0",
     "orjson>=3.10.18",
