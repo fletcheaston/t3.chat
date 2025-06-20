@@ -99,15 +99,7 @@ class GlobalSyncConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     ####################################################################################
-    async def disconnect(self, close_code) -> None:
-        # Close connection
-        await self.close(close_code)
-
-    ####################################################################################
     async def send_data(self, event: Any) -> None:
-        import logging
-
-        logging.warning(event)
         data = schemas.SendDataEvent.model_validate(event)
 
         for value in data.event:
