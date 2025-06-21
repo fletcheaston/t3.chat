@@ -254,6 +254,7 @@ const components: Components = {
                 )}
                 href={href}
                 target={external ? "_blank" : ""}
+                rel={external ? "noreferrer" : ""}
                 {...rest}
             >
                 {children}
