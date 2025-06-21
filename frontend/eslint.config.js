@@ -13,12 +13,23 @@ export default defineConfig([
         extends: [
             "js/recommended",
             tseslint.configs.recommended,
-            pluginReact.configs.flat.recommended,
+            pluginReact.configs.flat["jsx-runtime"],
         ],
         rules: {
             "react/no-unescaped-entities": 0,
-            "react/react-in-jsx-scope": 0,
             "@typescript-eslint/no-explicit-any": 0,
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    caughtErrors: "all",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    ignoreRestSiblings: true,
+                },
+            ],
         },
     },
 ]);
