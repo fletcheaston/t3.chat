@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
 
 import { Link, useLocation } from "@tanstack/react-router";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -22,7 +22,7 @@ function ConversationLink(props: { id: string; title: string; hidden: boolean; p
     const selected = props.pathname.includes(props.id);
 
     const toggleHidden = useCallback(
-        async (event: React.MouseEvent) => {
+        async (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
 

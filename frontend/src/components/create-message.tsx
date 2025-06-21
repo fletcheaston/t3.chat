@@ -1,5 +1,4 @@
 import { useState } from "react";
-import * as React from "react";
 
 import { ArrowUpIcon } from "lucide-react";
 import { toast } from "sonner";

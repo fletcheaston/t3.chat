@@ -74,7 +74,6 @@ def global_sync_bootstrap(
         messages = messages.filter(modified__gte=timestamp)
 
     for value in messages:
-        data.append(schemas.SyncMessageMetadata(type="message-metadata", data=value))
         data.append(schemas.SyncMessage(type="message", data=value))
 
     return data

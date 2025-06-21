@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from "react";
 
 import { MessageSchema } from "@/api";
 
@@ -7,7 +7,7 @@ import { useCachedLiveQuery } from "./utils";
 
 const MessageContext = createContext<MessageSchema | null>(null);
 
-export function MessageProvider(props: { messageId: string; children: React.ReactNode }) {
+export function MessageProvider(props: { messageId: string; children: ReactNode }) {
     /**************************************************************************/
     /* State */
     const message = useCachedLiveQuery(async () => {

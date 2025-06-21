@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from "react";
 
 import { ConversationSchema, MemberSchema } from "@/api";
 import { useUser } from "@/components/auth";
@@ -13,7 +13,7 @@ export interface Conversation extends ConversationSchema {
 
 const ConversationsContext = createContext<Array<Conversation> | null>(null);
 
-export function ConversationsProvider(props: { children: React.ReactNode }) {
+export function ConversationsProvider(props: { children: ReactNode }) {
     /**************************************************************************/
     /* State */
     const user = useUser();

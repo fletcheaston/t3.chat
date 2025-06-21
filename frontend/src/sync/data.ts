@@ -55,27 +55,11 @@ export async function createConversation(
         tokens: null,
     };
 
-    await db.transaction(
-        "readwrite",
-        db.conversations,
-        db.members,
-        db.messages,
-        db.messagesMetadata,
-        async () => {
-            await db.conversations.put(conversation, conversation.id);
-            await db.members.put(member, member.id);
-            await db.messages.put(message, message.id);
-            await db.messagesMetadata.put(
-                {
-                    id: message.id,
-                    conversationId: message.conversationId,
-                    replyToId: message.replyToId,
-                    created: timestamp,
-                },
-                message.id
-            );
-        }
-    );
+    await db.transaction("readwrite", db.conversations, db.members, db.messages, async () => {
+        await db.conversations.put(conversation, conversation.id);
+        await db.members.put(member, member.id);
+        await db.messages.put(message, message.id);
+    });
 
     // 1.5. If provided, optimistically navigate
     if (onOptimisticSave !== null) {
@@ -129,17 +113,8 @@ export async function createMessage(props: {
         tokens: null,
     };
 
-    await db.transaction("readwrite", db.messages, db.messagesMetadata, db.members, async () => {
+    await db.transaction("readwrite", db.messages, db.members, async () => {
         await db.messages.put(message, message.id);
-        await db.messagesMetadata.put(
-            {
-                id: message.id,
-                conversationId: message.conversationId,
-                replyToId: message.replyToId,
-                created: timestamp,
-            },
-            message.id
-        );
 
         const member = await db.members
             .where(["conversationId", "userId"])
