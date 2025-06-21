@@ -101,12 +101,6 @@ class Message(DjangoModel):
             {
                 "type": "send_data",
                 "event": [
-                    schemas.SyncMessageMetadata.model_validate(
-                        {
-                            "type": "message-metadata",
-                            "data": self,
-                        }
-                    ).model_dump_safe(),
                     schemas.SyncMessage.model_validate(
                         {
                             "type": "message",
