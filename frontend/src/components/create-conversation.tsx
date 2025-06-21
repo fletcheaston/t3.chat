@@ -1,5 +1,4 @@
 import { useState } from "react";
-import * as React from "react";
 
 import { useNavigate } from "@tanstack/react-router";
 import { ArrowUpIcon } from "lucide-react";

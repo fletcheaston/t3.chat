@@ -17,6 +17,8 @@ export default defineConfig([
         ],
         rules: {
             "react/no-unescaped-entities": 0,
+            "react/react-in-jsx-scope": 0,
+            "@typescript-eslint/no-explicit-any": 0,
         },
     },
 ]);

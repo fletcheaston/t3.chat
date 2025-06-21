@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useContext } from "react";
+import { ComponentType, FC, FunctionComponent, ReactNode, createContext, useContext } from "react";
 
 import { observer } from "mobx-react-lite";
 
@@ -13,7 +13,7 @@ interface StoreProviderProps {
     store?: RootStore;
 }
 
-export const StoreProvider: React.FC<StoreProviderProps> = ({ children, store = rootStore }) => {
+export const StoreProvider: FC<StoreProviderProps> = ({ children, store = rootStore }) => {
     return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 };
 
@@ -48,6 +48,6 @@ export const useUserStore = () => {
 };
 
 // Higher-order component for making components reactive to MobX changes
-export const withStore = <P extends object>(Component: React.ComponentType<P>): React.ComponentType<P> => {
-    return observer(Component as React.FunctionComponent<P>);
+export const withStore = <P extends object>(Component: ComponentType<P>): ComponentType<P> => {
+    return observer(Component as FunctionComponent<P>);
 };

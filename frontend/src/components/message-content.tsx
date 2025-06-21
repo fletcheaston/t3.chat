@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState } from "react";
-import * as React from "react";
+import { ReactNode, useMemo, useRef, useState } from "react";
 
 import {
     BanIcon,
@@ -61,7 +60,7 @@ function CopyButton(props: { value: string }) {
 function ActionButton(props: {
     onClick: (() => void) | null;
     tooltip: string;
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     /**************************************************************************/
     /* Render */

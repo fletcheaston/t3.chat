@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from "react";
 
 import {
     ConversationSchema,
@@ -26,7 +26,7 @@ const ConversationContext = createContext<CustomizedConversationSchema | null>(n
 const MessageTreeContext = createContext<Array<MessageTreeSchema> | null>(null);
 const UserMapContext = createContext<Record<string, UserSchema> | null>(null);
 
-export function ConversationProvider(props: { conversationId: string; children: React.ReactNode }) {
+export function ConversationProvider(props: { conversationId: string; children: ReactNode }) {
     /**************************************************************************/
     /* State */
     const user = useUser();

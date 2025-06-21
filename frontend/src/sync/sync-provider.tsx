@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 import { useIntervalEffect, useMountEffect } from "@react-hookz/web";
 import ReconnectingWebSocket from "reconnecting-websocket";
@@ -8,7 +8,7 @@ import { useAnonUser } from "@/components/auth";
 
 import { SyncData, addSyncedData } from "./database";
 
-export function SyncProvider(props: { children: React.ReactNode }) {
+export function SyncProvider(props: { children: ReactNode }) {
     /**************************************************************************/
     /* State */
     const user = useAnonUser();
