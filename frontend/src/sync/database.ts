@@ -5,14 +5,12 @@ import {
     SyncConversation,
     SyncMember,
     SyncMessage,
-    SyncMessageMetadata,
     SyncUser,
 } from "@/api";
 
 export type SyncData = GlobalSyncTypesResponses["200"];
 
 const db = new Dexie("F3Chat") as Dexie & {
-    messagesMetadata: EntityTable<SyncMessageMetadata["data"], "id">;
     messages: EntityTable<SyncMessage["data"], "id">;
     conversations: EntityTable<SyncConversation["data"], "id">;
     members: EntityTable<SyncMember["data"], "id">;
@@ -20,7 +18,6 @@ const db = new Dexie("F3Chat") as Dexie & {
 };
 
 db.version(1).stores({
-    messagesMetadata: "id,conversationId,replyToId,created",
     messages: "id,conversationId,replyToId,authorId,created",
     conversations: "id,created",
     members: "id,conversationId,userId,[conversationId+userId],created",
@@ -29,11 +26,6 @@ db.version(1).stores({
 
 export function addSyncedData(value: SyncData) {
     switch (value.type) {
-        case "message-metadata": {
-            db.messagesMetadata.put(value.data, value.data.id);
-            return;
-        }
-
         case "message": {
             db.transaction("readwrite", db.messages, async () => {
                 const stored = await db.messages.get(value.data.id);
